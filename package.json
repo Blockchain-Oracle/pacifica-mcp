@@ -1,0 +1,21 @@
+{
+  "name": "pacifica-mcp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @pacifica-mcp/web --filter @pacifica-mcp/docs -r --parallel dev",
+    "dev:mcp": "pnpm --filter @pacifica-mcp/mcp dev",
+    "dev:web": "pnpm --filter @pacifica-mcp/web dev",
+    "dev:docs": "pnpm --filter @pacifica-mcp/docs dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test"
+  },
+  "devDependencies": {
+    "shadcn": "^4.1.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "zod": "4.3.6"
+    }
+  }
+}
