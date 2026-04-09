@@ -1,0 +1,67 @@
+---
+title: System Tools
+description: Two utility tools for wallet info and tool discovery
+---
+
+# System Tools
+
+---
+
+## pacifica-wallet
+
+Show your MCP wallet address, current network (testnet or mainnet), and USDC balance.
+
+No parameters required.
+
+**Example prompt**
+
+> *"What's my Pacifica wallet address?"*
+
+> *"Show me my wallet info."*
+
+**Example response**
+
+```json
+{
+  "publicKey": "7xKmN3bPqRsT4uVwXyZ1aB2cD5eF6gH8iJ9kL0mN",
+  "network": "testnet",
+  "balance": {
+    "balance": "1000.00",
+    "equity": "1023.45"
+  }
+}
+```
+
+The wallet file is stored at `~/.pacifica/wallet.json`. It is auto-created on first use. **Back it up — it contains your private key.**
+
+---
+
+## pacifica-tools
+
+List all available Pacifica MCP tools grouped by category.
+
+No parameters required.
+
+**Example prompt**
+
+> *"What tools do you have for Pacifica?"*
+
+> *"List all available Pacifica MCP tools."*
+
+**Example response**
+
+```json
+{
+  "Market Data (free, cached)": [
+    { "name": "pacifica-markets", "description": "List all markets or look up a single market" },
+    { "name": "pacifica-prices", "description": "Real-time prices, funding, open interest, volume" },
+    ...
+  ],
+  "Trading (requires wallet, signed)": [
+    { "name": "pacifica-market-order", "description": "Place a market order (bid=long, ask=short)" },
+    ...
+  ]
+}
+```
+
+This is a good first tool to call when exploring capabilities.

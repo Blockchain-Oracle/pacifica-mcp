@@ -1,0 +1,114 @@
+---
+title: Installation
+description: Add Pacifica MCP to Claude Code, Claude Desktop, or Cursor
+---
+
+# Installation
+
+Pacifica MCP runs as a local process via `npx`. No global install needed — just add it to your MCP client.
+
+## Claude Code
+
+The fastest way. Run this in your terminal:
+
+```bash
+claude mcp add pacifica-mcp -- npx -y @pacifica-mcp/server
+```
+
+That's it. Restart Claude Code and start chatting. Try: *"Show me the BTC-PERP price."*
+
+### Verify it's working
+
+```bash
+claude mcp list
+```
+
+You should see `pacifica-mcp` in the list.
+
+---
+
+## Claude Desktop
+
+Open your Claude Desktop config file:
+
+- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add the Pacifica MCP entry:
+
+```json
+{
+  "mcpServers": {
+    "pacifica-mcp": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-mcp/server"]
+    }
+  }
+}
+```
+
+Save the file and restart Claude Desktop.
+
+---
+
+## Cursor
+
+Open **Cursor Settings** → **MCP** → **Add MCP Server**.
+
+Or edit `~/.cursor/mcp.json` directly:
+
+```json
+{
+  "mcpServers": {
+    "pacifica-mcp": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-mcp/server"]
+    }
+  }
+}
+```
+
+Restart Cursor after saving.
+
+---
+
+## Environment variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
+| `PACIFICA_WALLET_PATH` | `~/.pacifica/wallet.json` | Path to Ed25519 wallet file |
+
+To trade on mainnet, set `PACIFICA_NETWORK=mainnet` in the MCP server environment.
+
+### Claude Desktop with env vars
+
+```json
+{
+  "mcpServers": {
+    "pacifica-mcp": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-mcp/server"],
+      "env": {
+        "PACIFICA_NETWORK": "mainnet"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Wallet setup
+
+The first time a trading tool runs, Pacifica MCP auto-generates an Ed25519 wallet at `~/.pacifica/wallet.json`.
+
+**Backup this file.** It contains your private key.
+
+To check your wallet address:
+
+> *"Show me my Pacifica wallet address."*
+
+Then deposit USDC to that address on Pacifica to start trading.
+
+For testnet setup, see the [Testnet guide](/guides/testnet).

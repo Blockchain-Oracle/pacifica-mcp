@@ -1,0 +1,137 @@
+---
+title: Your First Trade
+description: Walk through checking prices, placing an order, and monitoring your position
+---
+
+# Your First Trade
+
+This guide walks you through a complete trading workflow using Pacifica MCP in Claude.
+
+## Prerequisites
+
+- Pacifica MCP installed ([see Installation](/getting-started/installation))
+- A Pacifica account with USDC deposited (testnet or mainnet)
+
+If you're starting fresh, use [testnet](/guides/testnet) — it's free.
+
+---
+
+## Step 1: Check market prices
+
+Start by looking at the market you want to trade.
+
+**Prompt:**
+> *"What's the current price and funding rate for BTC-PERP?"*
+
+**What happens:** Claude calls `pacifica-prices` and returns the mark price, oracle price, funding rate, and next funding time.
+
+**Example response:**
+```
+BTC-PERP:
+  Mark price:     $67,420.50
+  Oracle price:   $67,415.00
+  Funding rate:   0.0023% (every 8h)
+  Next funding:   in 3h 12m
+  24h volume:     $142M
+  Open interest:  $89M
+```
+
+---
+
+## Step 2: Check the order book
+
+Before placing a market order, check liquidity.
+
+**Prompt:**
+> *"Show me the BTC-PERP order book — top 5 levels."*
+
+**What happens:** Claude calls `pacifica-orderbook` with `agg_level=100`.
+
+---
+
+## Step 3: Check your account
+
+Make sure you have enough margin.
+
+**Prompt:**
+> *"What's my account balance and available margin?"*
+
+**What happens:** Claude calls `pacifica-account` and returns your equity, balance, margin used, and available margin.
+
+---
+
+## Step 4: Place a market order
+
+Now place a long position.
+
+**Prompt:**
+> *"Buy 0.01 BTC-PERP at market price."*
+
+**What happens:** Claude calls `pacifica-market-order` with `side=bid`, `amount=0.01`, `symbol=BTC-PERP`.
+
+The MCP server signs the request with your Ed25519 wallet and submits it to Pacifica.
+
+**Example response:**
+```json
+{
+  "order_id": "ord_abc123",
+  "symbol": "BTC-PERP",
+  "side": "bid",
+  "amount": "0.01",
+  "filled_price": "67421.00",
+  "status": "filled"
+}
+```
+
+---
+
+## Step 5: Check your position
+
+Confirm the position is open.
+
+**Prompt:**
+> *"Show me my open positions."*
+
+**What happens:** Claude calls `pacifica-positions`.
+
+**Example response:**
+```
+BTC-PERP LONG
+  Amount:       0.01 BTC
+  Entry price:  $67,421.00
+  Mark price:   $67,450.00
+  Unrealized PnL: +$0.29
+  Margin:       $67.42
+  Leverage:     10x
+```
+
+---
+
+## Step 6: Set a stop-loss
+
+Protect your position with a stop-loss.
+
+**Prompt:**
+> *"Set a stop-loss on my BTC-PERP long at $65,000."*
+
+**What happens:** Claude calls `pacifica-set-tpsl` with `symbol=BTC-PERP`, `side=bid`, `stop_loss_price=65000`.
+
+---
+
+## Step 7: Close the position
+
+When you're ready to exit:
+
+**Prompt:**
+> *"Close my BTC-PERP long position."*
+
+**What happens:** Claude calls `pacifica-market-order` with `side=ask`, `reduce_only=true`, and the same amount as your position.
+
+---
+
+## Tips
+
+- Use **testnet** to practice without risking real funds — [Testnet guide](/guides/testnet)
+- All amounts are decimal strings (e.g., `"0.01"` not `0.01`)
+- Claude will always ask for confirmation before placing or canceling orders
+- Check `pacifica-markets` for the exact symbol format (e.g., `BTC-PERP`, `ETH-PERP`, `SOL-PERP`)

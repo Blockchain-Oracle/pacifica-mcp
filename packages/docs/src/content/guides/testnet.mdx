@@ -1,0 +1,108 @@
+---
+title: Testnet Guide
+description: Trade risk-free on Pacifica testnet — access code, faucet, and setup
+---
+
+# Testnet Guide
+
+Pacifica testnet lets you trade with fake USDC at no risk. It's the best way to try the MCP server before moving real funds.
+
+## Access
+
+Pacifica testnet requires an access code:
+
+**Access code: `Pacifica`**
+
+Use this code when registering at [test.pacifica.fi](https://test.pacifica.fi).
+
+---
+
+## Step 1: Configure the MCP server for testnet
+
+Testnet is the default. No extra configuration needed.
+
+To explicitly confirm:
+
+```json
+{
+  "mcpServers": {
+    "pacifica-mcp": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-mcp/server"],
+      "env": {
+        "PACIFICA_NETWORK": "testnet"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Step 2: Get your wallet address
+
+Ask Claude:
+
+> *"What's my Pacifica wallet address?"*
+
+The MCP server returns your Ed25519 public key. Copy it — you'll need it to deposit testnet USDC.
+
+---
+
+## Step 3: Get testnet USDC
+
+1. Go to [test.pacifica.fi](https://test.pacifica.fi)
+2. Enter the access code: **`Pacifica`**
+3. Connect your wallet or use the address from step 2
+4. Use the testnet faucet to claim USDC
+
+Testnet USDC has no real value. Claim as much as you need.
+
+---
+
+## Step 4: Verify your balance
+
+After depositing:
+
+> *"Show me my Pacifica account balance."*
+
+You should see your USDC balance reflected in the account overview.
+
+---
+
+## Step 5: Start trading
+
+All market data on testnet mirrors mainnet prices in real time. Trading mechanics are identical.
+
+**Try it:**
+
+> *"What's the BTC-PERP price on testnet?"*
+
+> *"Buy 0.01 BTC-PERP at market price."*
+
+> *"Show me my open positions."*
+
+---
+
+## Testnet API
+
+The MCP server automatically uses the correct API endpoint:
+
+| Network | API endpoint |
+|---|---|
+| Testnet | `https://test-api.pacifica.fi/api/v1` |
+| Mainnet | `https://api.pacifica.fi/api/v1` |
+
+---
+
+## Switching to mainnet
+
+When you're ready to trade with real funds:
+
+1. Deposit real USDC to your wallet address on mainnet Pacifica
+2. Update your MCP config: set `PACIFICA_NETWORK=mainnet`
+3. Restart your MCP client
+
+The same wallet file works on both networks.
+
+> **Warning:** Mainnet trades use real money. Double-check all order parameters before confirming.

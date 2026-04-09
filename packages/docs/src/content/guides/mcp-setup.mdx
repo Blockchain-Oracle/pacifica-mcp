@@ -1,0 +1,154 @@
+---
+title: MCP Client Setup
+description: Detailed setup instructions for Claude Code, Claude Desktop, and Cursor
+---
+
+# MCP Client Setup
+
+Detailed configuration for each supported MCP client.
+
+---
+
+## Claude Code
+
+### One-liner
+
+```bash
+claude mcp add pacifica-mcp -- npx -y @pacifica-mcp/server
+```
+
+### Manual config
+
+The command above writes to `~/.claude/mcp.json`. You can also edit it directly:
+
+```json
+{
+  "mcpServers": {
+    "pacifica-mcp": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-mcp/server"]
+    }
+  }
+}
+```
+
+### With environment variables
+
+```bash
+claude mcp add pacifica-mcp -e PACIFICA_NETWORK=mainnet -- npx -y @pacifica-mcp/server
+```
+
+### Verify
+
+```bash
+claude mcp list
+# pacifica-mcp   npx -y @pacifica-mcp/server
+```
+
+---
+
+## Claude Desktop
+
+### Config file location
+
+| Platform | Path |
+|---|---|
+| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+| Linux | `~/.config/Claude/claude_desktop_config.json` |
+
+### Config
+
+```json
+{
+  "mcpServers": {
+    "pacifica-mcp": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-mcp/server"]
+    }
+  }
+}
+```
+
+### With env vars
+
+```json
+{
+  "mcpServers": {
+    "pacifica-mcp": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-mcp/server"],
+      "env": {
+        "PACIFICA_NETWORK": "mainnet",
+        "PACIFICA_WALLET_PATH": "/Users/you/.pacifica/wallet.json"
+      }
+    }
+  }
+}
+```
+
+Restart Claude Desktop after saving.
+
+---
+
+## Cursor
+
+### Via settings UI
+
+1. Open **Cursor Settings** (Cmd/Ctrl + ,)
+2. Search for **MCP** in the settings search bar
+3. Click **MCP Servers** → **Add MCP Server**
+4. Set:
+   - **Name:** `pacifica-mcp`
+   - **Command:** `npx`
+   - **Args:** `-y @pacifica-mcp/server`
+
+### Via config file
+
+Edit `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "pacifica-mcp": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-mcp/server"]
+    }
+  }
+}
+```
+
+Restart Cursor after saving.
+
+---
+
+## Any MCP client
+
+Pacifica MCP uses stdio transport (stdin/stdout), which is supported by all MCP clients. The configuration pattern is always:
+
+- **Command:** `npx`
+- **Args:** `["-y", "@pacifica-mcp/server"]`
+
+### Environment variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
+| `PACIFICA_WALLET_PATH` | `~/.pacifica/wallet.json` | Ed25519 wallet file path |
+| `LOG_LEVEL` | `info` | Pino log level: `debug`, `info`, `warn`, `error` |
+
+---
+
+## Troubleshooting
+
+**"npx: command not found"**
+Install Node.js 18+ from [nodejs.org](https://nodejs.org).
+
+**"ENOENT wallet.json"**
+The wallet file is created automatically on first use. Ask Claude: *"Show me my Pacifica wallet address."*
+
+**"Request failed: 401"**
+Your wallet has no funds on Pacifica. Deposit USDC to the address shown by `pacifica-wallet`.
+
+**Server not appearing in client**
+Check that the JSON config is valid (no trailing commas) and restart the client after saving.

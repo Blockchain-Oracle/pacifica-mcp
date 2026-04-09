@@ -1,0 +1,46 @@
+---
+title: Introduction
+description: Pacifica MCP — AI-native trading tools for the #1 Solana perps DEX
+---
+
+# Pacifica MCP
+
+**Pacifica MCP** is a [Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents the ability to trade, monitor, and manage positions on [Pacifica Finance](https://pacifica.fi) — the #1 perpetuals DEX on Solana.
+
+Connect it to Claude, Cursor, or any MCP-compatible client and start trading with natural language.
+
+## What can it do?
+
+Pacifica MCP exposes **22 tools** across four categories:
+
+| Category | Tools | Auth |
+|---|---|---|
+| Market Data | Prices, order book, candles, funding rates, recent trades | None |
+| Account Monitoring | Positions, orders, trade history, portfolio equity | None |
+| Trading | Market orders, limit orders, stop orders, TP/SL, cancel | Wallet required |
+| System | Wallet info, list tools | None |
+
+### Example prompts
+
+- *"What's the current BTC-PERP price and funding rate?"*
+- *"Show me my open positions and unrealized PnL."*
+- *"Buy 0.01 BTC-PERP at market price."*
+- *"Set a stop-loss on my ETH-PERP long at $2800."*
+- *"Cancel all my open orders on SOL-PERP."*
+
+## Quick install
+
+Add Pacifica MCP to Claude Code:
+
+```bash
+claude mcp add pacifica-mcp -- npx -y @pacifica-mcp/server
+```
+
+Or add it to any MCP client using `npx -y @pacifica-mcp/server` as the command.
+
+## Next steps
+
+- [Installation & setup](/getting-started/installation) — Claude Code, Claude Desktop, Cursor
+- [Your first trade](/getting-started/first-trade) — Walk through placing an order
+- [Tool reference](/tools) — All 22 tools with parameters and examples
+- [Testnet guide](/guides/testnet) — Trade risk-free on Pacifica testnet

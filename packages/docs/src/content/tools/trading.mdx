@@ -1,0 +1,211 @@
+---
+title: Trading Tools
+description: Seven tools for placing orders, managing positions, and configuring account settings
+---
+
+# Trading Tools
+
+Trading tools require a wallet with funds on Pacifica. Every request is signed with your Ed25519 keypair before being sent to the API — Claude never has access to your private key; signing happens inside the MCP server process.
+
+## How signing works
+
+When you ask Claude to place an order, the MCP server:
+
+1. Loads your Ed25519 keypair from `~/.pacifica/wallet.json`
+2. Builds the request payload with the order parameters
+3. Signs the payload with `nacl.sign.detached`
+4. Attaches `account`, `signature`, and `timestamp` to the request
+5. POSTs to the Pacifica API
+
+The signature proves ownership of the wallet without revealing the private key.
+
+---
+
+## pacifica-market-order
+
+Place a market order. Fills immediately at the best available price.
+
+`bid` = buy / go long. `ask` = sell / go short.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `side` | enum | Yes | `bid` (long) or `ask` (short) |
+| `amount` | string | Yes | Order size as decimal string (e.g. `"0.01"`) |
+| `slippage_percent` | string | No | Max slippage % (default `"1"`) |
+| `reduce_only` | boolean | No | Only reduce existing position (default `false`) |
+
+**Example prompt**
+
+> *"Buy 0.01 BTC-PERP at market price."*
+
+> *"Short 0.1 ETH-PERP at market."*
+
+**Example response**
+
+```json
+{
+  "order_id": "ord_abc123",
+  "symbol": "BTC-PERP",
+  "side": "bid",
+  "amount": "0.01",
+  "filled_price": "67421.00",
+  "fee": "0.034",
+  "status": "filled"
+}
+```
+
+---
+
+## pacifica-limit-order
+
+Place a limit order at a specific price.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol |
+| `side` | enum | Yes | `bid` (long) or `ask` (short) |
+| `amount` | string | Yes | Order size as decimal string |
+| `price` | string | Yes | Limit price as decimal string |
+| `tif` | enum | No | `GTC` / `IOC` / `ALO` / `TOB` (default `GTC`) |
+| `reduce_only` | boolean | No | Only reduce existing position (default `false`) |
+
+**TIF options**
+
+| Value | Description |
+|---|---|
+| `GTC` | Good-til-cancel — stays open until filled or canceled |
+| `IOC` | Immediate-or-cancel — fill what you can, cancel the rest |
+| `ALO` | Add-liquidity-only — post-only, rejected if it would take |
+| `TOB` | Top-of-book — places at the best bid/ask |
+
+**Example prompt**
+
+> *"Place a buy limit order for 0.05 BTC-PERP at $65,000."*
+
+> *"Sell 0.1 ETH-PERP at $3,100 GTC."*
+
+**Example response**
+
+```json
+{
+  "order_id": "ord_def456",
+  "symbol": "BTC-PERP",
+  "side": "bid",
+  "amount": "0.05",
+  "price": "65000.00",
+  "tif": "GTC",
+  "status": "open"
+}
+```
+
+---
+
+## pacifica-stop-order
+
+Place a stop-market or stop-limit order. Triggers when the market reaches `stop_price`.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol |
+| `side` | enum | Yes | `bid` or `ask` |
+| `stop_price` | string | Yes | Trigger price as decimal string |
+| `amount` | string | Yes | Order size as decimal string |
+| `limit_price` | string | No | Limit price after trigger. Omit for stop-market. |
+| `reduce_only` | boolean | No | Only reduce position (default `true`) |
+
+**Example prompt**
+
+> *"Place a stop-loss on my BTC-PERP long — sell 0.01 BTC if price drops to $63,000."*
+
+> *"Set a stop-limit order: buy 0.05 ETH-PERP when it hits $3,050, limit at $3,060."*
+
+---
+
+## pacifica-set-tpsl
+
+Set take-profit and/or stop-loss prices on an existing position. Provide at least one of `take_profit_price` or `stop_loss_price`.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol |
+| `side` | enum | Yes | Position side: `bid` (long) or `ask` (short) |
+| `take_profit_price` | string | No | TP trigger price as decimal string |
+| `stop_loss_price` | string | No | SL trigger price as decimal string |
+
+**Example prompt**
+
+> *"Set a take-profit at $72,000 and stop-loss at $63,000 on my BTC-PERP long."*
+
+> *"Add a stop-loss at $2,800 to my ETH-PERP long position."*
+
+---
+
+## pacifica-cancel-order
+
+Cancel a specific order by ID, or cancel all open orders for a symbol.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol |
+| `order_id` | string | No | Order ID to cancel. Omit to cancel all open orders. |
+
+**Example prompt**
+
+> *"Cancel order ord_def456."*
+
+> *"Cancel all my open orders on BTC-PERP."*
+
+**Example response**
+
+```json
+{ "canceled": 1 }
+```
+
+---
+
+## pacifica-set-leverage
+
+Set the leverage multiplier for a market (1–100x).
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol |
+| `leverage` | integer | Yes | Leverage multiplier, 1–100 |
+
+**Example prompt**
+
+> *"Set my BTC-PERP leverage to 20x."*
+
+> *"Reduce my ETH-PERP leverage to 5x."*
+
+---
+
+## pacifica-set-margin-mode
+
+Switch between cross margin and isolated margin for a market.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol |
+| `is_isolated` | boolean | Yes | `true` = isolated margin, `false` = cross margin |
+
+**Example prompt**
+
+> *"Switch BTC-PERP to isolated margin."*
+
+> *"Enable cross margin on ETH-PERP."*
