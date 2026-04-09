@@ -4,6 +4,7 @@ import { get } from "../lib/api.js";
 import { ok, err } from "../lib/format.js";
 import { loadOrCreateWallet } from "../lib/wallet.js";
 import { logger } from "../lib/logger.js";
+import type { AccountInfo } from "../lib/types.js";
 
 export function registerWalletTool(server: McpServer): void {
   server.registerTool(
@@ -25,10 +26,10 @@ export function registerWalletTool(server: McpServer): void {
 
         // Try to fetch balance from Pacifica
         try {
-          const account = await get<Record<string, unknown>>("/account", {
+          const account = await get<AccountInfo>("/account", {
             account: config.publicKey,
           });
-          info.balance = account.balance ?? account;
+          info.balance = account.balance;
         } catch {
           info.balance = "Unable to fetch (wallet may not be registered on Pacifica yet)";
         }

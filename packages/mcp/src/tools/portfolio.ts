@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { loadOrCreateWallet } from "../lib/wallet.js";
 import { logger } from "../lib/logger.js";
+import type { EquityPoint } from "../lib/types.js";
 
 export function registerPortfolioTool(server: McpServer): void {
   server.registerTool(
@@ -32,7 +33,7 @@ export function registerPortfolioTool(server: McpServer): void {
       const cacheParams = { account: address, time_range: params.time_range };
       return withCache("pacifica-portfolio", cacheParams, async () => {
         try {
-          const data = await get("/portfolio", {
+          const data = await get<EquityPoint[]>("/portfolio", {
             account: address,
             time_range: params.time_range,
           });

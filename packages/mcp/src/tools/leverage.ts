@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
+// leverage returns { success: boolean }
 
 export function registerLeverageTool(server: McpServer): void {
   server.registerTool(
@@ -34,7 +35,7 @@ export function registerLeverageTool(server: McpServer): void {
           keypair.secretKey,
           config.publicKey,
         );
-        const data = await post("/account/leverage", signed);
+        const data = await post<{ success: boolean }>("/account/leverage", signed);
         return ok(data);
       } catch (e) {
         logger.error({ err: e }, "pacifica-set-leverage error");

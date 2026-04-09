@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
+import type { OrderResponse } from "../lib/types.js";
 
 export function registerStopOrderTool(server: McpServer): void {
   server.registerTool(
@@ -59,7 +60,7 @@ export function registerStopOrderTool(server: McpServer): void {
           keypair.secretKey,
           config.publicKey,
         );
-        const data = await post("/orders/stop/create", signed);
+        const data = await post<OrderResponse>("/orders/stop/create", signed);
         return ok(data);
       } catch (e) {
         logger.error({ err: e }, "pacifica-stop-order error");

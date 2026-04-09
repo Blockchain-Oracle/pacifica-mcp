@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { loadOrCreateWallet } from "../lib/wallet.js";
 import { logger } from "../lib/logger.js";
+import type { Position } from "../lib/types.js";
 
 export function registerPositionsTool(server: McpServer): void {
   server.registerTool(
@@ -28,7 +29,7 @@ export function registerPositionsTool(server: McpServer): void {
       const cacheParams = { account: address };
       return withCache("pacifica-positions", cacheParams, async () => {
         try {
-          const data = await get("/positions", { account: address });
+          const data = await get<Position[]>("/positions", { account: address });
           return ok(data);
         } catch (e) {
           logger.error({ err: e }, "pacifica-positions error");

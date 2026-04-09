@@ -4,6 +4,7 @@ import { get } from "../lib/api.js";
 import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { logger } from "../lib/logger.js";
+import type { FundingRateHistory, Paginated } from "../lib/types.js";
 
 export function registerFundingRatesTool(server: McpServer): void {
   server.registerTool(
@@ -27,7 +28,7 @@ export function registerFundingRatesTool(server: McpServer): void {
       logger.debug(params, "pacifica-funding-rates invoked");
       return withCache("pacifica-funding-rates", params, async () => {
         try {
-          const data = await get("/funding_rate/history", {
+          const data = await get<Paginated<FundingRateHistory>>("/funding_rate/history", {
             symbol: params.symbol,
             limit: String(params.limit),
           });

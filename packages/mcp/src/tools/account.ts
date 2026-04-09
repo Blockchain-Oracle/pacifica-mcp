@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { loadOrCreateWallet } from "../lib/wallet.js";
 import { logger } from "../lib/logger.js";
+import type { AccountInfo } from "../lib/types.js";
 
 export function registerAccountTool(server: McpServer): void {
   server.registerTool(
@@ -28,7 +29,7 @@ export function registerAccountTool(server: McpServer): void {
       const cacheParams = { account: address };
       return withCache("pacifica-account", cacheParams, async () => {
         try {
-          const data = await get("/account", { account: address });
+          const data = await get<AccountInfo>("/account", { account: address });
           return ok(data);
         } catch (e) {
           logger.error({ err: e }, "pacifica-account error");

@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { loadOrCreateWallet } from "../lib/wallet.js";
 import { logger } from "../lib/logger.js";
+import type { BalanceEvent, Paginated } from "../lib/types.js";
 
 export function registerBalanceHistoryTool(server: McpServer): void {
   server.registerTool(
@@ -35,7 +36,7 @@ export function registerBalanceHistoryTool(server: McpServer): void {
       const cacheParams = { account: address, limit: params.limit };
       return withCache("pacifica-balance-history", cacheParams, async () => {
         try {
-          const data = await get("/account/balance/history", {
+          const data = await get<Paginated<BalanceEvent>>("/account/balance/history", {
             account: address,
             limit: String(params.limit),
           });

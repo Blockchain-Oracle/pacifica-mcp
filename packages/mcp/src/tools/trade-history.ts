@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { loadOrCreateWallet } from "../lib/wallet.js";
 import { logger } from "../lib/logger.js";
+import type { TradeRecord, Paginated } from "../lib/types.js";
 
 export function registerTradeHistoryTool(server: McpServer): void {
   server.registerTool(
@@ -48,7 +49,7 @@ export function registerTradeHistoryTool(server: McpServer): void {
             limit: String(params.limit),
           };
           if (params.symbol) queryParams.symbol = params.symbol;
-          const data = await get("/trades/history", queryParams);
+          const data = await get<Paginated<TradeRecord>>("/trades/history", queryParams);
           return ok(data);
         } catch (e) {
           logger.error({ err: e }, "pacifica-trade-history error");

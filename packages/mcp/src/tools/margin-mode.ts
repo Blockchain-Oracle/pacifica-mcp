@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
+// margin-mode returns { success: boolean }
 
 export function registerMarginModeTool(server: McpServer): void {
   server.registerTool(
@@ -31,7 +32,7 @@ export function registerMarginModeTool(server: McpServer): void {
           keypair.secretKey,
           config.publicKey,
         );
-        const data = await post("/account/margin", signed);
+        const data = await post<{ success: boolean }>("/account/margin", signed);
         return ok(data);
       } catch (e) {
         logger.error({ err: e }, "pacifica-set-margin-mode error");

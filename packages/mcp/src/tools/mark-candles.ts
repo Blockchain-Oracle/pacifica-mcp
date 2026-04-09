@@ -20,13 +20,13 @@ const INTERVAL_MS: Record<string, number> = {
   "1d": 86_400_000,
 };
 
-export function registerCandlesTool(server: McpServer): void {
+export function registerMarkCandlesTool(server: McpServer): void {
   server.registerTool(
-    "pacifica-candles",
+    "pacifica-mark-candles",
     {
-      title: "OHLCV Candles",
+      title: "Mark Price OHLCV Candles",
       description:
-        "Get OHLCV candlestick data for a Pacifica market.\n\nFree — no auth required.",
+        "Get OHLCV candlestick data based on the mark price for a Pacifica market.\n\nSimilar to pacifica-candles but uses the mark price instead of trade price.\n\nFree — no auth required.",
       inputSchema: z.object({
         symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
         interval: z
@@ -54,19 +54,19 @@ export function registerCandlesTool(server: McpServer): void {
       }),
     },
     async (params) => {
-      logger.debug(params, "pacifica-candles invoked");
-      return withCache("pacifica-candles", params, async () => {
+      logger.debug(params, "pacifica-mark-candles invoked");
+      return withCache("pacifica-mark-candles", params, async () => {
         try {
           const intervalMs = INTERVAL_MS[params.interval] ?? 60_000;
           const startTime = Date.now() - params.limit * intervalMs;
-          const data = await get<Candle[]>("/kline", {
+          const data = await get<Candle[]>("/kline/mark", {
             symbol: params.symbol,
             interval: params.interval,
             start_time: String(startTime),
           });
           return ok(data);
         } catch (e) {
-          logger.error({ err: e }, "pacifica-candles error");
+          logger.error({ err: e }, "pacifica-mark-candles error");
           return err(String(e));
         }
       });

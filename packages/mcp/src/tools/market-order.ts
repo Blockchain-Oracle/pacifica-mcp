@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
+import type { OrderResponse } from "../lib/types.js";
 
 export function registerMarketOrderTool(server: McpServer): void {
   server.registerTool(
@@ -46,7 +47,7 @@ export function registerMarketOrderTool(server: McpServer): void {
           keypair.secretKey,
           config.publicKey,
         );
-        const data = await post("/orders/create_market", signed);
+        const data = await post<OrderResponse>("/orders/create_market", signed);
         return ok(data);
       } catch (e) {
         logger.error({ err: e }, "pacifica-market-order error");

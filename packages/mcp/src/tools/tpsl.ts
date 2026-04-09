@@ -5,6 +5,7 @@ import { ok, err } from "../lib/format.js";
 import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
+// tpsl returns { success: boolean }
 
 export function registerTpslTool(server: McpServer): void {
   server.registerTool(
@@ -51,7 +52,7 @@ export function registerTpslTool(server: McpServer): void {
           keypair.secretKey,
           config.publicKey,
         );
-        const result = await post("/positions/tpsl", signed);
+        const result = await post<{ success: boolean }>("/positions/tpsl", signed);
         return ok(result);
       } catch (e) {
         logger.error({ err: e }, "pacifica-set-tpsl error");

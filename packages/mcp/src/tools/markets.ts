@@ -4,6 +4,7 @@ import { get } from "../lib/api.js";
 import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { logger } from "../lib/logger.js";
+import type { MarketInfo } from "../lib/types.js";
 
 export function registerMarketsTool(server: McpServer): void {
   server.registerTool(
@@ -23,17 +24,13 @@ export function registerMarketsTool(server: McpServer): void {
       logger.debug(params, "pacifica-markets invoked");
       return withCache("pacifica-markets", params, async () => {
         try {
-          const data = await get("/info");
+          const data = await get<MarketInfo[]>("/info");
           if (params.symbol) {
-            const markets = Array.isArray(data) ? data : (data as Record<string, unknown>);
-            if (Array.isArray(markets)) {
-              const filtered = markets.filter(
-                (m: Record<string, unknown>) =>
-                  String(m.symbol).toUpperCase() ===
-                  params.symbol!.toUpperCase(),
-              );
-              return ok(filtered.length === 1 ? filtered[0] : filtered);
-            }
+            const filtered = data.filter(
+              (m) =>
+                m.symbol.toUpperCase() === params.symbol!.toUpperCase(),
+            );
+            return ok(filtered.length === 1 ? filtered[0] : filtered);
           }
           return ok(data);
         } catch (e) {
