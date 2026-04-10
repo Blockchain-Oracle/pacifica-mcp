@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "pacifica-mcp": "./dist/index.js"
+    "pacifica-mcp": "./dist/cli.js"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -13,9 +13,10 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@solana/web3.js": "^1.98.0",
-    "tweetnacl": "^1.0.3",
     "bs58": "^6.0.0",
+    "commander": "^14.0.3",
     "pino": "^10.3.1",
+    "tweetnacl": "^1.0.3",
     "zod": "^4.3.6"
   },
   "devDependencies": {
