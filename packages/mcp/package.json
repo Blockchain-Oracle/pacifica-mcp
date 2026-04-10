@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "pacifica-mcp": "./dist/cli.js"
+    "pacifica-cli": "./dist/cli.js"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",

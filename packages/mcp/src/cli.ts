@@ -111,7 +111,7 @@ const TOOLS_CATALOG = {
 // ── Program ──────────────────────────────────────────────────────────────────
 
 const program = new Command()
-  .name("pacifica-mcp")
+  .name("pacifica-cli")
   .description(
     "Pacifica MCP Server & CLI — AI-powered trading tools for Pacifica DEX",
   )
