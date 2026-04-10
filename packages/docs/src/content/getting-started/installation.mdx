@@ -12,7 +12,7 @@ Pacifica MCP runs as a local process via `npx`. No global install needed — jus
 The fastest way. Run this in your terminal:
 
 ```bash
-claude mcp add pacifica-mcp -- npx -y @pacifica-mcp/server
+claude mcp add pacifica npx @pacifica/mcp
 ```
 
 That's it. Restart Claude Code and start chatting. Try: *"Show me the BTC-PERP price."*
@@ -41,7 +41,7 @@ Add the Pacifica MCP entry:
   "mcpServers": {
     "pacifica-mcp": {
       "command": "npx",
-      "args": ["-y", "@pacifica-mcp/server"]
+      "args": ["-y", "@pacifica/mcp"]
     }
   }
 }
@@ -62,7 +62,7 @@ Or edit `~/.cursor/mcp.json` directly:
   "mcpServers": {
     "pacifica-mcp": {
       "command": "npx",
-      "args": ["-y", "@pacifica-mcp/server"]
+      "args": ["-y", "@pacifica/mcp"]
     }
   }
 }
@@ -88,7 +88,7 @@ To trade on mainnet, set `PACIFICA_NETWORK=mainnet` in the MCP server environmen
   "mcpServers": {
     "pacifica-mcp": {
       "command": "npx",
-      "args": ["-y", "@pacifica-mcp/server"],
+      "args": ["-y", "@pacifica/mcp"],
       "env": {
         "PACIFICA_NETWORK": "mainnet"
       }

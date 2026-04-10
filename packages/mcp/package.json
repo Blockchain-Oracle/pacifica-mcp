@@ -1,5 +1,5 @@
 {
-  "name": "@pacifica-mcp/mcp",
+  "name": "@pacifica/mcp",
   "version": "0.1.0",
   "type": "module",
   "bin": {
