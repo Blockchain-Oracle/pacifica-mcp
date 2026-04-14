@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "Pacifica MCP Server — Trade Perpetuals with AI",
   description:
     "Give AI agents the power to trade perpetuals on Pacifica. One-line install. 32 tools covering market data, account monitoring, and live trading.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

@@ -36,76 +36,133 @@ export default function Home() {
             backgroundSize: "28px 28px",
           }}
         />
-        {/* Teal radial glow */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="w-[600px] h-[400px] rounded-full bg-primary/5 blur-[120px]" />
+        {/* Teal radial glow — shifted left for two-column layout */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-start">
+          <div className="ml-[10%] w-[500px] h-[320px] rounded-full bg-primary/5 blur-[100px]" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 py-28 sm:py-40 flex flex-col items-center text-center gap-10">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 sm:py-20">
+          {/* Two-column grid on desktop, stacked on mobile */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
-          <BlurFade delay={0}>
-            <span className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-              <span className="size-1.5 rounded-full bg-primary animate-pulse shrink-0" />
-              Pacifica Perpetuals · MCP Server
-            </span>
-          </BlurFade>
+            {/* ── Left column ── */}
+            <div className="flex flex-col gap-6">
+              <BlurFade delay={0}>
+                <span className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+                  <span className="size-1.5 rounded-full bg-primary animate-pulse shrink-0" />
+                  Pacifica Perpetuals · MCP Server
+                </span>
+              </BlurFade>
 
-          <BlurFade delay={0.06}>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.92] text-foreground max-w-3xl">
-              Give AI agents the power to{" "}
-              <span className="text-primary">trade perpetuals</span>
-            </h1>
-          </BlurFade>
+              <BlurFade delay={0.06}>
+                <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tighter leading-[0.92] text-foreground">
+                  Give AI agents the power to{" "}
+                  <span className="text-primary">trade perpetuals</span>
+                </h1>
+              </BlurFade>
 
-          <BlurFade delay={0.12}>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-              32 tools covering market data, account monitoring, and live trading — all accessible to Claude, Cursor, and any MCP-compatible AI host.
-            </p>
-          </BlurFade>
+              <BlurFade delay={0.12}>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  32 tools. Market data, positions, and live trading — for Claude, Cursor, and any MCP host.
+                </p>
+              </BlurFade>
 
-          <BlurFade delay={0.18} className="w-full max-w-xl">
-            <McpInstall />
-          </BlurFade>
+              <BlurFade delay={0.18} className="w-full">
+                <McpInstall />
+              </BlurFade>
 
-          <BlurFade delay={0.22}>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <Link href="/tools">
-                <Button className="rounded-full px-7 gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-                  Explore Tools
-                  <ArrowRight className="size-4" />
-                </Button>
-              </Link>
-              <a href="#how-it-works">
-                <Button
-                  variant="outline"
-                  className="rounded-full px-7 border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
-                >
-                  How It Works
-                </Button>
-              </a>
-            </div>
-          </BlurFade>
-
-          {/* Stats row */}
-          <BlurFade delay={0.28}>
-            <div className="flex flex-wrap items-center justify-center gap-8 pt-4">
-              {[
-                { label: "Tools", value: "32" },
-                { label: "Categories", value: "4" },
-                { label: "Auth needed", value: "None" },
-                { label: "Install", value: "1 command" },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex flex-col items-center gap-0.5">
-                  <span className="text-2xl font-bold text-foreground tracking-tight">
-                    {value}
-                  </span>
-                  <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
-                    {label}
-                  </span>
+              <BlurFade delay={0.22}>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link href="/tools">
+                    <Button className="rounded-full px-6 gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                      Explore Tools
+                      <ArrowRight className="size-4" />
+                    </Button>
+                  </Link>
+                  <a href="#how-it-works">
+                    <Button
+                      variant="outline"
+                      className="rounded-full px-6 border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
+                    >
+                      How It Works
+                    </Button>
+                  </a>
                 </div>
-              ))}
+              </BlurFade>
             </div>
-          </BlurFade>
+
+            {/* ── Right column: terminal preview + stats ── */}
+            <BlurFade delay={0.28}>
+              <div className="flex flex-col gap-4">
+                {/* Terminal window */}
+                <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm">
+                  {/* Terminal title bar */}
+                  <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
+                    <span className="size-2.5 rounded-full bg-red-400/70" />
+                    <span className="size-2.5 rounded-full bg-yellow-400/70" />
+                    <span className="size-2.5 rounded-full bg-green-400/70" />
+                    <span className="ml-2 font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+                      Claude · Pacifica MCP
+                    </span>
+                  </div>
+                  {/* Terminal body */}
+                  <div className="px-5 py-5 font-mono text-[13px] space-y-3">
+                    <div className="flex gap-2">
+                      <span className="text-primary shrink-0">›</span>
+                      <span className="text-foreground">What&apos;s the BTC price and funding rate?</span>
+                    </div>
+                    <div className="flex gap-2 text-muted-foreground">
+                      <span className="text-primary/60 shrink-0">✓</span>
+                      <span>
+                        <span className="text-foreground font-semibold">$74,586</span>
+                        {" · "}
+                        <span className="text-green-400">+0.8% 24h</span>
+                        {" · "}
+                        funding <span className="text-primary">+0.0015%</span>
+                      </span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-primary shrink-0">›</span>
+                      <span className="text-foreground">Open a 0.1 BTC long at market</span>
+                    </div>
+                    <div className="flex gap-2 text-muted-foreground">
+                      <span className="text-primary/60 shrink-0">✓</span>
+                      <span>
+                        Position opened · size <span className="text-foreground font-semibold">0.1 BTC</span> · entry <span className="text-foreground font-semibold">$74,592</span>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-primary shrink-0">›</span>
+                      <span className="text-muted-foreground/60 animate-pulse">_</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stats grid */}
+                <div className="grid grid-cols-4 gap-3">
+                  {[
+                    { label: "Tools", value: "32" },
+                    { label: "Categories", value: "4" },
+                    { label: "Auth", value: "None" },
+                    { label: "Install", value: "1 cmd" },
+                  ].map(({ label, value }) => (
+                    <div
+                      key={label}
+                      className="rounded-xl border border-border bg-card/50 px-3 py-3 flex flex-col items-center gap-0.5"
+                    >
+                      <span className="text-xl font-bold text-foreground tracking-tight">
+                        {value}
+                      </span>
+                      <span className="font-mono text-[9px] tracking-widest text-muted-foreground uppercase">
+                        {label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </BlurFade>
+
+          </div>
         </div>
       </section>
 
