@@ -88,3 +88,34 @@ export function getKeypair(config: PacificaConfig): Keypair {
 export function getSecretKey(config: PacificaConfig): Uint8Array {
   return bs58.decode(config.privateKey);
 }
+
+/**
+ * Save a subaccount keypair to ~/.pacifica-mcp/subaccounts/<address>.json
+ * The private key is stored locally — never returned through the AI context.
+ */
+export function saveSubaccountKey(
+  publicKey: string,
+  privateKey: string,
+): string {
+  const subDir = join(CONFIG_DIR, "subaccounts");
+  mkdirSync(subDir, { recursive: true });
+
+  const filePath = join(subDir, `${publicKey}.json`);
+  writeFileSync(
+    filePath,
+    JSON.stringify({ publicKey, privateKey, createdAt: new Date().toISOString() }, null, 2),
+    { mode: 0o600 },
+  );
+
+  logger.info({ publicKey, path: filePath }, "Subaccount key saved");
+  return filePath;
+}
+
+/**
+ * Load a subaccount keypair from local storage.
+ */
+export function loadSubaccountKey(publicKey: string): { publicKey: string; privateKey: string } | null {
+  const filePath = join(CONFIG_DIR, "subaccounts", `${publicKey}.json`);
+  if (!existsSync(filePath)) return null;
+  return JSON.parse(readFileSync(filePath, "utf-8"));
+}

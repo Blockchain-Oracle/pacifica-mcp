@@ -2,7 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { post } from "../lib/api.js";
 import { ok, err } from "../lib/format.js";
-import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
+import { loadOrCreateWallet, getKeypair, saveSubaccountKey } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
 import { Keypair } from "@solana/web3.js";
@@ -55,12 +55,17 @@ export function registerCreateSubaccountTool(server: McpServer): void {
           },
         );
 
+        // Save the subaccount key locally — never expose through AI context
+        const keyPath = saveSubaccountKey(
+          subPublicKey,
+          bs58.encode(subKeypair.secretKey),
+        );
+
         return ok({
           ...result,
           sub_account_public_key: subPublicKey,
-          sub_account_private_key: bs58.encode(subKeypair.secretKey),
-          warning:
-            "Save the subaccount private key securely — it cannot be recovered.",
+          key_saved_to: keyPath,
+          note: "Subaccount private key saved to local disk. It is NOT included in this response for security.",
         });
       } catch (e) {
         logger.error({ err: e }, "pacifica-create-subaccount error");
