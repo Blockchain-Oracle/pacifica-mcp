@@ -204,6 +204,8 @@ On first run, a Solana wallet is auto-generated at `~/.pacifica-mcp/config.json`
 
 ## Links
 
+- [@pacifica-dev/cli on npm](https://www.npmjs.com/package/@pacifica-dev/cli)
+- [@pacifica-dev/mcp on npm](https://www.npmjs.com/package/@pacifica-dev/mcp)
 - [GitHub](https://github.com/Blockchain-Oracle/pacifica-mcp)
 - [Pacifica DEX](https://app.pacifica.fi)
 - [Pacifica Testnet](https://test-app.pacifica.fi) (access code: `Pacifica`)

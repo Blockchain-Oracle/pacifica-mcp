@@ -211,10 +211,18 @@ pnpm build       # Build all packages
 
 ## Links
 
+**npm Packages:**
+- [@pacifica-dev/mcp](https://www.npmjs.com/package/@pacifica-dev/mcp) — MCP server
+- [@pacifica-dev/cli](https://www.npmjs.com/package/@pacifica-dev/cli) — Standalone CLI
+
+**Pacifica:**
 - [Pacifica DEX](https://app.pacifica.fi)
 - [Pacifica Testnet](https://test-app.pacifica.fi) (access code: `Pacifica`)
 - [Pacifica API Docs](https://pacifica.gitbook.io/docs/api-documentation/api)
 - [Pacifica Hackathon](https://pacifica.gitbook.io/docs/hackathon/pacifica-hackathon)
+
+**Project:**
+- [GitHub](https://github.com/Blockchain-Oracle/pacifica-mcp)
 
 ## License
 

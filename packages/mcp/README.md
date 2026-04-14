@@ -97,6 +97,8 @@ This package is a thin (~30 line) stdio wrapper around [`@pacifica-dev/cli`](htt
 
 ## Links
 
+- [@pacifica-dev/mcp on npm](https://www.npmjs.com/package/@pacifica-dev/mcp)
+- [@pacifica-dev/cli on npm](https://www.npmjs.com/package/@pacifica-dev/cli)
 - [GitHub](https://github.com/Blockchain-Oracle/pacifica-mcp)
 - [Pacifica DEX](https://app.pacifica.fi)
 - [Pacifica API Docs](https://pacifica.gitbook.io/docs/api-documentation/api)
