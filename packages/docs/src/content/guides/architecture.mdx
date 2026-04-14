@@ -22,14 +22,14 @@ packages/
 
 ## Why two packages for one server?
 
-The `@pacifica/cli` package contains all tool implementations, the API client, Ed25519 signing, wallet management, and the response cache. It exports a `createMcpServer()` factory function.
+The `@pacifica-dev/cli` package contains all tool implementations, the API client, Ed25519 signing, wallet management, and the response cache. It exports a `createMcpServer()` factory function.
 
-The `@pacifica/mcp` package is a thin entry point that imports `createMcpServer()` from `@pacifica/cli`, creates a `StdioServerTransport`, and connects them. It exists as a separate package because `npx` needs a single-bin package to resolve correctly when MCP hosts spawn via `npx @pacifica/mcp`.
+The `@pacifica-dev/mcp` package is a thin entry point that imports `createMcpServer()` from `@pacifica-dev/cli`, creates a `StdioServerTransport`, and connects them. It exists as a separate package because `npx` needs a single-bin package to resolve correctly when MCP hosts spawn via `npx @pacifica-dev/mcp`.
 
 This means:
 
-- **MCP hosts** use `npx @pacifica/mcp` (single binary, clean npx resolution)
-- **CLI users** install `@pacifica/cli` globally for the `pacifica` command
+- **MCP hosts** use `npx @pacifica-dev/mcp` (single binary, clean npx resolution)
+- **CLI users** install `@pacifica-dev/cli` globally for the `pacifica` command
 - **Tool logic** lives in one place (`packages/cli/src/tools/`) and is shared by both
 
 ## Request flow
@@ -38,8 +38,8 @@ This means:
 User prompt
   -> MCP host (Claude, Cursor, etc.)
     -> stdio transport
-      -> @pacifica/mcp (entry point)
-        -> @pacifica/cli/createMcpServer()
+      -> @pacifica-dev/mcp (entry point)
+        -> @pacifica-dev/cli/createMcpServer()
           -> registerXxxTool(server) x 32
             -> zod validation
             -> withCache() (5-min TTL, read-only tools)

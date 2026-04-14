@@ -3,11 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter @pacifica/web --filter @pacifica/docs -r --parallel dev",
-    "dev:mcp": "pnpm --filter @pacifica/mcp dev",
-    "dev:cli": "pnpm --filter @pacifica/cli dev",
-    "dev:web": "pnpm --filter @pacifica/web dev",
-    "dev:docs": "pnpm --filter @pacifica/docs dev",
+    "dev": "pnpm --filter @pacifica-dev/web --filter @pacifica-dev/docs -r --parallel dev",
+    "dev:mcp": "pnpm --filter @pacifica-dev/mcp dev",
+    "dev:cli": "pnpm --filter @pacifica-dev/cli dev",
+    "dev:web": "pnpm --filter @pacifica-dev/web dev",
+    "dev:docs": "pnpm --filter @pacifica-dev/docs dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
   },

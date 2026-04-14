@@ -1,5 +1,5 @@
 {
-  "name": "@pacifica/mcp",
+  "name": "@pacifica-dev/mcp",
   "version": "0.1.0",
   "description": "MCP server for Pacifica — gives AI agents the ability to trade, monitor, and manage positions on Solana's #1 perps DEX.",
   "type": "module",
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "@pacifica/cli": "workspace:*"
+    "@pacifica-dev/cli": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^25.5.1",

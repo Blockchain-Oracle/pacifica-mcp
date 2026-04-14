@@ -14,7 +14,7 @@ Detailed configuration for each supported MCP client.
 ### One-liner
 
 ```bash
-claude mcp add pacifica npx @pacifica/mcp
+claude mcp add pacifica npx @pacifica-dev/mcp
 ```
 
 ### Manual config
@@ -26,7 +26,7 @@ The command above writes to `~/.claude/mcp.json`. You can also edit it directly:
   "mcpServers": {
     "pacifica-mcp": {
       "command": "npx",
-      "args": ["-y", "@pacifica/mcp"]
+      "args": ["-y", "@pacifica-dev/mcp"]
     }
   }
 }
@@ -35,14 +35,14 @@ The command above writes to `~/.claude/mcp.json`. You can also edit it directly:
 ### With environment variables
 
 ```bash
-claude mcp add pacifica-mcp -e PACIFICA_NETWORK=mainnet -- npx @pacifica/mcp
+claude mcp add pacifica-mcp -e PACIFICA_NETWORK=mainnet -- npx @pacifica-dev/mcp
 ```
 
 ### Verify
 
 ```bash
 claude mcp list
-# pacifica-mcp   npx @pacifica/mcp
+# pacifica-mcp   npx @pacifica-dev/mcp
 ```
 
 ---
@@ -64,7 +64,7 @@ claude mcp list
   "mcpServers": {
     "pacifica-mcp": {
       "command": "npx",
-      "args": ["-y", "@pacifica/mcp"]
+      "args": ["-y", "@pacifica-dev/mcp"]
     }
   }
 }
@@ -77,7 +77,7 @@ claude mcp list
   "mcpServers": {
     "pacifica-mcp": {
       "command": "npx",
-      "args": ["-y", "@pacifica/mcp"],
+      "args": ["-y", "@pacifica-dev/mcp"],
       "env": {
         "PACIFICA_NETWORK": "mainnet"
       }
@@ -100,7 +100,7 @@ Restart Claude Desktop after saving.
 4. Set:
    - **Name:** `pacifica-mcp`
    - **Command:** `npx`
-   - **Args:** `-y @pacifica/mcp`
+   - **Args:** `-y @pacifica-dev/mcp`
 
 ### Via config file
 
@@ -111,7 +111,7 @@ Edit `~/.cursor/mcp.json`:
   "mcpServers": {
     "pacifica-mcp": {
       "command": "npx",
-      "args": ["-y", "@pacifica/mcp"]
+      "args": ["-y", "@pacifica-dev/mcp"]
     }
   }
 }
@@ -126,7 +126,7 @@ Restart Cursor after saving.
 Pacifica MCP uses stdio transport (stdin/stdout), which is supported by all MCP clients. The configuration pattern is always:
 
 - **Command:** `npx`
-- **Args:** `["-y", "@pacifica/mcp"]`
+- **Args:** `["-y", "@pacifica-dev/mcp"]`
 
 ### Environment variables
 

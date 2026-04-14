@@ -1,11 +1,11 @@
-# @pacifica/cli
+# @pacifica-dev/cli
 
 CLI and core library for trading on [Pacifica](https://app.pacifica.fi) — the #1 Solana perps DEX. 36 tools for market data, trading, account management, and real-time monitoring.
 
 ## Install
 
 ```bash
-npm install -g @pacifica/cli
+npm install -g @pacifica-dev/cli
 ```
 
 ## CLI Usage
@@ -116,7 +116,7 @@ pacifica --help
 This package also exports `createMcpServer()` for building custom MCP server wrappers:
 
 ```typescript
-import { createMcpServer } from "@pacifica/cli";
+import { createMcpServer } from "@pacifica-dev/cli";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
 const server = createMcpServer();

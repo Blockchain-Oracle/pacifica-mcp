@@ -14,15 +14,15 @@ interface McpOption {
 }
 
 const MCP_OPTIONS: McpOption[] = [
-  { client: "Claude Code", command: "claude mcp add pacifica npx @pacifica/mcp", hue: 200 },
-  { client: "Standalone CLI", command: "npm install -g @pacifica/cli", hue: 140 },
-  { client: "Cursor", command: '// .cursor/mcp.json — "pacifica": { "command": "npx", "args": ["-y", "@pacifica/mcp"] }', hue: 260 },
-  { client: "Claude Desktop", command: '// claude_desktop_config.json — "pacifica": { "command": "npx", "args": ["-y", "@pacifica/mcp"] }', hue: 220 },
-  { client: "Windsurf", command: '// ~/.codeium/windsurf/mcp_config.json — "mcpServers": { "pacifica": { "command": "npx", "args": ["-y", "@pacifica/mcp"] } }', hue: 290 },
-  { client: "VS Code Copilot", command: '// .vscode/mcp.json — "servers": { "pacifica": { "type": "stdio", "command": "npx", "args": ["-y", "@pacifica/mcp"] } }', hue: 180 },
-  { client: "Gemini CLI", command: "gemini mcp add pacifica npx -y @pacifica/mcp", hue: 30 },
-  { client: "Cline", command: '// cline_mcp_settings.json — "pacifica": { "command": "npx", "args": ["-y", "@pacifica/mcp"] }', hue: 90 },
-  { client: "Goose", command: "goose configure  # Add stdio extension → Command: npx -y @pacifica/mcp", hue: 40 },
+  { client: "Claude Code", command: "claude mcp add pacifica npx @pacifica-dev/mcp", hue: 200 },
+  { client: "Standalone CLI", command: "npm install -g @pacifica-dev/cli", hue: 140 },
+  { client: "Cursor", command: '// .cursor/mcp.json — "pacifica": { "command": "npx", "args": ["-y", "@pacifica-dev/mcp"] }', hue: 260 },
+  { client: "Claude Desktop", command: '// claude_desktop_config.json — "pacifica": { "command": "npx", "args": ["-y", "@pacifica-dev/mcp"] }', hue: 220 },
+  { client: "Windsurf", command: '// ~/.codeium/windsurf/mcp_config.json — "mcpServers": { "pacifica": { "command": "npx", "args": ["-y", "@pacifica-dev/mcp"] } }', hue: 290 },
+  { client: "VS Code Copilot", command: '// .vscode/mcp.json — "servers": { "pacifica": { "type": "stdio", "command": "npx", "args": ["-y", "@pacifica-dev/mcp"] } }', hue: 180 },
+  { client: "Gemini CLI", command: "gemini mcp add pacifica npx -y @pacifica-dev/mcp", hue: 30 },
+  { client: "Cline", command: '// cline_mcp_settings.json — "pacifica": { "command": "npx", "args": ["-y", "@pacifica-dev/mcp"] }', hue: 90 },
+  { client: "Goose", command: "goose configure  # Add stdio extension → Command: npx -y @pacifica-dev/mcp", hue: 40 },
 ];
 
 // ── Skill install options ─────────────────────────────────────

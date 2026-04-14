@@ -1,5 +1,5 @@
 {
-  "name": "@pacifica/cli",
+  "name": "@pacifica-dev/cli",
   "version": "0.1.0",
   "description": "CLI and core library for trading on Pacifica — the #1 Solana perps DEX. 36 tools for market data, trading, positions, and account management.",
   "type": "module",

@@ -9,7 +9,7 @@ const steps = [
     description: "One command. Zero config.",
     detail:
       "Run the install command and the Pacifica MCP server is immediately available in Claude, Cursor, or any MCP-compatible AI host.",
-    code: "claude mcp add pacifica npx @pacifica/mcp",
+    code: "claude mcp add pacifica npx @pacifica-dev/mcp",
   },
   {
     step: "02",

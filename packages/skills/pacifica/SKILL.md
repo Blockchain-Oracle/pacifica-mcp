@@ -110,8 +110,8 @@ User: "How's my account doing?"
 
 ```bash
 # MCP server (Claude Code, Cursor, Windsurf, VS Code Copilot, etc.)
-claude mcp add pacifica npx @pacifica/mcp
+claude mcp add pacifica npx @pacifica-dev/mcp
 
 # Standalone CLI
-npm install -g @pacifica/cli
+npm install -g @pacifica-dev/cli
 ```

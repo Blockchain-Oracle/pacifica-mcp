@@ -12,20 +12,20 @@ Pacifica MCP ships in three flavours: **MCP server**, **standalone CLI**, and **
 
 ```bash
 # Claude Code
-claude mcp add pacifica npx @pacifica/mcp
+claude mcp add pacifica npx @pacifica-dev/mcp
 
 # Gemini CLI
-gemini mcp add pacifica npx -y @pacifica/mcp
+gemini mcp add pacifica npx -y @pacifica-dev/mcp
 
 # Cursor / Windsurf / Claude Desktop / VS Code / Zed / Cline / Goose
 # Add to the client's MCP config:
-#   { "command": "npx", "args": ["-y", "@pacifica/mcp"] }
+#   { "command": "npx", "args": ["-y", "@pacifica-dev/mcp"] }
 ```
 
 ### Standalone CLI
 
 ```bash
-npm install -g @pacifica/cli
+npm install -g @pacifica-dev/cli
 pacifica --help
 ```
 
@@ -138,7 +138,7 @@ The skill teaches your agent the decision tree (user intent → tool), parameter
 Same tools, terminal interface. No MCP host needed.
 
 ```bash
-npm install -g @pacifica/cli
+npm install -g @pacifica-dev/cli
 
 pacifica wallet
 pacifica prices --symbol BTC
@@ -173,14 +173,14 @@ The WebSocket tools let agents monitor markets and positions in real-time:
 
 ```
 packages/
-  cli/     @pacifica/cli    — 36 tools, API client, Ed25519 signing, wallet, WebSocket
-  mcp/     @pacifica/mcp    — Thin MCP stdio wrapper (imports from cli)
+  cli/     @pacifica-dev/cli    — 36 tools, API client, Ed25519 signing, wallet, WebSocket
+  mcp/     @pacifica-dev/mcp    — Thin MCP stdio wrapper (imports from cli)
   skills/  Agent Skill       — SKILL.md for cross-client install
   web/     Landing page      — Next.js tool explorer + install instructions
   docs/    Documentation     — Nextra docs site
 ```
 
-The MCP package is a thin ~30 line wrapper. All tool logic lives in `@pacifica/cli`, which exports a `createMcpServer()` factory. This split ensures `npx @pacifica/mcp` works cleanly across all MCP hosts.
+The MCP package is a thin ~30 line wrapper. All tool logic lives in `@pacifica-dev/cli`, which exports a `createMcpServer()` factory. This split ensures `npx @pacifica-dev/mcp` works cleanly across all MCP hosts.
 
 ## Environment Variables
 

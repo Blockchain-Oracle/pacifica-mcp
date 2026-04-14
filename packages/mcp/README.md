@@ -1,4 +1,4 @@
-# @pacifica/mcp
+# @pacifica-dev/mcp
 
 MCP server for [Pacifica](https://app.pacifica.fi) — the #1 Solana perps DEX. Gives AI agents the ability to trade, monitor positions, and manage accounts on Pacifica through natural language.
 
@@ -9,7 +9,7 @@ MCP server for [Pacifica](https://app.pacifica.fi) — the #1 Solana perps DEX. 
 ### Claude Code
 
 ```bash
-claude mcp add pacifica npx @pacifica/mcp
+claude mcp add pacifica npx @pacifica-dev/mcp
 ```
 
 ### Cursor / Windsurf / Claude Desktop / VS Code Copilot
@@ -21,7 +21,7 @@ Add to your MCP config:
   "mcpServers": {
     "pacifica": {
       "command": "npx",
-      "args": ["-y", "@pacifica/mcp"]
+      "args": ["-y", "@pacifica-dev/mcp"]
     }
   }
 }
@@ -30,12 +30,12 @@ Add to your MCP config:
 ### Gemini CLI
 
 ```bash
-gemini mcp add pacifica npx -y @pacifica/mcp
+gemini mcp add pacifica npx -y @pacifica-dev/mcp
 ```
 
 ### Other Hosts
 
-Any MCP-compatible client can use `npx @pacifica/mcp` as the server command.
+Any MCP-compatible client can use `npx @pacifica-dev/mcp` as the server command.
 
 ## What You Can Do
 
@@ -93,7 +93,7 @@ On first run, a Solana wallet is auto-generated at `~/.pacifica-mcp/config.json`
 
 ## Architecture
 
-This package is a thin (~30 line) stdio wrapper around [`@pacifica/cli`](https://www.npmjs.com/package/@pacifica/cli), which contains all 36 tool implementations.
+This package is a thin (~30 line) stdio wrapper around [`@pacifica-dev/cli`](https://www.npmjs.com/package/@pacifica-dev/cli), which contains all 36 tool implementations.
 
 ## Links
 
