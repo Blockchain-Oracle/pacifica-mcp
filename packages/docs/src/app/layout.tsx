@@ -17,16 +17,15 @@ export const metadata = {
 const logo = (
   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
     <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      viewBox="0 0 32 32"
       fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
     >
-      <path d="M3 12h4l3-9 4 18 3-9h4" />
+      <polygon points="16,2 28,9 28,23 16,30 4,23 4,9" stroke="#22d3ee" strokeWidth="1.8" fill="none"/>
+      <path d="M7 16 Q9.75 10.5 12.5 16 Q15.25 21.5 18 16 Q20.75 10.5 23.5 16" stroke="#22d3ee" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+      <circle cx="7" cy="16" r="1.8" fill="#22d3ee"/>
+      <circle cx="23.5" cy="16" r="1.8" fill="#22d3ee"/>
     </svg>
     <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>Pacifica MCP</span>
   </div>
@@ -41,17 +40,19 @@ export default async function RootLayout({
 
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
-      <Head faviconGlyph="P" />
+      <Head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+      </Head>
       <body>
         <Layout
           navbar={
             <Navbar
               logo={logo}
-              projectLink="https://github.com/pacifica-fi/pacifica-mcp"
+              projectLink="https://github.com/Blockchain-Oracle/pacifica-mcp"
             />
           }
           pageMap={pageMap}
-          docsRepositoryBase="https://github.com/pacifica-fi/pacifica-mcp/tree/main/packages/docs"
+          docsRepositoryBase="https://github.com/Blockchain-Oracle/pacifica-mcp/tree/main/packages/docs"
           editLink="Edit this page on GitHub"
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           footer={
