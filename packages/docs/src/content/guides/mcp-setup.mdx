@@ -79,8 +79,7 @@ claude mcp list
       "command": "npx",
       "args": ["-y", "@pacifica/mcp"],
       "env": {
-        "PACIFICA_NETWORK": "mainnet",
-        "PACIFICA_WALLET_PATH": "/Users/you/.pacifica/wallet.json"
+        "PACIFICA_NETWORK": "mainnet"
       }
     }
   }
@@ -134,7 +133,7 @@ Pacifica MCP uses stdio transport (stdin/stdout), which is supported by all MCP 
 | Variable | Default | Description |
 |---|---|---|
 | `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
-| `PACIFICA_WALLET_PATH` | `~/.pacifica/wallet.json` | Ed25519 wallet file path |
+| `PACIFICA_PRIVATE_KEY` | (auto-generated) | Base58-encoded Ed25519 private key override |
 | `LOG_LEVEL` | `info` | Pino log level: `debug`, `info`, `warn`, `error` |
 
 ---
@@ -144,8 +143,8 @@ Pacifica MCP uses stdio transport (stdin/stdout), which is supported by all MCP 
 **"npx: command not found"**
 Install Node.js 18+ from [nodejs.org](https://nodejs.org).
 
-**"ENOENT wallet.json"**
-The wallet file is created automatically on first use. Ask Claude: *"Show me my Pacifica wallet address."*
+**Wallet not found**
+The wallet config at `~/.pacifica-mcp/config.json` is created automatically on first use. Ask Claude: *"Show me my Pacifica wallet address."*
 
 **"Request failed: 401"**
 Your wallet has no funds on Pacifica. Deposit USDC to the address shown by `pacifica-wallet`.

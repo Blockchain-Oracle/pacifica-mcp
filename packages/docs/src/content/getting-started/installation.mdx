@@ -77,7 +77,7 @@ Restart Cursor after saving.
 | Variable | Default | Description |
 |---|---|---|
 | `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
-| `PACIFICA_WALLET_PATH` | `~/.pacifica/wallet.json` | Path to Ed25519 wallet file |
+| `PACIFICA_PRIVATE_KEY` | (auto-generated) | Base58-encoded Ed25519 private key override |
 
 To trade on mainnet, set `PACIFICA_NETWORK=mainnet` in the MCP server environment.
 
@@ -99,9 +99,34 @@ To trade on mainnet, set `PACIFICA_NETWORK=mainnet` in the MCP server environmen
 
 ---
 
+## Agent Skill
+
+Install the Pacifica skill so your agent knows when and how to use the tools:
+
+```bash
+pnpm dlx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica
+```
+
+See the [Agent Skill guide](/guides/skill) for alternative install methods.
+
+---
+
+## Standalone CLI
+
+For terminal use without an MCP host:
+
+```bash
+npm install -g @pacifica/cli
+pacifica prices --symbol BTC-PERP
+```
+
+See the [CLI guide](/guides/cli) for full usage.
+
+---
+
 ## Wallet setup
 
-The first time a trading tool runs, Pacifica MCP auto-generates an Ed25519 wallet at `~/.pacifica/wallet.json`.
+The first time the MCP server starts, it auto-generates an Ed25519 wallet at `~/.pacifica-mcp/config.json`.
 
 **Backup this file.** It contains your private key.
 

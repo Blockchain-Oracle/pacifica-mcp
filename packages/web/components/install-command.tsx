@@ -35,9 +35,9 @@ interface SkillOption {
 
 const SKILL_OPTIONS: SkillOption[] = [
   { label: "Prompt", command: "Read https://pacifica-mcp.vercel.app/skill.md and follow the instructions.", hue: 180 },
-  { label: "pnpm dlx", command: "pnpm dlx skills add github:pacifica-fi/pacifica-mcp --skill pacifica", hue: 20 },
-  { label: "npx", command: "npx skills add github:pacifica-fi/pacifica-mcp --skill pacifica", hue: 300 },
-  { label: "bunx", command: "bunx skills add github:pacifica-fi/pacifica-mcp --skill pacifica", hue: 80 },
+  { label: "pnpm dlx", command: "pnpm dlx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica", hue: 20 },
+  { label: "npx", command: "npx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica", hue: 300 },
+  { label: "bunx", command: "bunx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica", hue: 80 },
 ];
 
 const ROTATE_MS = 3500;

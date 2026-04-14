@@ -1,0 +1,99 @@
+---
+title: Architecture
+description: How the Pacifica MCP monorepo is structured — CLI core, MCP wrapper, Agent Skill
+---
+
+# Architecture
+
+Pacifica MCP is a monorepo with five packages. This page explains the split and why each package exists.
+
+## Package overview
+
+```
+packages/
+  cli/          # Core: 32 tools, API client, signing, wallet, cache, CLI binary
+  mcp/          # Thin wrapper: imports cli, wires stdio transport
+  skills/       # Agent Skill: SKILL.md for cross-client install
+    pacifica/
+      SKILL.md
+  docs/         # Nextra documentation site
+  web/          # Next.js landing page + tool explorer
+```
+
+## Why two packages for one server?
+
+The `@pacifica/cli` package contains all tool implementations, the API client, Ed25519 signing, wallet management, and the response cache. It exports a `createMcpServer()` factory function.
+
+The `@pacifica/mcp` package is a thin entry point that imports `createMcpServer()` from `@pacifica/cli`, creates a `StdioServerTransport`, and connects them. It exists as a separate package because `npx` needs a single-bin package to resolve correctly when MCP hosts spawn via `npx @pacifica/mcp`.
+
+This means:
+
+- **MCP hosts** use `npx @pacifica/mcp` (single binary, clean npx resolution)
+- **CLI users** install `@pacifica/cli` globally for the `pacifica` command
+- **Tool logic** lives in one place (`packages/cli/src/tools/`) and is shared by both
+
+## Request flow
+
+```
+User prompt
+  -> MCP host (Claude, Cursor, etc.)
+    -> stdio transport
+      -> @pacifica/mcp (entry point)
+        -> @pacifica/cli/createMcpServer()
+          -> registerXxxTool(server) x 32
+            -> zod validation
+            -> withCache() (5-min TTL, read-only tools)
+            -> api.get() or api.post()
+            -> signRequest() (write tools only)
+            -> Pacifica API (testnet or mainnet)
+          -> ok(data) or err(message)
+        -> MCP response
+      -> stdio back to host
+    -> AI formats response for user
+```
+
+## Signing flow (write operations)
+
+Trading tools (market orders, limit orders, cancellations, etc.) require Ed25519 signatures:
+
+1. `loadOrCreateWallet()` reads `~/.pacifica-mcp/config.json` (or creates a new keypair on first run)
+2. The tool builds a request payload with order parameters
+3. `signRequest()` constructs a message: `{timestamp, expiry_window, type, data}`
+4. Keys are sorted recursively, then compact-JSON-stringified
+5. `nacl.sign.detached()` signs the UTF-8 bytes with the Ed25519 secret key
+6. The signature is Base58-encoded and attached to the flattened POST body
+7. The Pacifica API verifies the signature against the account's public key
+
+The private key never leaves the local process. The MCP host (Claude, Cursor) never sees it.
+
+## Caching
+
+Read-only tools (market data, account queries) use `withCache()`:
+
+- Cache key: `toolName:JSON.stringify(params)`
+- TTL: 5 minutes
+- Cached responses are prefixed with `[cached]`
+- Only successful responses are cached
+- Auto-eviction runs when the cache exceeds 50 entries
+
+## Tool registration pattern
+
+Every tool follows the same pattern:
+
+```ts
+export function registerXxxTool(server: McpServer): void {
+  server.registerTool(
+    "pacifica-xxx",
+    {
+      title: "Human Title",
+      description: "What it does.\n\nFree or Requires wallet.",
+      inputSchema: z.object({ ... }),
+    },
+    async (params) => {
+      // validate, call API, return ok(data) or err(message)
+    },
+  );
+}
+```
+
+Tools are registered in `server.ts` grouped by category with clear comments.

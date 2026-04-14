@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const DOCS_URL = "https://pacifica.gitbook.io/docs";
-const GITHUB_URL = "https://github.com/pacifica-fi";
+const GITHUB_URL = "https://github.com/Blockchain-Oracle/pacifica-mcp";
 
 const navLinks = [
   { href: "/tools", label: "Tools" },

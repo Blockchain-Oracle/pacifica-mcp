@@ -4,7 +4,9 @@ MCP server giving AI agents the ability to trade, monitor, and manage positions 
 
 ## Architecture
 
-- `packages/mcp` — MCP server (stdio transport, 22 tools)
+- `packages/cli` — Core library: 32 tools, API client, signing, wallet, cache
+- `packages/mcp` — Thin MCP server wrapper (stdio transport, imports from cli)
+- `packages/skills/pacifica` — Agent Skill (SKILL.md for cross-client install)
 - `packages/web` — Next.js landing page + tool explorer
 - `packages/docs` — Nextra documentation
 
@@ -24,7 +26,7 @@ pnpm dev:docs   # Docs on :3001
 - Testnet by default (`PACIFICA_NETWORK=testnet`)
 - All Pacifica API responses are wrapped: `{success, data, error, code}` — always unwrap
 - All numeric values from Pacifica are decimal strings — preserve as strings in output
-- Ed25519 signing for write operations — see `packages/mcp/src/lib/signing.ts`
+- Ed25519 signing for write operations — see `packages/cli/src/lib/signing.ts`
 - Tool pattern: `registerXxxTool(server)` with zod schemas
 - Response pattern: `ok(data)` or `err(message)`
 - Cache read-only tools with `withCache()` (5-min TTL)

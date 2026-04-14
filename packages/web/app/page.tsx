@@ -241,7 +241,7 @@ export default function Home() {
               Docs <ExternalLink className="size-3" />
             </Link>
             <Link
-              href="https://github.com/pacifica-fi"
+              href="https://github.com/Blockchain-Oracle/pacifica-mcp"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"

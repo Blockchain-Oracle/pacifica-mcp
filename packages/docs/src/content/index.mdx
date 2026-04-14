@@ -11,13 +11,14 @@ Connect it to Claude, Cursor, or any MCP-compatible client and start trading wit
 
 ## What can it do?
 
-Pacifica MCP exposes **22 tools** across four categories:
+Pacifica MCP exposes **32 tools** across four categories:
 
 | Category | Tools | Auth |
 |---|---|---|
 | Market Data | Prices, order book, candles, funding rates, recent trades | None |
 | Account Monitoring | Positions, orders, trade history, portfolio equity | None |
-| Trading | Market orders, limit orders, stop orders, TP/SL, cancel | Wallet required |
+| Trading | Market/limit/stop orders, TP/SL, batch, edit, cancel, leverage, margin mode | Wallet required |
+| Account Management | Withdraw, subaccounts, fund transfers | Wallet required |
 | System | Wallet info, list tools | None |
 
 ### Example prompts
@@ -30,17 +31,30 @@ Pacifica MCP exposes **22 tools** across four categories:
 
 ## Quick install
 
-Add Pacifica MCP to Claude Code:
+**MCP server** — add to Claude Code:
 
 ```bash
 claude mcp add pacifica npx @pacifica/mcp
 ```
 
-Or add it to any MCP client using `npx @pacifica/mcp` as the command.
+**Agent Skill** — cross-client install via the community skills CLI:
+
+```bash
+pnpm dlx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica
+```
+
+**Standalone CLI** — install globally:
+
+```bash
+npm install -g @pacifica/cli
+```
 
 ## Next steps
 
 - [Installation & setup](/getting-started/installation) — Claude Code, Claude Desktop, Cursor
 - [Your first trade](/getting-started/first-trade) — Walk through placing an order
-- [Tool reference](/tools) — All 22 tools with parameters and examples
+- [Tool reference](/tools) — All 32 tools with parameters and examples
+- [Architecture](/guides/architecture) — How the MCP + CLI split works
+- [Agent Skill](/guides/skill) — Install the SKILL.md for cross-client AI awareness
+- [Standalone CLI](/guides/cli) — Use tools directly from the terminal
 - [Testnet guide](/guides/testnet) — Trade risk-free on Pacifica testnet

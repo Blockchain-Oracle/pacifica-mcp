@@ -11,7 +11,7 @@ Trading tools require a wallet with funds on Pacifica. Every request is signed w
 
 When you ask Claude to place an order, the MCP server:
 
-1. Loads your Ed25519 keypair from `~/.pacifica/wallet.json`
+1. Loads your Ed25519 keypair from `~/.pacifica-mcp/config.json`
 2. Builds the request payload with the order parameters
 3. Signs the payload with `nacl.sign.detached`
 4. Attaches `account`, `signature`, and `timestamp` to the request

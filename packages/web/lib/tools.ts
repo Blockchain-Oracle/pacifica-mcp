@@ -178,7 +178,7 @@ export const tools: Tool[] = [
   {
     name: "pacifica-batch-order",
     title: "Batch Orders",
-    description: "Place or cancel multiple orders in a single signed request — up to 8 actions.",
+    description: "Place or cancel multiple orders in a single signed request — up to 10 actions.",
     category: "trading",
     requiresWallet: true,
     prompt: "Place a limit buy at $3000 and a limit sell at $3500 for ETH-PERP in one batch",

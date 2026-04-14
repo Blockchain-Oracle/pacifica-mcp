@@ -1,11 +1,11 @@
 ---
 title: Tools Overview
-description: All 22 Pacifica MCP tools at a glance
+description: All 32 Pacifica MCP tools at a glance
 ---
 
 # Tools Overview
 
-Pacifica MCP provides **22 tools** grouped into four categories. Market data and account tools are free and cached (5-minute TTL). Trading tools require a wallet and sign every request with your Ed25519 keypair.
+Pacifica MCP provides **32 tools** grouped into five categories. Market data and account tools are free and cached (5-minute TTL). Trading and account management tools require a wallet and sign every request with your Ed25519 keypair.
 
 ## Market Data
 
@@ -17,6 +17,7 @@ Free — no authentication required. Results cached for 5 minutes.
 | `pacifica-prices` | Real-time prices, funding rate, open interest, 24h volume | None |
 | `pacifica-orderbook` | Order book bids and asks with configurable aggregation | None |
 | `pacifica-candles` | OHLCV candlestick data, 1m to 1d intervals | None |
+| `pacifica-mark-candles` | Mark price OHLCV candlestick data | None |
 | `pacifica-recent-trades` | Most recent trades for a market | None |
 | `pacifica-funding-rates` | Historical funding rate entries | None |
 
@@ -27,9 +28,11 @@ Free — no authentication required. Uses the MCP wallet address by default, or 
 | Tool | Description | Auth |
 |---|---|---|
 | `pacifica-account` | Balance, equity, margin used, fee tier | None |
+| `pacifica-account-settings` | Account settings: margin mode, leverage per market | None |
 | `pacifica-positions` | Open positions with entry price, margin, and PnL | None |
 | `pacifica-orders` | All open orders | None |
 | `pacifica-order-history` | Historical orders with status | None |
+| `pacifica-order-by-id` | Full event history for a specific order | None |
 | `pacifica-trade-history` | Historical trades with realized PnL and fees | None |
 | `pacifica-portfolio` | Portfolio equity over time (1d / 7d / 30d / all) | None |
 | `pacifica-balance-history` | Balance events: deposits, withdrawals, funding payments | None |
@@ -43,10 +46,24 @@ Requires a wallet. Every request is signed with your Ed25519 keypair before bein
 | `pacifica-market-order` | Place a market order (bid = long, ask = short) | Wallet |
 | `pacifica-limit-order` | Place a limit order with GTC / IOC / ALO / TOB | Wallet |
 | `pacifica-stop-order` | Place a stop-market or stop-limit order | Wallet |
+| `pacifica-edit-order` | Edit an existing order's price and amount | Wallet |
+| `pacifica-batch-order` | Submit up to 10 create/cancel actions in one batch | Wallet |
 | `pacifica-set-tpsl` | Set take-profit and/or stop-loss on a position | Wallet |
 | `pacifica-cancel-order` | Cancel a specific order or all open orders for a symbol | Wallet |
+| `pacifica-cancel-stop` | Cancel a specific stop order | Wallet |
 | `pacifica-set-leverage` | Set leverage multiplier for a market (1–100x) | Wallet |
 | `pacifica-set-margin-mode` | Switch between cross margin and isolated margin | Wallet |
+
+## Account Management
+
+Requires a wallet. Every request is signed with your Ed25519 keypair.
+
+| Tool | Description | Auth |
+|---|---|---|
+| `pacifica-withdraw` | Withdraw USDC from Pacifica to your Solana wallet | Wallet |
+| `pacifica-create-subaccount` | Create a new subaccount with a fresh keypair | Wallet |
+| `pacifica-list-subaccounts` | List all subaccounts under your main account | Wallet |
+| `pacifica-transfer-funds` | Transfer USDC between main account and subaccount | Wallet |
 
 ## System
 

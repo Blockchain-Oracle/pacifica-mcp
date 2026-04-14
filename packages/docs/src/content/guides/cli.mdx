@@ -1,0 +1,73 @@
+---
+title: Standalone CLI
+description: Use Pacifica tools from the terminal with the pacifica CLI
+---
+
+# Standalone CLI
+
+The `@pacifica/cli` package provides a standalone CLI for using Pacifica tools directly from the terminal. It uses the same tool implementations as the MCP server.
+
+## Install
+
+```bash
+npm install -g @pacifica/cli
+```
+
+## Usage
+
+```bash
+# List all commands
+pacifica --help
+
+# Market data (free)
+pacifica markets
+pacifica prices --symbol BTC-PERP
+pacifica orderbook --symbol BTC-PERP
+pacifica candles --symbol BTC-PERP --interval 1h --limit 50
+pacifica recent-trades --symbol ETH-PERP
+pacifica funding-rates --symbol BTC-PERP --limit 10
+
+# Account monitoring (free)
+pacifica account
+pacifica positions
+pacifica orders
+pacifica trade-history --symbol BTC-PERP --limit 20
+pacifica portfolio --time-range 30d
+
+# Trading (requires wallet)
+pacifica market-order --symbol BTC-PERP --side bid --amount 0.01
+pacifica limit-order --symbol ETH-PERP --side ask --amount 0.1 --price 3500
+pacifica set-leverage --symbol BTC-PERP --leverage 10
+pacifica cancel --order-id 12345 --symbol BTC-PERP
+
+# System
+pacifica wallet
+pacifica tools
+```
+
+## Output
+
+All output is JSON. Pipe to `jq` for filtering:
+
+```bash
+pacifica prices --symbol BTC-PERP | jq '.mark'
+pacifica positions | jq '.[].symbol'
+```
+
+## Configuration
+
+The CLI uses the same wallet and network configuration as the MCP server:
+
+- Wallet: `~/.pacifica-mcp/config.json` (auto-created on first run)
+- Network: `PACIFICA_NETWORK` env var (default `testnet`)
+- Private key override: `PACIFICA_PRIVATE_KEY` env var
+
+## MCP server mode
+
+When invoked with no subcommand, the CLI starts the MCP server on stdio:
+
+```bash
+pacifica  # starts MCP server (used by npx @pacifica/cli)
+```
+
+This is the same behavior as `@pacifica/mcp`, but with a different binary name.
