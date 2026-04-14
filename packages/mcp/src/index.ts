@@ -1,106 +1,31 @@
 #!/usr/bin/env node
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+/**
+ * @pacifica/mcp — Pacifica MCP stdio server entry point.
+ *
+ * This package is a THIN wrapper: all tool implementations live in
+ * `@pacifica/cli` (the standalone CLI package), which exports a
+ * `createMcpServer()` factory. Here we import that factory, wire it
+ * up to a `StdioServerTransport`, and connect.
+ *
+ * Why two packages instead of one with two bins: npx can't decide
+ * which bin to run when a package has multiple bins and none matches
+ * the package tail name. So shipping a dedicated single-bin package
+ * (`@pacifica/mcp` → `pacifica-mcp`) is the only clean way to make
+ *   `claude mcp add pacifica npx @pacifica/mcp`
+ * just work for every MCP host that spawns via npx.
+ */
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { loadOrCreateWallet } from "./lib/wallet.js";
-import { logger } from "./lib/logger.js";
+import { createMcpServer } from "@pacifica/cli";
 
-// Market Data tools
-import { registerMarketsTool } from "./tools/markets.js";
-import { registerPricesTool } from "./tools/prices.js";
-import { registerOrderbookTool } from "./tools/orderbook.js";
-import { registerCandlesTool } from "./tools/candles.js";
-import { registerMarkCandlesTool } from "./tools/mark-candles.js";
-import { registerRecentTradesTool } from "./tools/recent-trades.js";
-import { registerFundingRatesTool } from "./tools/funding-rates.js";
-
-// Account Monitoring tools
-import { registerAccountTool } from "./tools/account.js";
-import { registerAccountSettingsTool } from "./tools/account-settings.js";
-import { registerPositionsTool } from "./tools/positions.js";
-import { registerTradeHistoryTool } from "./tools/trade-history.js";
-import { registerPortfolioTool } from "./tools/portfolio.js";
-import { registerBalanceHistoryTool } from "./tools/balance-history.js";
-import { registerOrdersTool } from "./tools/orders.js";
-import { registerOrderHistoryTool } from "./tools/order-history.js";
-import { registerOrderByIdTool } from "./tools/order-by-id.js";
-
-// Trading tools
-import { registerMarketOrderTool } from "./tools/market-order.js";
-import { registerLimitOrderTool } from "./tools/limit-order.js";
-import { registerStopOrderTool } from "./tools/stop-order.js";
-import { registerEditOrderTool } from "./tools/edit-order.js";
-import { registerBatchOrderTool } from "./tools/batch-order.js";
-import { registerTpslTool } from "./tools/tpsl.js";
-import { registerCancelOrderTool } from "./tools/cancel.js";
-import { registerCancelStopTool } from "./tools/cancel-stop.js";
-import { registerLeverageTool } from "./tools/leverage.js";
-import { registerMarginModeTool } from "./tools/margin-mode.js";
-import { registerWithdrawTool } from "./tools/withdraw.js";
-
-// Subaccount tools
-import { registerCreateSubaccountTool } from "./tools/create-subaccount.js";
-import { registerListSubaccountsTool } from "./tools/list-subaccounts.js";
-import { registerTransferFundsTool } from "./tools/transfer-funds.js";
-
-// System tools
-import { registerWalletTool } from "./tools/wallet.js";
-import { registerToolsListTool } from "./tools/tools-list.js";
-
-const server = new McpServer(
-  { name: "pacifica-mcp", version: "0.1.0" },
-  { capabilities: { tools: {}, logging: {} } },
-);
-
-// --- Market Data (7) ---
-registerMarketsTool(server);
-registerPricesTool(server);
-registerOrderbookTool(server);
-registerCandlesTool(server);
-registerMarkCandlesTool(server);
-registerRecentTradesTool(server);
-registerFundingRatesTool(server);
-
-// --- Account Monitoring (9) ---
-registerAccountTool(server);
-registerAccountSettingsTool(server);
-registerPositionsTool(server);
-registerTradeHistoryTool(server);
-registerPortfolioTool(server);
-registerBalanceHistoryTool(server);
-registerOrdersTool(server);
-registerOrderHistoryTool(server);
-registerOrderByIdTool(server);
-
-// --- Trading (10) ---
-registerMarketOrderTool(server);
-registerLimitOrderTool(server);
-registerStopOrderTool(server);
-registerEditOrderTool(server);
-registerBatchOrderTool(server);
-registerTpslTool(server);
-registerCancelOrderTool(server);
-registerCancelStopTool(server);
-registerLeverageTool(server);
-registerMarginModeTool(server);
-
-// --- Account Management (4) ---
-registerWithdrawTool(server);
-registerCreateSubaccountTool(server);
-registerListSubaccountsTool(server);
-registerTransferFundsTool(server);
-
-// --- System (2) ---
-registerWalletTool(server);
-registerToolsListTool(server);
-
-async function main() {
-  loadOrCreateWallet(); // ensure wallet exists on startup
+async function main(): Promise<void> {
+  const server = createMcpServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  logger.info("Pacifica MCP server running");
 }
 
-main().catch((error) => {
-  logger.error({ err: error }, "Fatal error");
+main().catch((error: unknown) => {
+  process.stderr.write(
+    `[pacifica-mcp] fatal: ${error instanceof Error ? error.stack ?? error.message : String(error)}\n`,
+  );
   process.exit(1);
 });

@@ -119,7 +119,13 @@ const program = new Command()
 
 // Default action (no subcommand) → start MCP server
 program.action(async () => {
-  await import("./index.js");
+  const { StdioServerTransport } = await import(
+    "@modelcontextprotocol/sdk/server/stdio.js"
+  );
+  const { createMcpServer } = await import("./server.js");
+  const server = createMcpServer();
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════

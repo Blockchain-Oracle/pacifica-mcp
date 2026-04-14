@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "pnpm --filter @pacifica/web --filter @pacifica/docs -r --parallel dev",
     "dev:mcp": "pnpm --filter @pacifica/mcp dev",
+    "dev:cli": "pnpm --filter @pacifica/cli dev",
     "dev:web": "pnpm --filter @pacifica/web dev",
     "dev:docs": "pnpm --filter @pacifica/docs dev",
     "build": "pnpm -r build",
