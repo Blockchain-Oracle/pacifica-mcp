@@ -1,5 +1,5 @@
 import { Keypair } from "@solana/web3.js";
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import bs58 from "bs58";
@@ -114,8 +114,41 @@ export function saveSubaccountKey(
 /**
  * Load a subaccount keypair from local storage.
  */
-export function loadSubaccountKey(publicKey: string): { publicKey: string; privateKey: string } | null {
+export function loadSubaccountKey(publicKey: string): { publicKey: string; privateKey: string; createdAt?: string } | null {
   const filePath = join(CONFIG_DIR, "subaccounts", `${publicKey}.json`);
   if (!existsSync(filePath)) return null;
   return JSON.parse(readFileSync(filePath, "utf-8"));
+}
+
+/**
+ * List all locally saved subaccount public keys.
+ */
+export function listLocalSubaccounts(): { publicKey: string; createdAt?: string }[] {
+  const subDir = join(CONFIG_DIR, "subaccounts");
+  if (!existsSync(subDir)) return [];
+
+  const results: { publicKey: string; createdAt?: string }[] = [];
+  for (const f of readdirSync(subDir)) {
+    if (!f.endsWith(".json")) continue;
+    try {
+      const data = JSON.parse(readFileSync(join(subDir, f), "utf-8")) as {
+        publicKey: string;
+        createdAt?: string;
+      };
+      results.push({ publicKey: data.publicKey, createdAt: data.createdAt });
+    } catch {
+      // skip corrupted files
+    }
+  }
+  return results;
+}
+
+/**
+ * Get a Keypair for a subaccount by its public key.
+ * Returns null if the subaccount key isn't stored locally.
+ */
+export function getSubaccountKeypair(publicKey: string): Keypair | null {
+  const data = loadSubaccountKey(publicKey);
+  if (!data) return null;
+  return Keypair.fromSecretKey(bs58.decode(data.privateKey));
 }
