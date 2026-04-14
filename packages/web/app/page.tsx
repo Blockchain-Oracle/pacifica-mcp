@@ -203,7 +203,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             <div className="rounded-2xl border border-border bg-card p-6 lg:p-8 flex flex-col">
               <McpInstall />
             </div>
