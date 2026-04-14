@@ -11,7 +11,7 @@ const INSTALL_METHODS = [
     description:
       "The simplest install — works in any agent that can fetch URLs. Paste this sentence and the agent installs itself.",
     command:
-      "Read https://pacifica-mcp.vercel.app/skill.md and follow the instructions to install the Pacifica MCP skill.",
+      "Read https://pacifica-mcp.xyz/skill.md and follow the instructions to install the Pacifica MCP skill.",
   },
   {
     id: "cli",

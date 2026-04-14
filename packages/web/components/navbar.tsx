@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-const DOCS_URL = "https://pacifica.gitbook.io/docs";
+const DOCS_URL = "https://docs.pacifica-mcp.xyz";
 const GITHUB_URL = "https://github.com/Blockchain-Oracle/pacifica-mcp";
 
 const navLinks = [

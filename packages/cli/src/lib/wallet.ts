@@ -66,7 +66,7 @@ export function loadOrCreateWallet(): PacificaConfig {
       CONFIG_PATH +
       "\n\n" +
       "  Fund this wallet on Pacifica to start trading.\n" +
-      "  Docs: https://pacifica.gitbook.io/docs\n\n" +
+      "  Docs: https://docs.pacifica-mcp.xyz\n\n" +
       "\u2500".repeat(34) +
       "\n\n",
   );

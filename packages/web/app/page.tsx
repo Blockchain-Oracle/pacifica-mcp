@@ -290,7 +290,7 @@ export default function Home() {
               Skill
             </Link>
             <Link
-              href="https://pacifica.gitbook.io/docs"
+              href="https://docs.pacifica-mcp.xyz"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
