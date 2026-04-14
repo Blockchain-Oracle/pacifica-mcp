@@ -8,6 +8,7 @@
     "dev:cli": "pnpm --filter @pacifica-dev/cli dev",
     "dev:web": "pnpm --filter @pacifica-dev/web dev",
     "dev:docs": "pnpm --filter @pacifica-dev/docs dev",
+    "start": "pnpm -r start",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
   },
