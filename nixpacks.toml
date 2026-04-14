@@ -1,0 +1,43 @@
+# Pacifica MCP monorepo — Nixpacks build config for Coolify / Railway / Render
+#
+# Two deployable services. Set the APP_NAME env var per deploy so each
+# service builds and runs the right workspace:
+#
+#   web   → APP_NAME=@pacifica-dev/web    (Next.js 16 landing + tool explorer)
+#   docs  → APP_NAME=@pacifica-dev/docs   (Nextra 4 documentation site)
+#
+# The CLI and MCP packages are NOT deployed here — they're published to npm
+# as @pacifica-dev/cli and @pacifica-dev/mcp and installed locally by users.
+#
+# IMPORTANT: In Coolify, set "Base Directory" to / (repo root), NOT
+# packages/<name>. Nixpacks needs to see the workspace root so pnpm can
+# resolve the monorepo. The APP_NAME filter picks the target workspace.
+
+# ── Install phase ────────────────────────────────────────────────
+# onlyIncludeFiles controls cache invalidation: nixpacks only rebuilds
+# the install layer when one of these files changes. Source edits, README
+# tweaks, docs content won't bust the install cache.
+[phases.install]
+cmds = ["NODE_ENV=development pnpm install --frozen-lockfile"]
+cacheDirectories = [".pnpm-store"]
+onlyIncludeFiles = [
+  "package.json",
+  "pnpm-lock.yaml",
+  "pnpm-workspace.yaml",
+  "packages/web/package.json",
+  "packages/docs/package.json",
+  "packages/cli/package.json",
+  "packages/mcp/package.json"
+]
+
+# ── Build phase ──────────────────────────────────────────────────
+# pnpm --filter builds only the target workspace.
+[phases.build]
+dependsOn = ["install"]
+cmds = ["pnpm --filter ${APP_NAME:-@pacifica-dev/web} build"]
+
+# ── Start ────────────────────────────────────────────────────────
+# web   → next start -p $PORT
+# docs  → next start -p $PORT
+[start]
+cmd = "pnpm --filter ${APP_NAME:-@pacifica-dev/web} start"
