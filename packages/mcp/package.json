@@ -1,14 +1,44 @@
 {
   "name": "@pacifica/mcp",
   "version": "0.1.0",
+  "description": "MCP server for Pacifica — gives AI agents the ability to trade, monitor, and manage positions on Solana's #1 perps DEX.",
   "type": "module",
   "bin": {
     "pacifica-mcp": "./dist/index.js"
   },
   "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc"
+  },
+  "keywords": [
+    "pacifica",
+    "mcp",
+    "model-context-protocol",
+    "solana",
+    "perps",
+    "dex",
+    "trading",
+    "ai",
+    "agent",
+    "defi"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pacifica-fi/pacifica-mcp"
+  },
+  "homepage": "https://pacifica.fi",
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
