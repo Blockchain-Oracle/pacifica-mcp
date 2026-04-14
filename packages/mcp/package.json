@@ -1,6 +1,6 @@
 {
   "name": "@pacifica-dev/mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for Pacifica — gives AI agents the ability to trade, monitor, and manage positions on Solana's #1 perps DEX.",
   "type": "module",
   "bin": {
@@ -13,7 +13,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -34,9 +35,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pacifica-fi/pacifica-mcp"
+    "url": "git+https://github.com/Blockchain-Oracle/pacifica-mcp.git"
   },
-  "homepage": "https://pacifica.fi",
+  "homepage": "https://pacifica-mcp.xyz",
   "engines": {
     "node": ">=18.0.0"
   },

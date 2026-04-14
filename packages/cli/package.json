@@ -1,6 +1,6 @@
 {
   "name": "@pacifica-dev/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI and core library for trading on Pacifica — the #1 Solana perps DEX. 36 tools for market data, trading, positions, and account management.",
   "type": "module",
   "bin": {
@@ -15,7 +15,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "dev": "tsx watch src/cli.ts",
@@ -36,9 +37,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pacifica-fi/pacifica-mcp"
+    "url": "git+https://github.com/Blockchain-Oracle/pacifica-mcp.git"
   },
-  "homepage": "https://pacifica.fi",
+  "homepage": "https://pacifica-mcp.xyz",
   "engines": {
     "node": ">=18.0.0"
   },
