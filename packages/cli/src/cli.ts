@@ -102,6 +102,12 @@ const TOOLS_CATALOG = {
     { command: "list-subaccounts", description: "List all subaccounts" },
     { command: "transfer-funds", description: "Transfer USDC between accounts" },
   ],
+  "Real-Time (WebSocket)": [
+    { command: "watch", description: "Snapshot: collect WebSocket events for N seconds" },
+    { command: "watch-start", description: "Start a persistent WebSocket subscription" },
+    { command: "watch-read", description: "Read buffered events from a subscription" },
+    { command: "watch-stop", description: "Stop a WebSocket subscription" },
+  ],
   System: [
     { command: "wallet", description: "Show wallet address, network, and balance" },
     { command: "tools", description: "List all available CLI commands" },
@@ -1019,6 +1025,171 @@ program
         signed,
       );
       output(data);
+    } catch (e) {
+      fatal(e);
+    }
+  });
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// REAL-TIME (4)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+program
+  .command("watch")
+  .description("Subscribe to a WebSocket channel, collect events for N seconds, then print")
+  .requiredOption(
+    "--channel <channel>",
+    "Channel: prices, trades, orderbook, account_info, account_positions, account_trades",
+  )
+  .option("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .option("--account <address>", "Wallet address for account_* channels")
+  .option("--duration <seconds>", "Seconds to collect (default 10, max 60)", "10")
+  .action(
+    async (opts: {
+      channel: string;
+      symbol?: string;
+      account?: string;
+      duration: string;
+    }) => {
+      try {
+        const { wsManager } = await import("./lib/ws.js");
+        const { buildParams, summarizeEvents } = await import("./tools/watch.js");
+
+        const durationSec = Math.max(1, Math.min(60, parseInt(opts.duration, 10)));
+        const durationMs = durationSec * 1000;
+        const wsParams = buildParams(opts.channel, opts.symbol, opts.account);
+
+        process.stderr.write(
+          `Watching ${opts.channel} for ${durationSec}s...\n`,
+        );
+        const events = await wsManager.snapshot(opts.channel, wsParams, durationMs);
+        const summary = summarizeEvents(opts.channel, events, durationMs);
+
+        output({ events, summary });
+      } catch (e) {
+        fatal(e);
+      }
+    },
+  );
+
+program
+  .command("watch-start")
+  .description("Start a persistent WebSocket subscription (events are buffered)")
+  .requiredOption(
+    "--channel <channel>",
+    "Channel: prices, trades, orderbook, account_info, account_positions, account_trades",
+  )
+  .option("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .option("--account <address>", "Wallet address for account_* channels")
+  .action(
+    async (opts: {
+      channel: string;
+      symbol?: string;
+      account?: string;
+    }) => {
+      try {
+        const { wsManager } = await import("./lib/ws.js");
+        const { buildParams } = await import("./tools/watch.js");
+
+        const wsParams = buildParams(opts.channel, opts.symbol, opts.account);
+        const subscriptionId = await wsManager.subscribe(
+          opts.channel,
+          wsParams,
+        );
+
+        output({
+          subscription_id: subscriptionId,
+          channel: opts.channel,
+          message:
+            "Subscription started. Use 'pacifica watch-read' to check events.",
+        });
+      } catch (e) {
+        fatal(e);
+      }
+    },
+  );
+
+program
+  .command("watch-read")
+  .description("Read and drain buffered events from a WebSocket subscription")
+  .requiredOption(
+    "--subscription-id <id>",
+    "Subscription ID from watch-start",
+  )
+  .action(async (opts: { subscriptionId: string }) => {
+    try {
+      const { wsManager } = await import("./lib/ws.js");
+      const { summarizeEvents } = await import("./tools/watch.js");
+
+      const result = wsManager.read(opts.subscriptionId);
+      if (!result) {
+        const active = wsManager.listSubscriptions();
+        process.stderr.write(
+          `Subscription "${opts.subscriptionId}" not found.\n`,
+        );
+        if (active.length > 0) {
+          process.stderr.write(
+            `Active subscriptions: ${JSON.stringify(active, null, 2)}\n`,
+          );
+        }
+        process.exit(1);
+      }
+
+      const channel = opts.subscriptionId.replace(/_\d+$/, "");
+      const summary = summarizeEvents(channel, result.events, result.timeSpanMs);
+
+      output({
+        events: result.events,
+        count: result.count,
+        time_span_ms: result.timeSpanMs,
+        summary,
+      });
+    } catch (e) {
+      fatal(e);
+    }
+  });
+
+program
+  .command("watch-stop")
+  .description("Stop a WebSocket subscription (or all if no ID given)")
+  .option(
+    "--subscription-id <id>",
+    "Subscription ID to stop (omit to stop all)",
+  )
+  .action(async (opts: { subscriptionId?: string }) => {
+    try {
+      const { wsManager } = await import("./lib/ws.js");
+
+      const stopped: string[] = [];
+      if (opts.subscriptionId) {
+        const ok_ = wsManager.unsubscribe(opts.subscriptionId);
+        if (!ok_) {
+          const active = wsManager.listSubscriptions();
+          process.stderr.write(
+            `Subscription "${opts.subscriptionId}" not found.\n`,
+          );
+          if (active.length > 0) {
+            process.stderr.write(
+              `Active subscriptions: ${JSON.stringify(active, null, 2)}\n`,
+            );
+          }
+          process.exit(1);
+        }
+        stopped.push(opts.subscriptionId);
+      } else {
+        const active = wsManager.listSubscriptions();
+        for (const sub of active) {
+          wsManager.unsubscribe(sub.id);
+          stopped.push(sub.id);
+        }
+        if (stopped.length === 0) {
+          output({ message: "No active subscriptions to stop." });
+          return;
+        }
+      }
+
+      const remaining = wsManager.listSubscriptions();
+      output({ stopped, remaining_subscriptions: remaining });
     } catch (e) {
       fatal(e);
     }

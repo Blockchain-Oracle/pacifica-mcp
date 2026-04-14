@@ -42,6 +42,12 @@ const TOOLS = {
     { name: "pacifica-list-subaccounts", description: "List all subaccounts under your main account" },
     { name: "pacifica-transfer-funds", description: "Transfer USDC between main account and subaccount" },
   ],
+  "Real-Time (WebSocket)": [
+    { name: "pacifica-watch", description: "Snapshot: subscribe to a channel, collect events for N seconds" },
+    { name: "pacifica-watch-start", description: "Start a persistent WebSocket subscription (events buffered)" },
+    { name: "pacifica-watch-read", description: "Read and drain buffered events from a subscription" },
+    { name: "pacifica-watch-stop", description: "Stop a WebSocket subscription (or all)" },
+  ],
   "System": [
     { name: "pacifica-wallet", description: "Show wallet address, network, and balance" },
     { name: "pacifica-tools", description: "This tool — list all available tools" },

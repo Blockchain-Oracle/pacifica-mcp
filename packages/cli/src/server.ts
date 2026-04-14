@@ -40,6 +40,12 @@ import { registerCreateSubaccountTool } from "./tools/create-subaccount.js";
 import { registerListSubaccountsTool } from "./tools/list-subaccounts.js";
 import { registerTransferFundsTool } from "./tools/transfer-funds.js";
 
+// Real-Time tools
+import { registerWatchTool } from "./tools/watch.js";
+import { registerWatchStartTool } from "./tools/watch-start.js";
+import { registerWatchReadTool } from "./tools/watch-read.js";
+import { registerWatchStopTool } from "./tools/watch-stop.js";
+
 // System tools
 import { registerWalletTool } from "./tools/wallet.js";
 import { registerToolsListTool } from "./tools/tools-list.js";
@@ -90,10 +96,16 @@ export function createMcpServer(): McpServer {
   registerListSubaccountsTool(server);
   registerTransferFundsTool(server);
 
+  // --- Real-Time (4) ---
+  registerWatchTool(server);
+  registerWatchStartTool(server);
+  registerWatchReadTool(server);
+  registerWatchStopTool(server);
+
   // --- System (2) ---
   registerWalletTool(server);
   registerToolsListTool(server);
 
-  logger.info("Pacifica MCP server created with 32 tools");
+  logger.info("Pacifica MCP server created with 36 tools");
   return server;
 }
