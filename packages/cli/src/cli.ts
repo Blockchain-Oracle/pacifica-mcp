@@ -553,7 +553,7 @@ program
   .requiredOption("--stop-price <price>", "Trigger price as a decimal string")
   .requiredOption("--amount <amount>", "Order size as a decimal string")
   .option("--limit-price <price>", "Limit price after trigger (omit for stop-market)")
-  .option("--reduce-only", "Only reduce existing position", true)
+  .option("--no-reduce-only", "Allow opening new position (default: reduce-only)")
   .action(
     async (opts: {
       symbol: string;
