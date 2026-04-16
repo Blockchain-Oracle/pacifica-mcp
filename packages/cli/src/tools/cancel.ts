@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { post } from "../lib/api.js";
-import { ok, err } from "../lib/format.js";
+import { ok, err } from "../lib/format.js"
+import { invalidateCacheAll } from "../lib/cache.js";
 import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
@@ -55,7 +56,8 @@ export function registerCancelOrderTool(server: McpServer): void {
             config.publicKey,
           );
           const data = await post<{ success: boolean }>("/orders/cancel", signed);
-          return ok(data);
+          invalidateCacheAll();
+        return ok(data);
         } else {
           const cancelData: Record<string, unknown> = {
             all_symbols: params.all_symbols,
@@ -71,7 +73,8 @@ export function registerCancelOrderTool(server: McpServer): void {
             config.publicKey,
           );
           const data = await post<CancelAllResponse>("/orders/cancel_all", signed);
-          return ok(data);
+          invalidateCacheAll();
+        return ok(data);
         }
       } catch (e) {
         logger.error({ err: e }, "pacifica-cancel-order error");

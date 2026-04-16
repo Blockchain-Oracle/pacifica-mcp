@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { post } from "../lib/api.js";
-import { ok, err } from "../lib/format.js";
+import { ok, err } from "../lib/format.js"
+import { invalidateCacheAll } from "../lib/cache.js";
 import { loadOrCreateWallet, getKeypair, saveSubaccountKey } from "../lib/wallet.js";
 import { sortKeys } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
@@ -78,6 +79,7 @@ export function registerCreateSubaccountTool(server: McpServer): void {
           bs58.encode(subKeypair.secretKey),
         );
 
+        invalidateCacheAll();
         return ok({
           ...result,
           sub_account_public_key: subPublicKey,

@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { post } from "../lib/api.js";
-import { ok, err } from "../lib/format.js";
+import { ok, err } from "../lib/format.js"
+import { invalidateCacheAll } from "../lib/cache.js";
 import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
@@ -52,6 +53,7 @@ export function registerCancelStopTool(server: McpServer): void {
           "/orders/stop/cancel",
           signed,
         );
+        invalidateCacheAll();
         return ok(result);
       } catch (e) {
         logger.error({ err: e }, "pacifica-cancel-stop error");

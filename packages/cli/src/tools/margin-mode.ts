@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { post } from "../lib/api.js";
-import { ok, err } from "../lib/format.js";
+import { ok, err } from "../lib/format.js"
+import { invalidateCacheAll } from "../lib/cache.js";
 import { loadOrCreateWallet, getKeypair } from "../lib/wallet.js";
 import { signRequest } from "../lib/signing.js";
 import { logger } from "../lib/logger.js";
@@ -33,6 +34,7 @@ export function registerMarginModeTool(server: McpServer): void {
           config.publicKey,
         );
         const data = await post<{ success: boolean }>("/account/margin", signed);
+        invalidateCacheAll();
         return ok(data);
       } catch (e) {
         logger.error({ err: e }, "pacifica-set-margin-mode error");

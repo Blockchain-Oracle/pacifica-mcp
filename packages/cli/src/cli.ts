@@ -816,13 +816,11 @@ program
   .command("set-margin-mode")
   .description("Switch between cross and isolated margin for a market")
   .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
-  .requiredOption(
-    "--isolated <bool>",
-    "true = isolated margin, false = cross margin",
-  )
-  .action(async (opts: { symbol: string; isolated: string }) => {
+  .option("--isolated", "Use isolated margin (default: cross)")
+  .option("--no-isolated", "Use cross margin")
+  .action(async (opts: { symbol: string; isolated: boolean }) => {
     try {
-      const isIsolated = opts.isolated === "true";
+      const isIsolated = opts.isolated;
       const config = loadOrCreateWallet();
       const keypair = getKeypair(config);
       const signed = signRequest(
