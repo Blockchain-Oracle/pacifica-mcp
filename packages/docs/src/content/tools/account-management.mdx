@@ -1,0 +1,137 @@
+---
+title: Account Management Tools
+description: Withdraw USDC, create subaccounts, and transfer funds
+---
+
+# Account Management Tools
+
+Account management tools handle withdrawals, subaccount creation, and fund transfers. All operations require wallet signing — the MCP server signs each request with your Ed25519 keypair. Your private key never leaves the local process.
+
+---
+
+## pacifica-withdraw
+
+Withdraw USDC from your Pacifica account to your Solana wallet.
+
+A flat $1 fee is deducted per withdrawal request. Your Solana wallet must already have a USDC token account (ATA) — the tool will not create one.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `amount` | string | Yes | Amount to withdraw as decimal string (min `"1"`, max `"100000"` per day) |
+
+**Example prompt**
+
+> *"Withdraw $500 USDC to my wallet."*
+
+> *"Send 100 USDC back to my Solana wallet."*
+
+**Example response**
+
+```json
+{
+  "amount": "500.00",
+  "fee": "1.00",
+  "net_amount": "499.00",
+  "status": "pending"
+}
+```
+
+---
+
+## pacifica-create-subaccount
+
+Create a new subaccount under your main account. A fresh Ed25519 keypair is generated automatically — no parameters needed.
+
+The new subaccount requires a dual signature (main account + subaccount keypair sign together). The subaccount private key is saved locally at `~/.pacifica-mcp/subaccounts/<address>.json` and is **never** exposed through the MCP response or AI output.
+
+**Parameters**
+
+None — the keypair is generated automatically.
+
+**Example prompt**
+
+> *"Create a new subaccount."*
+
+> *"Set up a fresh trading subaccount for me."*
+
+**Example response**
+
+```json
+{
+  "address": "9xR...def",
+  "status": "created",
+  "key_path": "~/.pacifica-mcp/subaccounts/9xR...def.json"
+}
+```
+
+---
+
+## pacifica-list-subaccounts
+
+List all subaccounts under your main account.
+
+Returns on-chain subaccounts with their balances and settings. Also includes locally-saved subaccounts that have not yet appeared on-chain (e.g. recently created, not yet funded).
+
+**Parameters**
+
+None.
+
+**Example prompt**
+
+> *"List all my subaccounts."*
+
+> *"Show me my subaccounts and their balances."*
+
+**Example response**
+
+```json
+[
+  {
+    "address": "9xR...def",
+    "balance": "500.00",
+    "pending_balance": "0.00",
+    "fee_level": "taker",
+    "created_at": "1712700000000"
+  },
+  {
+    "address": "4kT...ghi",
+    "balance": "0.00",
+    "pending_balance": "0.00",
+    "fee_level": "taker",
+    "created_at": "1712750000000",
+    "local_only": true
+  }
+]
+```
+
+---
+
+## pacifica-transfer-funds
+
+Transfer USDC between your main account and a subaccount. Works in both directions — main to sub, or sub to main.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `to_account` | string | Yes | Destination address (subaccount or main account) |
+| `amount` | string | Yes | Amount to transfer as decimal string (min `"10"`) |
+
+**Example prompt**
+
+> *"Transfer $200 to my subaccount 9xR...def."*
+
+> *"Move 500 USDC from subaccount 9xR...def back to my main account."*
+
+**Example response**
+
+```json
+{
+  "from": "7xK...abc",
+  "to": "9xR...def",
+  "amount": "200.00",
+  "status": "completed"
+}
+```

@@ -1,0 +1,160 @@
+---
+title: Real-Time Tools
+description: WebSocket streaming for live prices, trades, and account updates
+---
+
+# Real-Time Tools
+
+Real-time tools use WebSocket connections to stream live market and account data. Market channels (prices, trades, orderbook) are free and require no authentication. Account channels (account_info, account_positions, account_trades) require wallet signing.
+
+## Channels reference
+
+| Channel | Requires Symbol | Auth | Description |
+|---|---|---|---|
+| `prices` | No | Free | All market prices |
+| `trades` | Yes | Free | Trade feed for one market |
+| `orderbook` | Yes | Free | Live orderbook updates |
+| `account_info` | No | Wallet | Account balance changes |
+| `account_positions` | No | Wallet | Position updates |
+| `account_trades` | No | Wallet | Your trade fills |
+
+---
+
+## pacifica-watch
+
+Subscribe to a channel, collect events for a duration, and return a summary. This is the simplest way to sample real-time data — no need to manage subscriptions.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel` | enum | Yes | `prices`, `trades`, `orderbook`, `account_info`, `account_positions`, `account_trades` |
+| `symbol` | string | Conditional | Required for `trades` and `orderbook` channels (e.g. `BTC-PERP`) |
+| `duration` | integer | No | Seconds to collect events, 1–60 (default `10`) |
+
+**Example prompt**
+
+> *"Watch BTC-PERP trades for 15 seconds."*
+
+> *"Sample the prices channel for 5 seconds."*
+
+**Example response**
+
+```json
+{
+  "events": [
+    {
+      "channel": "trades",
+      "symbol": "BTC-PERP",
+      "price": "67420.50",
+      "amount": "0.025",
+      "side": "bid",
+      "time": "1712699800000"
+    }
+  ],
+  "summary": {
+    "count": 42,
+    "duration_ms": 15000
+  }
+}
+```
+
+---
+
+## pacifica-watch-start
+
+Start a persistent WebSocket subscription that buffers events in the background. Use `pacifica-watch-read` to retrieve buffered events and `pacifica-watch-stop` to end the subscription.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel` | enum | Yes | `prices`, `trades`, `orderbook`, `account_info`, `account_positions`, `account_trades` |
+| `symbol` | string | Conditional | Required for `trades` and `orderbook` channels (e.g. `ETH-PERP`) |
+
+**Example prompt**
+
+> *"Start streaming BTC-PERP orderbook updates."*
+
+> *"Subscribe to my account position updates."*
+
+**Example response**
+
+```json
+{
+  "subscription_id": "sub_abc123",
+  "channel": "orderbook",
+  "symbol": "BTC-PERP",
+  "status": "active"
+}
+```
+
+---
+
+## pacifica-watch-read
+
+Read and drain buffered events from a persistent subscription. The buffer is cleared after reading — each event is returned only once.
+
+> **Tip:** The `prices` channel streams ALL markets simultaneously and can produce massive output. Use `summary_only: true` to get aggregate stats instead of raw events.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `subscription_id` | string | Yes | Subscription ID from `pacifica-watch-start` |
+| `summary_only` | boolean | No | Return only summary stats, not raw events (default `false`) |
+| `max_events` | integer | No | Maximum events to return, 1–10000 (default `100`) |
+
+**Example prompt**
+
+> *"Read the latest events from subscription sub_abc123."*
+
+> *"Get a summary of the prices subscription."*
+
+**Example response**
+
+```json
+{
+  "subscription_id": "sub_abc123",
+  "events": [
+    {
+      "channel": "orderbook",
+      "symbol": "BTC-PERP",
+      "bids": [["67419.0", "1.234"]],
+      "asks": [["67421.0", "0.890"]],
+      "time": "1712699850000"
+    }
+  ],
+  "summary": {
+    "count": 128,
+    "buffer_remaining": 0
+  }
+}
+```
+
+---
+
+## pacifica-watch-stop
+
+Stop a persistent subscription, or stop all active subscriptions at once.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `subscription_id` | string | No | Subscription ID to stop. Omit to stop all active subscriptions. |
+
+**Example prompt**
+
+> *"Stop subscription sub_abc123."*
+
+> *"Stop all my WebSocket subscriptions."*
+
+**Example response**
+
+```json
+{
+  "stopped": ["sub_abc123"],
+  "remaining_active": []
+}
+```

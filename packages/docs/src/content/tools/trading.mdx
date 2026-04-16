@@ -132,12 +132,14 @@ Place a stop-market or stop-limit order. Triggers when the market reaches `stop_
 
 Set take-profit and/or stop-loss prices on an existing position. Provide at least one of `take_profit_price` or `stop_loss_price`.
 
+> ⚠️ **The `side` parameter is the EXIT side, not the position side.** To set TP/SL on a long (bid) position, use `side: "ask"`. To set TP/SL on a short (ask) position, use `side: "bid"`.
+
 **Parameters**
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `symbol` | string | Yes | Market symbol |
-| `side` | enum | Yes | Position side: `bid` (long) or `ask` (short) |
+| `side` | enum | Yes | Exit side: `bid` or `ask` (opposite of your position side) |
 | `take_profit_price` | string | No | TP trigger price as decimal string |
 | `stop_loss_price` | string | No | SL trigger price as decimal string |
 
@@ -209,3 +211,108 @@ Switch between cross margin and isolated margin for a market.
 > *"Switch BTC-PERP to isolated margin."*
 
 > *"Enable cross margin on ETH-PERP."*
+
+---
+
+## pacifica-edit-order
+
+Edit an existing order's price and/or amount. The original order is replaced and a new order ID is returned.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol |
+| `price` | string | No | New price as decimal string |
+| `amount` | string | No | New amount as decimal string |
+| `order_id` | string | Conditional | Order ID to edit. Provide this or `client_order_id`. |
+| `client_order_id` | string | Conditional | Client order ID to edit. Provide this or `order_id`. |
+
+**Example prompt**
+
+> *"Change my BTC-PERP limit order ord_def456 to $66,000."*
+
+> *"Update order ord_def456 — set amount to 0.1 and price to $64,500."*
+
+**Example response**
+
+```json
+{
+  "order_id": "ord_new789",
+  "symbol": "BTC-PERP",
+  "price": "66000.00",
+  "amount": "0.05",
+  "status": "open"
+}
+```
+
+---
+
+## pacifica-batch-order
+
+Submit up to 10 order actions (create and/or cancel) in a single request.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `actions` | array | Yes | JSON array of up to 10 actions (see below) |
+
+Each action object:
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `type` | enum | Yes | `create` or `cancel` |
+| `symbol` | string | Yes | Market symbol |
+| `side` | enum | For create | `bid` or `ask` |
+| `amount` | string | For create | Order size as decimal string |
+| `price` | string | For create | Limit price as decimal string |
+| `tif` | enum | No | `GTC` / `IOC` / `ALO` / `TOB` (default `GTC`) |
+| `order_id` | string | For cancel | Order ID to cancel |
+
+**Example prompt**
+
+> *"Place 3 limit buy orders for BTC-PERP at $64,000, $63,500, and $63,000 — each for 0.01 BTC."*
+
+> *"Cancel orders ord_1 and ord_2, and place a new bid at $65,000 for 0.05 BTC-PERP."*
+
+**Example response**
+
+```json
+{
+  "results": [
+    { "type": "create", "order_id": "ord_batch1", "status": "open" },
+    { "type": "create", "order_id": "ord_batch2", "status": "open" },
+    { "type": "cancel", "order_id": "ord_1", "status": "canceled" }
+  ]
+}
+```
+
+---
+
+## pacifica-cancel-stop
+
+Cancel a specific stop order by ID.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `symbol` | string | Yes | Market symbol |
+| `order_id` | string | Conditional | Stop order ID to cancel. Provide this or `client_order_id`. |
+| `client_order_id` | string | Conditional | Client order ID to cancel. Provide this or `order_id`. |
+
+**Example prompt**
+
+> *"Cancel my BTC-PERP stop order ord_stop123."*
+
+> *"Remove the stop-loss order on ETH-PERP."*
+
+**Example response**
+
+```json
+{
+  "order_id": "ord_stop123",
+  "symbol": "BTC-PERP",
+  "status": "canceled"
+}

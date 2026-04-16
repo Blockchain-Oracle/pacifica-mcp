@@ -218,3 +218,86 @@ Get balance event history: deposits, withdrawals, trades, and funding payments.
   }
 ]
 ```
+
+---
+
+## pacifica-account-settings
+
+Get account settings including margin mode and leverage configuration per market.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `account` | string | No | Solana wallet address. Defaults to MCP wallet. |
+
+**Example prompt**
+
+> *"Show me my margin settings and leverage for each market."*
+
+> *"What leverage is set on my BTC-PERP and ETH-PERP?"*
+
+**Example response**
+
+```json
+{
+  "margin_settings": [
+    {
+      "symbol": "BTC-PERP",
+      "isolated": false,
+      "leverage": 10
+    },
+    {
+      "symbol": "ETH-PERP",
+      "isolated": true,
+      "leverage": 20
+    }
+  ]
+}
+```
+
+---
+
+## pacifica-order-by-id
+
+Get the full event history for a specific order. Returns all lifecycle events — make, fill, partial fill, cancel, etc.
+
+**Parameters**
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `order_id` | integer | Yes | Order ID |
+
+**Example prompt**
+
+> *"Show me the full history for order 123456."*
+
+> *"What happened to order 789012 — was it filled or canceled?"*
+
+**Example response**
+
+```json
+[
+  {
+    "event": "make",
+    "order_id": 123456,
+    "price": "65000.00",
+    "amount": "0.05",
+    "timestamp": "1712699000000"
+  },
+  {
+    "event": "fill",
+    "order_id": 123456,
+    "price": "65000.00",
+    "amount": "0.03",
+    "fee": "0.020",
+    "timestamp": "1712699500000"
+  },
+  {
+    "event": "cancel",
+    "order_id": 123456,
+    "remaining_amount": "0.02",
+    "timestamp": "1712700000000"
+  }
+]
+```

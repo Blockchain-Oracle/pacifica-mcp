@@ -63,7 +63,7 @@ Trigger when the user:
 
 ## Parameter Guide
 
-- **symbol**: Uppercase, no suffix — `BTC`, `ETH`, `SOL`, `DOGE`, `HYPE`. Run `pacifica-markets` to discover all symbols.
+- **symbol**: Perps use uppercase with no suffix — `BTC`, `ETH`, `SOL`, `DOGE`. Spot markets use `SOL-USDC`, `BTC-USDC`, `ETH-USDC`. Run `pacifica-markets` to discover all symbols.
 - **side**: `"bid"` = long/buy, `"ask"` = short/sell
 - **amount**: Always a decimal string (`"0.1"`, `"1.5"`). Min order value is $10.
 - **price**: Always a decimal string (`"70000"`, `"3500"`)
@@ -77,6 +77,9 @@ Trigger when the user:
 - **Deposits** happen on the Pacifica web app ([test-app.pacifica.fi](https://test-app.pacifica.fi) testnet, [pacifica.fi](https://pacifica.fi) mainnet). Not through MCP or CLI.
 - **Wallet auto-generated** on first run at `~/.pacifica-mcp/config.json`. Users import the private key into Phantom/Backpack to deposit.
 - **Order confirmation**: For interactive use, briefly confirm order details with the user before placing. For autonomous/bot use, execute directly.
+- **Withdrawals are USDC only**. If user has SOL or other spot assets and wants to withdraw, they must sell on the spot market first (e.g. `pacifica-market-order symbol: "SOL-USDC" side: "ask"`) to convert to USDC, then withdraw.
+- **Subaccount funding**: Deposit to main account first via web app, then use `pacifica-transfer-funds` to move USDC to the subaccount. Min transfer: $10.
+- **Spot markets** (SOL-USDC, BTC-USDC, ETH-USDC): Same order tools work. Use the spot symbol format. Max leverage is 1x (no leverage on spot).
 
 ## WebSocket (Real-Time)
 
