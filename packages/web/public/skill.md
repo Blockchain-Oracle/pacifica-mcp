@@ -1,133 +1,150 @@
 ---
 name: pacifica
-description: Live market data and trading actions for Pacifica — the #1 perpetuals DEX on Solana. Use this skill when the user asks about crypto perps, positions, orders, funding rates, or wants to trade on Pacifica. Available as MCP (tools prefixed `mcp__pacifica__*`). Skip for general knowledge, math, code, or explanations answerable from training data.
+description: Trade perpetuals on Pacifica via 36 MCP tools. Market data, account monitoring, order execution, subaccounts, and real-time WebSocket streaming on Solana. Trigger when the user asks about crypto prices, perps, trading, positions, orders, funding rates, or Pacifica. Skip for general knowledge, math, or questions answerable from training data.
 ---
 
 # Pacifica MCP Skill
 
 ## When to Use
 
-Trigger this skill when the user:
+Trigger when the user:
 - Asks about crypto prices, perps, or trading on Pacifica / Solana
 - Wants to check their trading account, positions, or open orders
 - Wants to place, modify, or cancel trades
 - Wants market data (orderbooks, candles, funding rates, recent trades)
 - Mentions BTC, ETH, SOL, or any perpetual contract on Pacifica
+- Wants real-time price/trade monitoring via WebSocket
 
 ## When NOT to Use
 
-Skip this skill for:
-- General knowledge questions ("What is a perpetual contract?")
+- General knowledge ("What is a perpetual contract?")
 - Math or computation ("What's 10x leverage on $1000?")
 - Questions answerable from training data alone
-- Summarizing content the user already pasted
 
-## Tool Selection Decision Tree
+## Tool Selection
 
-1. "What's the price of X?" → `pacifica-prices` with symbol X
-2. "Show my positions / account" → `pacifica-positions` or `pacifica-account`
-3. "Open a long / buy X" → `pacifica-market-order` with side "bid"
-4. "Open a short / sell X" → `pacifica-market-order` with side "ask"
-5. "Place a limit order" → `pacifica-limit-order`
-6. "Set stop loss / take profit" → `pacifica-set-tpsl`
-7. "Cancel my order" → `pacifica-cancel-order`
-8. "Show the orderbook" → `pacifica-orderbook`
-9. "What are funding rates?" → `pacifica-funding-rates`
-10. "Show OHLCV candles" → `pacifica-candles` (trade price) or `pacifica-mark-candles` (mark price)
-11. "Show recent trades" → `pacifica-recent-trades`
-12. "What markets are available?" → `pacifica-markets`
-13. "Show my order history" → `pacifica-order-history`
-14. "Show my trade history / PnL" → `pacifica-trade-history`
-15. "Show my equity curve" → `pacifica-portfolio`
-16. "Show my deposits / withdrawals" → `pacifica-balance-history`
-17. "What's my wallet address?" → `pacifica-wallet`
-18. "Set leverage" → `pacifica-set-leverage`
-19. "Switch to isolated / cross margin" → `pacifica-set-margin-mode`
-20. "Place a stop order" → `pacifica-stop-order`
-21. "Edit my order" → `pacifica-edit-order`
-22. "Cancel stop order" → `pacifica-cancel-stop`
-23. "Place multiple orders at once" → `pacifica-batch-order`
-24. "Get order details by ID" → `pacifica-order-by-id`
-25. "Account settings / leverage per market" → `pacifica-account-settings`
-26. "Create subaccount" → `pacifica-create-subaccount`
-27. "List subaccounts" → `pacifica-list-subaccounts`
-28. "Transfer funds to subaccount" → `pacifica-transfer-funds`
-29. "Withdraw funds" → `pacifica-withdraw`
-30. "Open orders for my account" → `pacifica-orders`
-31. "What tools are available?" → `pacifica-tools`
-32. "Watch BTC trades live" → `pacifica-watch` (snapshot: collect events for N seconds)
-33. "Monitor prices in real time" → `pacifica-watch-start` then `pacifica-watch-read` then `pacifica-watch-stop`
+| User Intent | Tool | Key Params |
+|---|---|---|
+| Price of X | `pacifica-prices` | symbol |
+| My account/balance | `pacifica-account` | — |
+| My positions | `pacifica-positions` | — |
+| Open a long / buy | `pacifica-market-order` | symbol, side: "bid", amount |
+| Open a short / sell | `pacifica-market-order` | symbol, side: "ask", amount |
+| Limit order | `pacifica-limit-order` | symbol, side, amount, price, tif |
+| Stop order | `pacifica-stop-order` | symbol, side, stop_price, amount |
+| Set TP / SL | `pacifica-set-tpsl` | symbol, side (exit side!), take_profit_price, stop_loss_price |
+| Cancel order | `pacifica-cancel-order` | symbol, order_id (omit to cancel all) |
+| Cancel stop order | `pacifica-cancel-stop` | symbol, order_id |
+| Edit order | `pacifica-edit-order` | symbol, order_id, price, amount |
+| Batch orders | `pacifica-batch-order` | actions (array, max 10) |
+| Orderbook | `pacifica-orderbook` | symbol |
+| Candles / chart | `pacifica-candles` | symbol, interval, limit |
+| Mark price candles | `pacifica-mark-candles` | symbol, interval, limit |
+| Funding rates | `pacifica-funding-rates` | symbol, limit |
+| Recent trades | `pacifica-recent-trades` | symbol |
+| Available markets | `pacifica-markets` | — |
+| Order history | `pacifica-order-history` | limit |
+| Trade history / PnL | `pacifica-trade-history` | symbol, limit |
+| Equity curve | `pacifica-portfolio` | time_range |
+| Deposits / withdrawals | `pacifica-balance-history` | limit |
+| Order details by ID | `pacifica-order-by-id` | order_id |
+| Account settings | `pacifica-account-settings` | — |
+| My open orders | `pacifica-orders` | — |
+| Set leverage | `pacifica-set-leverage` | symbol, leverage |
+| Cross / isolated margin | `pacifica-set-margin-mode` | symbol, is_isolated |
+| Wallet address | `pacifica-wallet` | — |
+| Create subaccount | `pacifica-create-subaccount` | — |
+| List subaccounts | `pacifica-list-subaccounts` | — |
+| Transfer to subaccount | `pacifica-transfer-funds` | to_account, amount |
+| Withdraw funds | `pacifica-withdraw` | amount |
+| All available tools | `pacifica-tools` | — |
+| Watch trades live | `pacifica-watch` | channel, symbol, duration |
+| Monitor real-time | `pacifica-watch-start` → `pacifica-watch-read` → `pacifica-watch-stop` | channel, symbol |
 
 ## Parameter Guide
 
-- **symbol**: Uppercase, no suffix — e.g. `BTC`, `ETH`, `SOL`, `DOGE`, `HYPE`. Use `pacifica-markets` to discover all available symbols.
+- **symbol**: Uppercase, no suffix — `BTC`, `ETH`, `SOL`, `DOGE`, `HYPE`. Run `pacifica-markets` to discover all symbols.
 - **side**: `"bid"` = long/buy, `"ask"` = short/sell
-- **amount**: Always a string (e.g. `"0.1"`, `"1.5"`). Minimum order value is $10 — check `min_order_size` from `pacifica-markets`.
-- **price**: Always a string (e.g. `"70000"`, `"3500"`)
-- **tif**: `GTC` (default, good-til-cancelled), `IOC` (immediate-or-cancel), `ALO` (add-liquidity-only / post-only), `TOB` (top-of-book)
+- **amount**: Always a decimal string (`"0.1"`, `"1.5"`). Min order value is $10.
+- **price**: Always a decimal string (`"70000"`, `"3500"`)
+- **tif**: `GTC` (default), `IOC` (immediate-or-cancel), `ALO` (post-only), `TOB` (top-of-book)
 - **interval**: `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `8h`, `12h`, `1d`
 
-## Important Behaviors
+## Critical Behaviors
 
-- **set-tpsl side**: The `side` parameter is the **exit side**, not the position side. For a long position (bid), use `side: "ask"` for both TP and SL. For a short position (ask), use `side: "bid"`.
-- **set-leverage returns null**: A `null` response means success — the API returns no body on leverage changes. Verify with `pacifica-account-settings`.
-- **Deposits**: Users deposit funds (SOL, USDC, or other supported assets) through the Pacifica web app at [test-app.pacifica.fi](https://test-app.pacifica.fi) (testnet) or [pacifica.fi](https://pacifica.fi) (mainnet). Deposits are NOT done through the MCP or CLI.
+- **set-tpsl side is the EXIT side**, not the position side. Long position → `side: "ask"`. Short position → `side: "bid"`.
+- **null responses mean success** for: `set-leverage`, `set-margin-mode`, `set-tpsl`. Verify changes with `pacifica-account-settings` or `pacifica-positions`.
+- **Deposits** happen on the Pacifica web app ([test-app.pacifica.fi](https://test-app.pacifica.fi) testnet, [pacifica.fi](https://pacifica.fi) mainnet). Not through MCP or CLI.
+- **Wallet auto-generated** on first run at `~/.pacifica-mcp/config.json`. Users import the private key into Phantom/Backpack to deposit.
+- **Order confirmation**: For interactive use, briefly confirm order details with the user before placing. For autonomous/bot use, execute directly.
 
-## WebSocket (Real-Time) Tools
+## WebSocket (Real-Time)
 
-Two modes for real-time data:
-
-1. **Snapshot** (`pacifica-watch`): Subscribe for N seconds (max 60), collect all events, return summary. Good for quick checks.
-2. **Persistent** (`pacifica-watch-start` → `pacifica-watch-read` → `pacifica-watch-stop`): Start a subscription that buffers events. Read whenever needed. Stop when done.
+| Mode | Tools | Use Case |
+|---|---|---|
+| Snapshot | `pacifica-watch` | Quick check: collect events for N seconds (max 60) |
+| Persistent | `watch-start` → `watch-read` → `watch-stop` | Ongoing monitoring |
 
 Channels: `prices`, `trades`, `orderbook`, `account_info`, `account_positions`, `account_trades`
 
-- For `trades` and `orderbook` channels, you must provide a `symbol` parameter.
-- The `prices` channel streams ALL markets at once — use short durations (3-5s) to avoid massive output.
-- Account channels (`account_*`) use the local wallet automatically.
+- `trades` and `orderbook` require a `symbol` parameter.
+- `prices` streams ALL markets — use `summary_only: true` on `watch-read` to avoid data flooding.
+- `watch-read` supports `max_events` (default 100) and `summary_only` (default false).
 
-## Free vs Wallet-Required Tools
+## Free vs Wallet-Required
 
-**Free (no auth):** markets, prices, orderbook, candles, mark-candles, recent-trades, funding-rates, account, positions, orders, order-history, trade-history, portfolio, balance-history, order-by-id, account-settings, wallet, tools
+**Free:** markets, prices, orderbook, candles, mark-candles, recent-trades, funding-rates, account, positions, orders, order-history, trade-history, portfolio, balance-history, order-by-id, account-settings, wallet, tools, watch, watch-start, watch-read, watch-stop
 
-**Requires wallet (signed):** market-order, limit-order, stop-order, set-tpsl, cancel-order, cancel-stop, edit-order, batch-order, set-leverage, set-margin-mode, create-subaccount, list-subaccounts, transfer-funds, withdraw
+**Wallet (signed):** market-order, limit-order, stop-order, set-tpsl, cancel-order, cancel-stop, edit-order, batch-order, set-leverage, set-margin-mode, create-subaccount, list-subaccounts, transfer-funds, withdraw
 
 ## Error Handling
 
-- **404 on account**: User hasn't deposited on Pacifica yet — direct them to https://test-app.pacifica.fi (testnet) or https://pacifica.fi (mainnet)
-- **422 "Order amount too low"**: Order value is below $10 minimum. Increase the amount.
-- **429 rate limited**: Back off and retry after a moment
-- **Signing errors**: Check that the wallet key is set (`pacifica-wallet` to verify)
-- **"Account not found"**: User needs to connect and deposit on Pacifica first
+| Error | Cause | Fix |
+|---|---|---|
+| 404 account | Not deposited yet | Direct to test-app.pacifica.fi or pacifica.fi |
+| 422 amount too low | Order < $10 minimum | Increase amount |
+| 429 rate limited | Too many requests | Back off, retry |
+| Verification failed | Bad signature | Check wallet with `pacifica-wallet` |
 
 ## Example Workflows
 
-### Check price and open a long
+### Open a leveraged long
 ```
-User: "Open a 0.1 BTC long on 10x leverage"
-
-1. pacifica-prices (symbol: "BTC") — check current mark price
-2. pacifica-set-leverage (symbol: "BTC", leverage: 10) — set leverage
-3. pacifica-market-order (symbol: "BTC", side: "bid", amount: "0.1") — place order
-```
-
-### Set risk management on an existing position
-```
-User: "Set TP at $100k and SL at $80k for my BTC long"
-
-1. pacifica-positions — verify position exists and note the side
-2. pacifica-set-tpsl (symbol: "BTC", side: "ask", take_profit_price: "100000", stop_loss_price: "80000")
-   Note: side is "ask" because we're setting exit orders for a long (bid) position
+1. pacifica-prices (symbol: "BTC") → check mark price
+2. pacifica-set-leverage (symbol: "BTC", leverage: 10)
+3. pacifica-market-order (symbol: "BTC", side: "bid", amount: "0.01")
+4. pacifica-positions → confirm position opened
 ```
 
-### Portfolio review
+### Risk management
 ```
-User: "How's my account doing?"
+1. pacifica-positions → note position side
+2. pacifica-set-tpsl (symbol: "BTC", side: "ask", take_profit_price: "100000", stop_loss_price: "60000")
+   (side is "ask" because exiting a long)
+```
 
-1. pacifica-account — equity, margin, PnL summary
-2. pacifica-positions — open positions breakdown
-3. pacifica-portfolio — equity curve (optional)
+### Monitor and react
 ```
+1. pacifica-watch-start (channel: "trades", symbol: "BTC")
+2. pacifica-watch-read (subscription_id: "...", summary_only: true) → check activity
+3. pacifica-watch-stop → cleanup
+```
+
+## CLI Alternative
+
+The same 36 tools are available as a standalone CLI for terminal use:
+
+```bash
+npm install -g @pacifica-dev/cli
+
+pacifica prices --symbol BTC
+pacifica positions
+pacifica market-order --symbol SOL --side bid --amount 0.5
+pacifica wallet
+pacifica watch --channel trades --symbol ETH --duration 10
+```
+
+Output is JSON. Pipe to `jq` for filtering: `pacifica prices --symbol BTC | jq '.mark'`
 
 ## Install
 
