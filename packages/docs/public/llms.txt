@@ -1,0 +1,37 @@
+# Pacifica MCP
+
+> MCP server giving AI agents the ability to trade perpetuals on Pacifica — the #1 Solana perps DEX. 36 tools for market data, account monitoring, order execution, subaccounts, and real-time WebSocket streaming.
+
+Pacifica MCP ships as three interfaces: an MCP server (`@pacifica-dev/mcp`), a standalone CLI (`@pacifica-dev/cli`), and an Agent Skill (SKILL.md). Install with one command, auto-generates an Ed25519 wallet, and connects to Pacifica testnet by default.
+
+Symbols use uppercase with no suffix for perps (BTC, ETH, SOL) and hyphenated for spot (SOL-USDC, BTC-USDC). All amounts and prices are decimal strings. Withdrawals and subaccount transfers are USDC only. Deposits happen through the Pacifica web app (any supported asset).
+
+## Getting Started
+
+- [Installation](https://docs.pacifica-mcp.xyz/getting-started/installation): Setup for Claude Code, Cursor, Windsurf, Claude Desktop, and other MCP hosts
+- [First Trade](https://docs.pacifica-mcp.xyz/getting-started/first-trade): Step-by-step guide to placing your first trade
+
+## Guides
+
+- [Testnet Guide](https://docs.pacifica-mcp.xyz/guides/testnet): Access code, wallet setup, deposit flow, faucet
+- [MCP Setup](https://docs.pacifica-mcp.xyz/guides/mcp-setup): Platform-specific configuration and environment variables
+- [CLI Usage](https://docs.pacifica-mcp.xyz/guides/cli): Standalone CLI commands and examples
+- [Agent Skill](https://docs.pacifica-mcp.xyz/guides/skill): Install the Pacifica skill for any AI agent
+- [Architecture](https://docs.pacifica-mcp.xyz/guides/architecture): How signing, caching, and the request flow work
+
+## Tool Reference
+
+- [Overview](https://docs.pacifica-mcp.xyz/tools): All 36 tools at a glance
+- [Market Data](https://docs.pacifica-mcp.xyz/tools/market-data): prices, orderbook, candles, mark-candles, recent-trades, funding-rates, markets
+- [Account](https://docs.pacifica-mcp.xyz/tools/account): account, positions, orders, order-history, trade-history, portfolio, balance-history, account-settings, order-by-id
+- [Trading](https://docs.pacifica-mcp.xyz/tools/trading): market-order, limit-order, stop-order, set-tpsl, cancel-order, cancel-stop, edit-order, batch-order, set-leverage, set-margin-mode
+- [Account Management](https://docs.pacifica-mcp.xyz/tools/account-management): withdraw, create-subaccount, list-subaccounts, transfer-funds
+- [Real-Time](https://docs.pacifica-mcp.xyz/tools/real-time): watch, watch-start, watch-read, watch-stop (WebSocket)
+- [System](https://docs.pacifica-mcp.xyz/tools/system): wallet, tools
+
+## Optional
+
+- [npm: @pacifica-dev/mcp](https://www.npmjs.com/package/@pacifica-dev/mcp): MCP server package
+- [npm: @pacifica-dev/cli](https://www.npmjs.com/package/@pacifica-dev/cli): CLI package
+- [GitHub](https://github.com/Blockchain-Oracle/pacifica-mcp): Source code
+- [Agent Skill (SKILL.md)](https://pacifica-mcp.xyz/skill.md): Full skill file for AI agents
