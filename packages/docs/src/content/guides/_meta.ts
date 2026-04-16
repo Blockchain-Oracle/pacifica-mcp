@@ -4,4 +4,5 @@ export default {
   skill: "Agent Skill",
   cli: "Standalone CLI",
   testnet: "Testnet Guide",
+  openclaw: "OpenClaw",
 }

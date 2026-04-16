@@ -1,6 +1,7 @@
 ---
 name: pacifica
 description: Trade perpetuals on Pacifica via 36 MCP tools. Market data, account monitoring, order execution, subaccounts, and real-time WebSocket streaming on Solana. Trigger when the user asks about crypto prices, perps, trading, positions, orders, funding rates, or Pacifica. Skip for general knowledge, math, or questions answerable from training data.
+version: 1.0.0
 ---
 
 # Pacifica MCP Skill

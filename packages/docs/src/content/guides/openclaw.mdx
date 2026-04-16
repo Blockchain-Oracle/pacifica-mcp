@@ -1,0 +1,162 @@
+import { Callout, Steps } from 'nextra/components'
+
+# Pacifica MCP on OpenClaw
+
+[OpenClaw](https://openclaw.ai) is an open-source AI agent platform that runs across WhatsApp, Telegram, Slack, Discord, and 20+ messaging platforms. It supports both MCP servers and Skills — so you can trade perpetuals on Pacifica from any chat app.
+
+This guide walks through the complete setup: enabling MCP, adding Pacifica, and installing the agent skill.
+
+<Callout type="info">
+OpenClaw supports both **MCP tools** (for calling Pacifica tools directly) and **Skills** (to teach the agent when and how to use each tool). Install both for the best experience.
+</Callout>
+
+## Part 1: Set up the MCP server
+
+<Steps>
+
+### Add Pacifica via the CLI
+
+Run this one command:
+
+```bash
+openclaw mcp set pacifica '{"command":"npx","args":["-y","@pacifica-dev/mcp"]}'
+```
+
+This writes the server entry to `~/.openclaw/openclaw.json` automatically.
+
+### Or edit the config file directly
+
+**Config location:** `~/.openclaw/openclaw.json`
+
+```json
+{
+  "mcpServers": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+
+### Restart the gateway
+
+```bash
+openclaw restart
+```
+
+### Verify the connection
+
+In any connected chat (Telegram, WhatsApp, Slack, etc.), send:
+
+```
+List all Pacifica tools
+```
+
+OpenClaw should call the `pacifica-tools` tool and return all 36 Pacifica tools grouped by category.
+
+</Steps>
+
+## Part 2: Install the Pacifica skill
+
+The skill teaches OpenClaw's agent *when* to use Pacifica tools and how to handle trading operations correctly — including symbol formats, exit-side conventions for TP/SL, and the deposit flow.
+
+<Steps>
+
+### Open the Skills panel
+
+In the OpenClaw app, click **Skills** in the left sidebar (or top navigation).
+
+### Search for Pacifica
+
+Type `pacifica` in the search box. Select **Pacifica** from the results and click **Install**.
+
+### Or install via CLI
+
+```bash
+openclaw skill add pacifica
+```
+
+This fetches the latest `SKILL.md` directly from the Pacifica registry.
+
+### Or install manually
+
+Paste this into any OpenClaw conversation:
+
+```
+Read https://pacifica-mcp.xyz/skill.md and follow the instructions to install Pacifica.
+```
+
+The agent will fetch and install the skill itself.
+
+</Steps>
+
+## Running your first command
+
+Once MCP and the skill are active, try these from any connected chat app:
+
+**Market data** — free, no wallet needed:
+
+```
+What's the current BTC price on Pacifica?
+```
+
+```
+Show me the SOL orderbook
+```
+
+```
+What are the funding rates for ETH?
+```
+
+**Trading** — requires a funded wallet:
+
+```
+Open a 0.01 ETH long at market with 5x leverage
+```
+
+```
+Set a take profit at $2,600 and stop loss at $2,100 on my ETH position
+```
+
+```
+Close all my positions
+```
+
+**Real-time monitoring:**
+
+```
+Watch BTC trades for 10 seconds and summarize
+```
+
+## Wallet setup
+
+On first run, Pacifica MCP generates a wallet at `~/.pacifica-mcp/config.json`. To fund it:
+
+1. Copy your private key from the config file
+2. Import into [Phantom](https://phantom.app) or [Backpack](https://backpack.app)
+3. Go to [test-app.pacifica.fi](https://test-app.pacifica.fi) (access code: `Pacifica`)
+4. Connect wallet and deposit SOL, USDC, or other supported assets
+
+## Troubleshooting
+
+**MCP tools not appearing after setup**
+Make sure **Enable MCP** is toggled on in Settings → Integrations. Then restart the gateway with `openclaw restart`.
+
+**`openclaw` command not found**
+Install the OpenClaw CLI:
+```bash
+npm install -g @openclaw/cli
+```
+
+**"Account not found" errors**
+Your wallet needs funds on Pacifica. Deposit via the Pacifica web app at [test-app.pacifica.fi](https://test-app.pacifica.fi) (testnet) or [pacifica.fi](https://pacifica.fi) (mainnet).
+
+**Skill not triggering**
+Make sure the skill is installed (check **Skills** panel — it should show Pacifica as active). If it's installed but not triggering, try: `Use Pacifica to check the BTC price` to invoke it explicitly.
+
+## See also
+
+- [MCP Host Setup](/guides/mcp-setup) — setup for Claude Code, Cursor, Windsurf, and 12 other hosts
+- [Agent Skill](/guides/skill) — how the Pacifica skill works and all install methods
+- [Testnet Guide](/guides/testnet) — deposit flow, access code, faucet
