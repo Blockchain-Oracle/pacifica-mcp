@@ -1109,20 +1109,28 @@ program
       account?: string;
     }) => {
       try {
-        const { wsManager } = await import("./lib/ws.js");
-        const { buildParams } = await import("./tools/watch.js");
+        const { getDaemonPid, spawnDaemon } = await import("./lib/daemon.js");
 
-        const wsParams = buildParams(opts.channel, opts.symbol, opts.account);
-        const subscriptionId = await wsManager.subscribe(
-          opts.channel,
-          wsParams,
-        );
+        const existingPid = getDaemonPid();
+        if (existingPid) {
+          process.stderr.write(
+            `Watch daemon already running (PID ${existingPid}). Run 'pacifica watch-stop' first.\n`,
+          );
+          process.exit(1);
+        }
+
+        const wsParams: Record<string, unknown> = {};
+        if (opts.symbol) wsParams.symbol = opts.symbol;
+        if (opts.account) wsParams.account = opts.account;
+
+        const subId = `${opts.channel}_cli`;
+        const pid = spawnDaemon(opts.channel, wsParams, subId);
 
         output({
-          subscription_id: subscriptionId,
+          subscription_id: subId,
           channel: opts.channel,
-          message:
-            "Subscription started. Use 'pacifica watch-read' to check events.",
+          daemon_pid: pid,
+          message: "Daemon started. Use 'pacifica watch-read' to check events, 'pacifica watch-stop' to end.",
         });
       } catch (e) {
         fatal(e);
@@ -1141,38 +1149,35 @@ program
   .option("--max-events <n>", "Max events to return (default 100)", "100")
   .action(async (opts: { subscriptionId: string; summaryOnly: boolean; maxEvents: string }) => {
     try {
-      const { wsManager } = await import("./lib/ws.js");
+      const { getDaemonPid, readAndDrainEvents, readSubs } = await import("./lib/daemon.js");
       const { summarizeEvents } = await import("./tools/watch.js");
 
-      const result = wsManager.read(opts.subscriptionId);
-      if (!result) {
-        const active = wsManager.listSubscriptions();
-        process.stderr.write(
-          `Subscription "${opts.subscriptionId}" not found.\n`,
-        );
-        if (active.length > 0) {
-          process.stderr.write(
-            `Active subscriptions: ${JSON.stringify(active, null, 2)}\n`,
-          );
-        }
+      const pid = getDaemonPid();
+      if (!pid) {
+        process.stderr.write("No watch daemon running. Use 'pacifica watch-start' first.\n");
         process.exit(1);
       }
 
-      const channel = opts.subscriptionId.replace(/_\d+$/, "");
-      const summary = summarizeEvents(channel, result.events, result.timeSpanMs);
+      const events = readAndDrainEvents();
+      const subs = readSubs();
+      const channel = subs[0]?.channel ?? opts.subscriptionId.replace(/_\d+$/, "");
+      const timeSpanMs = events.length >= 2
+        ? events[events.length - 1].receivedAt - events[0].receivedAt
+        : 0;
+      const summary = summarizeEvents(channel, events, timeSpanMs);
 
       if (opts.summaryOnly) {
-        output({ count: result.count, time_span_ms: result.timeSpanMs, summary });
+        output({ count: events.length, time_span_ms: timeSpanMs, summary });
       } else {
         const maxEvents = parseInt(opts.maxEvents, 10);
-        const capped = result.events.slice(0, maxEvents);
-        const dropped = result.events.length - capped.length;
+        const capped = events.slice(0, maxEvents);
+        const dropped = events.length - capped.length;
         output({
           events: capped,
-          count: result.count,
+          count: events.length,
           events_returned: capped.length,
           events_dropped: dropped,
-          time_span_ms: result.timeSpanMs,
+          time_span_ms: timeSpanMs,
           summary,
         });
       }
@@ -1190,38 +1195,19 @@ program
   )
   .action(async (opts: { subscriptionId?: string }) => {
     try {
-      const { wsManager } = await import("./lib/ws.js");
+      const { getDaemonPid, killDaemon, readSubs } = await import("./lib/daemon.js");
 
-      const stopped: string[] = [];
-      if (opts.subscriptionId) {
-        const ok_ = wsManager.unsubscribe(opts.subscriptionId);
-        if (!ok_) {
-          const active = wsManager.listSubscriptions();
-          process.stderr.write(
-            `Subscription "${opts.subscriptionId}" not found.\n`,
-          );
-          if (active.length > 0) {
-            process.stderr.write(
-              `Active subscriptions: ${JSON.stringify(active, null, 2)}\n`,
-            );
-          }
-          process.exit(1);
-        }
-        stopped.push(opts.subscriptionId);
-      } else {
-        const active = wsManager.listSubscriptions();
-        for (const sub of active) {
-          wsManager.unsubscribe(sub.id);
-          stopped.push(sub.id);
-        }
-        if (stopped.length === 0) {
-          output({ message: "No active subscriptions to stop." });
-          return;
-        }
+      const pid = getDaemonPid();
+      if (!pid) {
+        output({ message: "No watch daemon running." });
+        return;
       }
 
-      const remaining = wsManager.listSubscriptions();
-      output({ stopped, remaining_subscriptions: remaining });
+      const subs = readSubs();
+      const stopped = subs.map((s) => s.id);
+      killDaemon();
+
+      output({ stopped, message: "Daemon stopped." });
     } catch (e) {
       fatal(e);
     }
