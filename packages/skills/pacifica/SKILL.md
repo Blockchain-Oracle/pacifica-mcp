@@ -55,6 +55,8 @@ Skip this skill for:
 29. "Withdraw funds" → `pacifica-withdraw`
 30. "Open orders for my account" → `pacifica-orders`
 31. "What tools are available?" → `pacifica-tools`
+32. "Watch BTC trades live" → `pacifica-watch` (snapshot: collect events for N seconds)
+33. "Monitor prices in real time" → `pacifica-watch-start` then `pacifica-watch-read` then `pacifica-watch-stop`
 
 ## Parameter Guide
 
@@ -70,6 +72,19 @@ Skip this skill for:
 - **set-tpsl side**: The `side` parameter is the **exit side**, not the position side. For a long position (bid), use `side: "ask"` for both TP and SL. For a short position (ask), use `side: "bid"`.
 - **set-leverage returns null**: A `null` response means success — the API returns no body on leverage changes. Verify with `pacifica-account-settings`.
 - **Deposits**: Users deposit funds (SOL, USDC, or other supported assets) through the Pacifica web app at [test-app.pacifica.fi](https://test-app.pacifica.fi) (testnet) or [pacifica.fi](https://pacifica.fi) (mainnet). Deposits are NOT done through the MCP or CLI.
+
+## WebSocket (Real-Time) Tools
+
+Two modes for real-time data:
+
+1. **Snapshot** (`pacifica-watch`): Subscribe for N seconds (max 60), collect all events, return summary. Good for quick checks.
+2. **Persistent** (`pacifica-watch-start` → `pacifica-watch-read` → `pacifica-watch-stop`): Start a subscription that buffers events. Read whenever needed. Stop when done.
+
+Channels: `prices`, `trades`, `orderbook`, `account_info`, `account_positions`, `account_trades`
+
+- For `trades` and `orderbook` channels, you must provide a `symbol` parameter.
+- The `prices` channel streams ALL markets at once — use short durations (3-5s) to avoid massive output.
+- Account channels (`account_*`) use the local wallet automatically.
 
 ## Free vs Wallet-Required Tools
 
