@@ -46,10 +46,10 @@ export function registerCreateSubaccountTool(server: McpServer): void {
         const result = await post<{ success: boolean }>(
           "/account/subaccount/create",
           {
-            main_account_signature: mainSigned.signature,
-            sub_account_signature: subSigned.signature,
-            account: config.publicKey,
-            sub_account: subPublicKey,
+            main_account: config.publicKey,
+            subaccount: subPublicKey,
+            main_signature: mainSigned.signature,
+            sub_signature: subSigned.signature,
             timestamp: mainSigned.timestamp,
             expiry_window: mainSigned.expiry_window,
           },
