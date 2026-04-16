@@ -12,7 +12,7 @@ Trigger this skill when the user:
 - Wants to check their trading account, positions, or open orders
 - Wants to place, modify, or cancel trades
 - Wants market data (orderbooks, candles, funding rates, recent trades)
-- Mentions BTC-PERP, ETH-PERP, SOL-PERP, or any other perpetual contract
+- Mentions BTC, ETH, SOL, or any perpetual contract on Pacifica
 
 ## When NOT to Use
 
@@ -58,12 +58,18 @@ Skip this skill for:
 
 ## Parameter Guide
 
-- **symbol**: Use uppercase with `-PERP` suffix — e.g. `BTC-PERP`, `ETH-PERP`, `SOL-PERP`
+- **symbol**: Uppercase, no suffix — e.g. `BTC`, `ETH`, `SOL`, `DOGE`, `HYPE`. Use `pacifica-markets` to discover all available symbols.
 - **side**: `"bid"` = long/buy, `"ask"` = short/sell
-- **amount**: Always a string (e.g. `"0.1"`, `"1.5"`)
+- **amount**: Always a string (e.g. `"0.1"`, `"1.5"`). Minimum order value is $10 — check `min_order_size` from `pacifica-markets`.
 - **price**: Always a string (e.g. `"70000"`, `"3500"`)
 - **tif**: `GTC` (default, good-til-cancelled), `IOC` (immediate-or-cancel), `ALO` (add-liquidity-only / post-only), `TOB` (top-of-book)
 - **interval**: `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `8h`, `12h`, `1d`
+
+## Important Behaviors
+
+- **set-tpsl side**: The `side` parameter is the **exit side**, not the position side. For a long position (bid), use `side: "ask"` for both TP and SL. For a short position (ask), use `side: "bid"`.
+- **set-leverage returns null**: A `null` response means success — the API returns no body on leverage changes. Verify with `pacifica-account-settings`.
+- **Deposits**: Users deposit funds (SOL, USDC, or other supported assets) through the Pacifica web app at [test-app.pacifica.fi](https://test-app.pacifica.fi) (testnet) or [pacifica.fi](https://pacifica.fi) (mainnet). Deposits are NOT done through the MCP or CLI.
 
 ## Free vs Wallet-Required Tools
 
@@ -74,6 +80,7 @@ Skip this skill for:
 ## Error Handling
 
 - **404 on account**: User hasn't deposited on Pacifica yet — direct them to https://test-app.pacifica.fi (testnet) or https://pacifica.fi (mainnet)
+- **422 "Order amount too low"**: Order value is below $10 minimum. Increase the amount.
 - **429 rate limited**: Back off and retry after a moment
 - **Signing errors**: Check that the wallet key is set (`pacifica-wallet` to verify)
 - **"Account not found"**: User needs to connect and deposit on Pacifica first
@@ -84,17 +91,18 @@ Skip this skill for:
 ```
 User: "Open a 0.1 BTC long on 10x leverage"
 
-1. pacifica-prices (symbol: "BTC-PERP") — check current mark price
-2. pacifica-set-leverage (symbol: "BTC-PERP", leverage: 10) — set leverage
-3. pacifica-market-order (symbol: "BTC-PERP", side: "bid", amount: "0.1") — place order
+1. pacifica-prices (symbol: "BTC") — check current mark price
+2. pacifica-set-leverage (symbol: "BTC", leverage: 10) — set leverage
+3. pacifica-market-order (symbol: "BTC", side: "bid", amount: "0.1") — place order
 ```
 
 ### Set risk management on an existing position
 ```
 User: "Set TP at $100k and SL at $80k for my BTC long"
 
-1. pacifica-positions — verify position exists
-2. pacifica-set-tpsl (symbol: "BTC-PERP", take_profit: "100000", stop_loss: "80000")
+1. pacifica-positions — verify position exists and note the side
+2. pacifica-set-tpsl (symbol: "BTC", side: "ask", take_profit_price: "100000", stop_loss_price: "80000")
+   Note: side is "ask" because we're setting exit orders for a long (bid) position
 ```
 
 ### Portfolio review

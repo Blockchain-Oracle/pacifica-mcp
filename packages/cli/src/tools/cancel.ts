@@ -50,7 +50,7 @@ export function registerCancelOrderTool(server: McpServer): void {
         if (params.order_id) {
           const signed = signRequest(
             "cancel_order",
-            { symbol: params.symbol ?? "", order_id: params.order_id },
+            { symbol: params.symbol ?? "", order_id: Number(params.order_id) },
             keypair.secretKey,
             config.publicKey,
           );

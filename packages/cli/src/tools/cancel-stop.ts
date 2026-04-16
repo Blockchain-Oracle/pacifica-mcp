@@ -38,7 +38,7 @@ export function registerCancelStopTool(server: McpServer): void {
         const config = loadOrCreateWallet();
         const keypair = getKeypair(config);
         const data: Record<string, unknown> = { symbol: params.symbol };
-        if (params.order_id) data.order_id = params.order_id;
+        if (params.order_id) data.order_id = Number(params.order_id);
         if (params.client_order_id)
           data.client_order_id = params.client_order_id;
 

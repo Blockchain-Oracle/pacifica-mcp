@@ -668,7 +668,7 @@ program
           price: opts.price,
           amount: opts.amount,
         };
-        if (opts.orderId) data.order_id = opts.orderId;
+        if (opts.orderId) data.order_id = Number(opts.orderId);
         if (opts.clientOrderId) data.client_order_id = opts.clientOrderId;
         const signed = signRequest(
           "edit_order",
@@ -712,7 +712,7 @@ program
         if (opts.orderId) {
           const signed = signRequest(
             "cancel_order",
-            { symbol: opts.symbol ?? "", order_id: opts.orderId },
+            { symbol: opts.symbol ?? "", order_id: Number(opts.orderId) },
             keypair.secretKey,
             config.publicKey,
           );
@@ -767,7 +767,7 @@ program
         const config = loadOrCreateWallet();
         const keypair = getKeypair(config);
         const data: Record<string, unknown> = { symbol: opts.symbol };
-        if (opts.orderId) data.order_id = opts.orderId;
+        if (opts.orderId) data.order_id = Number(opts.orderId);
         if (opts.clientOrderId) data.client_order_id = opts.clientOrderId;
         const signed = signRequest(
           "cancel_stop_order",
@@ -885,7 +885,7 @@ program
           };
         } else {
           const data: Record<string, unknown> = { symbol: action.symbol };
-          if (action.order_id) data.order_id = action.order_id;
+          if (action.order_id) data.order_id = Number(action.order_id);
           if (action.client_order_id)
             data.client_order_id = action.client_order_id;
           return {

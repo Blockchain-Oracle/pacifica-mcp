@@ -43,7 +43,7 @@ export function registerEditOrderTool(server: McpServer): void {
           price: params.price,
           amount: params.amount,
         };
-        if (params.order_id) data.order_id = params.order_id;
+        if (params.order_id) data.order_id = Number(params.order_id);
         if (params.client_order_id)
           data.client_order_id = params.client_order_id;
 
