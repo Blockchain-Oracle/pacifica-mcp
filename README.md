@@ -91,7 +91,7 @@ Works with every major agent client (Claude Code, Claude Desktop, Cursor, Windsu
 | `pacifica-cancel-stop` | Cancel a specific stop order |
 | `pacifica-set-leverage` | Set leverage for a market |
 | `pacifica-set-margin-mode` | Switch between cross and isolated margin |
-| `pacifica-withdraw` | Withdraw funds from Pacifica |
+| `pacifica-withdraw` | Withdraw USDC from Pacifica |
 
 ### Subaccount Management (requires wallet)
 
@@ -99,7 +99,7 @@ Works with every major agent client (Claude Code, Claude Desktop, Cursor, Windsu
 | --- | --- |
 | `pacifica-create-subaccount` | Create a new subaccount (key saved locally) |
 | `pacifica-list-subaccounts` | List all subaccounts (on-chain + local) |
-| `pacifica-transfer-funds` | Transfer funds between accounts |
+| `pacifica-transfer-funds` | Transfer USDC between accounts |
 
 ### Real-Time WebSocket
 

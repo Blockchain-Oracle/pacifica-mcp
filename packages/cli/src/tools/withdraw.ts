@@ -10,13 +10,13 @@ export function registerWithdrawTool(server: McpServer): void {
   server.registerTool(
     "pacifica-withdraw",
     {
-      title: "Withdraw Funds",
+      title: "Withdraw USDC",
       description:
-        "Withdraw funds from your Pacifica account back to your Solana wallet.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
+        "Withdraw USDC from your Pacifica account back to your Solana wallet.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
       inputSchema: z.object({
         amount: z
           .string()
-          .describe("Amount to withdraw as a decimal string"),
+          .describe("Amount of USDC to withdraw as a decimal string"),
       }),
     },
     async (params) => {

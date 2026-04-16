@@ -226,15 +226,15 @@ export const tools: Tool[] = [
   {
     name: "pacifica-transfer-funds",
     title: "Transfer Funds",
-    description: "Transfer funds between your main account and a subaccount.",
+    description: "Transfer USDC between your main account and a subaccount.",
     category: "trading",
     requiresWallet: true,
     prompt: "Transfer 100 USDC to my subaccount on Pacifica",
   },
   {
     name: "pacifica-withdraw",
-    title: "Withdraw Funds",
-    description: "Withdraw funds from your Pacifica account back to your Solana wallet.",
+    title: "Withdraw USDC",
+    description: "Withdraw USDC from your Pacifica account back to your Solana wallet.",
     category: "trading",
     requiresWallet: true,
     prompt: "Withdraw 500 USDC from my Pacifica account to my Solana wallet",

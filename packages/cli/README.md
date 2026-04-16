@@ -166,7 +166,7 @@ await server.connect(transport);
 | `cancel-stop` | Cancel a stop order |
 | `set-leverage` | Set leverage for a market |
 | `set-margin-mode` | Switch cross / isolated margin |
-| `withdraw` | Withdraw funds from Pacifica |
+| `withdraw` | Withdraw USDC from Pacifica |
 
 ### Subaccounts (3)
 
@@ -174,7 +174,7 @@ await server.connect(transport);
 |---------|-------------|
 | `create-subaccount` | Create subaccount (key saved locally) |
 | `list-subaccounts` | List all subaccounts |
-| `transfer-funds` | Transfer funds between accounts |
+| `transfer-funds` | Transfer USDC between accounts |
 
 ### Real-Time (4)
 

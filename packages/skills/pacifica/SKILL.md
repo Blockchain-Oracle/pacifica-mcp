@@ -55,8 +55,8 @@ Trigger when the user:
 | Wallet address | `pacifica-wallet` | — |
 | Create subaccount | `pacifica-create-subaccount` | — |
 | List subaccounts | `pacifica-list-subaccounts` | — |
-| Transfer to subaccount | `pacifica-transfer-funds` | to_account, amount |
-| Withdraw funds | `pacifica-withdraw` | amount |
+| Transfer USDC to subaccount | `pacifica-transfer-funds` | to_account, amount |
+| Withdraw USDC | `pacifica-withdraw` | amount |
 | All available tools | `pacifica-tools` | — |
 | Watch trades live | `pacifica-watch` | channel, symbol, duration |
 | Monitor real-time | `pacifica-watch-start` → `pacifica-watch-read` → `pacifica-watch-stop` | channel, symbol |

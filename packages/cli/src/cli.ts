@@ -99,10 +99,10 @@ const TOOLS_CATALOG = {
     { command: "set-margin-mode", description: "Switch between cross and isolated margin" },
   ],
   "Account Management (requires wallet)": [
-    { command: "withdraw", description: "Withdraw funds from Pacifica to your wallet" },
+    { command: "withdraw", description: "Withdraw USDC from Pacifica to your wallet" },
     { command: "create-subaccount", description: "Create a new subaccount" },
     { command: "list-subaccounts", description: "List all subaccounts" },
-    { command: "transfer-funds", description: "Transfer funds between accounts" },
+    { command: "transfer-funds", description: "Transfer USDC between accounts" },
   ],
   "Real-Time (WebSocket)": [
     { command: "watch", description: "Snapshot: collect WebSocket events for N seconds" },
@@ -915,8 +915,8 @@ program
 
 program
   .command("withdraw")
-  .description("Withdraw funds from your Pacifica account")
-  .requiredOption("--amount <amount>", "Amount to withdraw")
+  .description("Withdraw USDC from your Pacifica account")
+  .requiredOption("--amount <amount>", "Amount of USDC to withdraw")
   .action(async (opts: { amount: string }) => {
     try {
       const config = loadOrCreateWallet();
@@ -1028,9 +1028,9 @@ program
 
 program
   .command("transfer-funds")
-  .description("Transfer funds between main account and a subaccount")
+  .description("Transfer USDC between main account and a subaccount")
   .requiredOption("--to <address>", "Destination account address")
-  .requiredOption("--amount <amount>", "Amount to transfer")
+  .requiredOption("--amount <amount>", "Amount of USDC to transfer")
   .action(async (opts: { to: string; amount: string }) => {
     try {
       const config = loadOrCreateWallet();
