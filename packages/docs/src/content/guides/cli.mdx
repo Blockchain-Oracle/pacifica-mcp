@@ -21,24 +21,24 @@ pacifica --help
 
 # Market data (free)
 pacifica markets
-pacifica prices --symbol BTC-PERP
-pacifica orderbook --symbol BTC-PERP
-pacifica candles --symbol BTC-PERP --interval 1h --limit 50
-pacifica recent-trades --symbol ETH-PERP
-pacifica funding-rates --symbol BTC-PERP --limit 10
+pacifica prices --symbol BTC
+pacifica orderbook --symbol BTC
+pacifica candles --symbol BTC --interval 1h --limit 50
+pacifica recent-trades --symbol ETH
+pacifica funding-rates --symbol BTC --limit 10
 
 # Account monitoring (free)
 pacifica account
 pacifica positions
 pacifica orders
-pacifica trade-history --symbol BTC-PERP --limit 20
+pacifica trade-history --symbol BTC --limit 20
 pacifica portfolio --time-range 30d
 
 # Trading (requires wallet)
-pacifica market-order --symbol BTC-PERP --side bid --amount 0.01
-pacifica limit-order --symbol ETH-PERP --side ask --amount 0.1 --price 3500
-pacifica set-leverage --symbol BTC-PERP --leverage 10
-pacifica cancel --order-id 12345 --symbol BTC-PERP
+pacifica market-order --symbol BTC --side bid --amount 0.01
+pacifica limit-order --symbol ETH --side ask --amount 0.1 --price 3500
+pacifica set-leverage --symbol BTC --leverage 10
+pacifica cancel --order-id 12345 --symbol BTC
 
 # System
 pacifica wallet
@@ -50,7 +50,7 @@ pacifica tools
 All output is JSON. Pipe to `jq` for filtering:
 
 ```bash
-pacifica prices --symbol BTC-PERP | jq '.mark'
+pacifica prices --symbol BTC | jq '.mark'
 pacifica positions | jq '.[].symbol'
 ```
 

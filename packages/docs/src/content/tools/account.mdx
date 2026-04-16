@@ -60,7 +60,7 @@ Get all open positions for an account.
 ```json
 [
   {
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "side": "bid",
     "amount": "0.01",
     "entry_price": "67421.00",
@@ -95,7 +95,7 @@ Get all open orders for an account.
 [
   {
     "order_id": "ord_abc123",
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "side": "bid",
     "amount": "0.05",
     "price": "65000.00",
@@ -134,12 +134,12 @@ Get historical trades with realized PnL and fees.
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `account` | string | No | Solana wallet address. Defaults to MCP wallet. |
-| `symbol` | string | No | Filter by market (e.g. `BTC-PERP`) |
+| `symbol` | string | No | Filter by market (e.g. `BTC`) |
 | `limit` | integer | No | Number of trades, 1–500 (default `50`) |
 
 **Example prompt**
 
-> *"Show me my BTC-PERP trade history with PnL."*
+> *"Show me my BTC trade history with PnL."*
 
 **Example response**
 
@@ -147,7 +147,7 @@ Get historical trades with realized PnL and fees.
 [
   {
     "trade_id": "trd_xyz789",
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "side": "ask",
     "amount": "0.01",
     "price": "67800.00",
@@ -213,7 +213,7 @@ Get balance event history: deposits, withdrawals, trades, and funding payments.
   {
     "type": "funding",
     "amount": "-0.05",
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "timestamp": "1712692800000"
   }
 ]
@@ -235,7 +235,7 @@ Get account settings including margin mode and leverage configuration per market
 
 > *"Show me my margin settings and leverage for each market."*
 
-> *"What leverage is set on my BTC-PERP and ETH-PERP?"*
+> *"What leverage is set on my BTC and ETH?"*
 
 **Example response**
 
@@ -243,12 +243,12 @@ Get account settings including margin mode and leverage configuration per market
 {
   "margin_settings": [
     {
-      "symbol": "BTC-PERP",
+      "symbol": "BTC",
       "isolated": false,
       "leverage": 10
     },
     {
-      "symbol": "ETH-PERP",
+      "symbol": "ETH",
       "isolated": true,
       "leverage": 20
     }

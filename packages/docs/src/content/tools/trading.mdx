@@ -31,7 +31,7 @@ Place a market order. Fills immediately at the best available price.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 | `side` | enum | Yes | `bid` (long) or `ask` (short) |
 | `amount` | string | Yes | Order size as decimal string (e.g. `"0.01"`) |
 | `slippage_percent` | string | No | Max slippage % (default `"1"`) |
@@ -39,16 +39,16 @@ Place a market order. Fills immediately at the best available price.
 
 **Example prompt**
 
-> *"Buy 0.01 BTC-PERP at market price."*
+> *"Buy 0.01 BTC at market price."*
 
-> *"Short 0.1 ETH-PERP at market."*
+> *"Short 0.1 ETH at market."*
 
 **Example response**
 
 ```json
 {
   "order_id": "ord_abc123",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "side": "bid",
   "amount": "0.01",
   "filled_price": "67421.00",
@@ -85,16 +85,16 @@ Place a limit order at a specific price.
 
 **Example prompt**
 
-> *"Place a buy limit order for 0.05 BTC-PERP at $65,000."*
+> *"Place a buy limit order for 0.05 BTC at $65,000."*
 
-> *"Sell 0.1 ETH-PERP at $3,100 GTC."*
+> *"Sell 0.1 ETH at $3,100 GTC."*
 
 **Example response**
 
 ```json
 {
   "order_id": "ord_def456",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "side": "bid",
   "amount": "0.05",
   "price": "65000.00",
@@ -122,9 +122,9 @@ Place a stop-market or stop-limit order. Triggers when the market reaches `stop_
 
 **Example prompt**
 
-> *"Place a stop-loss on my BTC-PERP long — sell 0.01 BTC if price drops to $63,000."*
+> *"Place a stop-loss on my BTC long — sell 0.01 BTC if price drops to $63,000."*
 
-> *"Set a stop-limit order: buy 0.05 ETH-PERP when it hits $3,050, limit at $3,060."*
+> *"Set a stop-limit order: buy 0.05 ETH when it hits $3,050, limit at $3,060."*
 
 ---
 
@@ -145,9 +145,9 @@ Set take-profit and/or stop-loss prices on an existing position. Provide at leas
 
 **Example prompt**
 
-> *"Set a take-profit at $72,000 and stop-loss at $63,000 on my BTC-PERP long."*
+> *"Set a take-profit at $72,000 and stop-loss at $63,000 on my BTC long."*
 
-> *"Add a stop-loss at $2,800 to my ETH-PERP long position."*
+> *"Add a stop-loss at $2,800 to my ETH long position."*
 
 ---
 
@@ -166,7 +166,7 @@ Cancel a specific order by ID, or cancel all open orders for a symbol.
 
 > *"Cancel order ord_def456."*
 
-> *"Cancel all my open orders on BTC-PERP."*
+> *"Cancel all my open orders on BTC."*
 
 **Example response**
 
@@ -189,9 +189,9 @@ Set the leverage multiplier for a market (1–100x).
 
 **Example prompt**
 
-> *"Set my BTC-PERP leverage to 20x."*
+> *"Set my BTC leverage to 20x."*
 
-> *"Reduce my ETH-PERP leverage to 5x."*
+> *"Reduce my ETH leverage to 5x."*
 
 ---
 
@@ -208,9 +208,9 @@ Switch between cross margin and isolated margin for a market.
 
 **Example prompt**
 
-> *"Switch BTC-PERP to isolated margin."*
+> *"Switch BTC to isolated margin."*
 
-> *"Enable cross margin on ETH-PERP."*
+> *"Enable cross margin on ETH."*
 
 ---
 
@@ -230,7 +230,7 @@ Edit an existing order's price and/or amount. The original order is replaced and
 
 **Example prompt**
 
-> *"Change my BTC-PERP limit order ord_def456 to $66,000."*
+> *"Change my BTC limit order ord_def456 to $66,000."*
 
 > *"Update order ord_def456 — set amount to 0.1 and price to $64,500."*
 
@@ -239,7 +239,7 @@ Edit an existing order's price and/or amount. The original order is replaced and
 ```json
 {
   "order_id": "ord_new789",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "price": "66000.00",
   "amount": "0.05",
   "status": "open"
@@ -272,9 +272,9 @@ Each action object:
 
 **Example prompt**
 
-> *"Place 3 limit buy orders for BTC-PERP at $64,000, $63,500, and $63,000 — each for 0.01 BTC."*
+> *"Place 3 limit buy orders for BTC at $64,000, $63,500, and $63,000 — each for 0.01 BTC."*
 
-> *"Cancel orders ord_1 and ord_2, and place a new bid at $65,000 for 0.05 BTC-PERP."*
+> *"Cancel orders ord_1 and ord_2, and place a new bid at $65,000 for 0.05 BTC."*
 
 **Example response**
 
@@ -304,15 +304,15 @@ Cancel a specific stop order by ID.
 
 **Example prompt**
 
-> *"Cancel my BTC-PERP stop order ord_stop123."*
+> *"Cancel my BTC stop order ord_stop123."*
 
-> *"Remove the stop-loss order on ETH-PERP."*
+> *"Remove the stop-loss order on ETH."*
 
 **Example response**
 
 ```json
 {
   "order_id": "ord_stop123",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "status": "canceled"
 }

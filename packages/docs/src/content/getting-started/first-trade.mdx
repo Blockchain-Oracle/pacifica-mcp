@@ -21,13 +21,13 @@ If you're starting fresh, use [testnet](/guides/testnet) — it's free.
 Start by looking at the market you want to trade.
 
 **Prompt:**
-> *"What's the current price and funding rate for BTC-PERP?"*
+> *"What's the current price and funding rate for BTC?"*
 
 **What happens:** Claude calls `pacifica-prices` and returns the mark price, oracle price, funding rate, and next funding time.
 
 **Example response:**
 ```
-BTC-PERP:
+BTC:
   Mark price:     $67,420.50
   Oracle price:   $67,415.00
   Funding rate:   0.0023% (every 8h)
@@ -43,7 +43,7 @@ BTC-PERP:
 Before placing a market order, check liquidity.
 
 **Prompt:**
-> *"Show me the BTC-PERP order book — top 5 levels."*
+> *"Show me the BTC order book — top 5 levels."*
 
 **What happens:** Claude calls `pacifica-orderbook` with `agg_level=100`.
 
@@ -65,9 +65,9 @@ Make sure you have enough margin.
 Now place a long position.
 
 **Prompt:**
-> *"Buy 0.01 BTC-PERP at market price."*
+> *"Buy 0.01 BTC at market price."*
 
-**What happens:** Claude calls `pacifica-market-order` with `side=bid`, `amount=0.01`, `symbol=BTC-PERP`.
+**What happens:** Claude calls `pacifica-market-order` with `side=bid`, `amount=0.01`, `symbol=BTC`.
 
 The MCP server signs the request with your Ed25519 wallet and submits it to Pacifica.
 
@@ -75,7 +75,7 @@ The MCP server signs the request with your Ed25519 wallet and submits it to Paci
 ```json
 {
   "order_id": "ord_abc123",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "side": "bid",
   "amount": "0.01",
   "filled_price": "67421.00",
@@ -96,7 +96,7 @@ Confirm the position is open.
 
 **Example response:**
 ```
-BTC-PERP LONG
+BTC LONG
   Amount:       0.01 BTC
   Entry price:  $67,421.00
   Mark price:   $67,450.00
@@ -112,9 +112,9 @@ BTC-PERP LONG
 Protect your position with a stop-loss.
 
 **Prompt:**
-> *"Set a stop-loss on my BTC-PERP long at $65,000."*
+> *"Set a stop-loss on my BTC long at $65,000."*
 
-**What happens:** Claude calls `pacifica-set-tpsl` with `symbol=BTC-PERP`, `side=bid`, `stop_loss_price=65000`.
+**What happens:** Claude calls `pacifica-set-tpsl` with `symbol=BTC`, `side=bid`, `stop_loss_price=65000`.
 
 ---
 
@@ -123,7 +123,7 @@ Protect your position with a stop-loss.
 When you're ready to exit:
 
 **Prompt:**
-> *"Close my BTC-PERP long position."*
+> *"Close my BTC long position."*
 
 **What happens:** Claude calls `pacifica-market-order` with `side=ask`, `reduce_only=true`, and the same amount as your position.
 
@@ -134,4 +134,4 @@ When you're ready to exit:
 - Use **testnet** to practice without risking real funds — [Testnet guide](/guides/testnet)
 - All amounts are decimal strings (e.g., `"0.01"` not `0.01`)
 - Claude will always ask for confirmation before placing or canceling orders
-- Check `pacifica-markets` for the exact symbol format (e.g., `BTC-PERP`, `ETH-PERP`, `SOL-PERP`)
+- Check `pacifica-markets` for the exact symbol format (e.g., `BTC`, `ETH`, `SOL`)

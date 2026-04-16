@@ -8,43 +8,53 @@
 
 **Pacifica MCP** is a [Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents the ability to trade, monitor, and manage positions on [Pacifica Finance](https://pacifica.fi) — the #1 perpetuals DEX on Solana.
 
-Connect it to Claude, Cursor, or any MCP-compatible client and start trading with natural language.
+Connect it to Claude Code, Cursor, Windsurf, VS Code Copilot, OpenClaw, Gemini CLI, or any MCP-compatible client and start trading with natural language.
 
 ## What can it do?
 
-Pacifica MCP exposes **36 tools** across four categories:
+Pacifica MCP exposes **36 tools** across five categories:
 
 | Category | Tools | Auth |
 |---|---|---|
-| Market Data | Prices, order book, candles, funding rates, recent trades | None |
-| Account Monitoring | Positions, orders, trade history, portfolio equity | None |
-| Trading | Market/limit/stop orders, TP/SL, batch, edit, cancel, leverage, margin mode | Wallet required |
-| Account Management | Withdraw, subaccounts, fund transfers | Wallet required |
-| System | Wallet info, list tools | None |
+| Market Data | Prices, order book, candles, funding rates, recent trades | Free |
+| Account Monitoring | Positions, orders, trade history, portfolio equity | Free |
+| Trading | Market/limit/stop orders, TP/SL, batch, edit, cancel, leverage, margin mode | Wallet |
+| Account Management | Withdraw, subaccounts, fund transfers | Wallet |
+| Real-Time | WebSocket streaming for prices, trades, orderbook, account updates | Free |
+| System | Wallet info, list tools | Free |
 
 ### Example prompts
 
-- *"What's the current BTC-PERP price and funding rate?"*
+- *"What's the current BTC price and funding rate?"*
 - *"Show me my open positions and unrealized PnL."*
-- *"Buy 0.01 BTC-PERP at market price."*
-- *"Set a stop-loss on my ETH-PERP long at $2800."*
-- *"Cancel all my open orders on SOL-PERP."*
+- *"Open a 0.01 BTC long at market with 10x leverage."*
+- *"Set a stop-loss on my ETH position at $2,100."*
+- *"Watch BTC trades for 10 seconds and summarize."*
 
 ## Quick install
 
-**MCP server** — add to Claude Code:
+**MCP server** — one command for any supported client:
 
 ```bash
+# Claude Code
 claude mcp add pacifica npx @pacifica-dev/mcp
+
+# Gemini CLI
+gemini mcp add pacifica npx -y @pacifica-dev/mcp
+
+# OpenClaw
+openclaw mcp set pacifica '{"command":"npx","args":["-y","@pacifica-dev/mcp"]}'
 ```
 
-**Agent Skill** — cross-client install via the community skills CLI:
+For Cursor, Windsurf, VS Code, Zed, Continue, Cline, and Goose — see the [Installation guide](/getting-started/installation).
+
+**Agent Skill** — teaches your agent when and how to use each tool:
 
 ```bash
 pnpm dlx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica
 ```
 
-**Standalone CLI** — install globally:
+**Standalone CLI** — terminal-native, no AI required:
 
 ```bash
 npm install -g @pacifica-dev/cli
@@ -57,55 +67,189 @@ npm install -g @pacifica-dev/cli
 
 ## Next steps
 
-- [Installation & setup](/getting-started/installation) — Claude Code, Claude Desktop, Cursor
+- [Installation & setup](/getting-started/installation) — Claude Code, Cursor, Windsurf, OpenClaw, and 12+ clients
 - [Your first trade](/getting-started/first-trade) — Walk through placing an order
 - [Tool reference](/tools) — All 36 tools with parameters and examples
 - [Architecture](/guides/architecture) — How the MCP + CLI split works
 - [Agent Skill](/guides/skill) — Install the SKILL.md for cross-client AI awareness
 - [Standalone CLI](/guides/cli) — Use tools directly from the terminal
+- [OpenClaw](/guides/openclaw) — Trade from WhatsApp, Telegram, Slack, and 20+ chat apps
 - [Testnet guide](/guides/testnet) — Trade risk-free on Pacifica testnet
 
 ---
 
+import { Callout, Tabs } from 'nextra/components'
+
 # Installation
 
-Pacifica MCP runs as a local process via `npx`. No global install needed — just add it to your MCP client.
+Pacifica MCP installs in two ways: as an **MCP server** (every major agent client supports it) or as a **standalone CLI** (for terminal use). Pick whichever fits your workflow — or install both.
 
-**npm packages:** [`@pacifica-dev/mcp`](https://www.npmjs.com/package/@pacifica-dev/mcp) · [`@pacifica-dev/cli`](https://www.npmjs.com/package/@pacifica-dev/cli)
+## Install the MCP server
 
-## Claude Code
+Pacifica MCP works natively with 12+ MCP clients. Pick yours:
 
-The fastest way. Run this in your terminal:
+<Tabs items={['Claude Code', 'Claude Desktop', 'Cursor', 'Windsurf', 'VS Code', 'Gemini CLI', 'Codex', 'Zed', 'Continue', 'Cline', 'Goose', 'OpenClaw']}>
 
+<Tabs.Tab>
 ```bash
 claude mcp add pacifica npx @pacifica-dev/mcp
 ```
 
-That's it. Restart Claude Code and start chatting. Try: *"Show me the BTC-PERP price."*
+Claude Code downloads and runs the server automatically on next session.
+</Tabs.Tab>
 
-### Verify it's working
+<Tabs.Tab>
+Open your config file:
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- Linux: `~/.config/Claude/claude_desktop_config.json`
 
+```json
+{
+  "mcpServers": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+
+Fully quit and restart Claude Desktop.
+</Tabs.Tab>
+
+<Tabs.Tab>
+Create `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
+
+```json
+{
+  "mcpServers": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+
+Or use the UI: Settings → Tools & MCP → Add new MCP server.
+</Tabs.Tab>
+
+<Tabs.Tab>
+Edit `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+VS Code Copilot uses a different schema — note `servers` key (not `mcpServers`). Create `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "pacifica": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+
+Copilot Chat must be in Agent mode for MCP tools to appear.
+</Tabs.Tab>
+
+<Tabs.Tab>
 ```bash
-claude mcp list
+gemini mcp add pacifica npx -y @pacifica-dev/mcp
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+```bash
+codex mcp add pacifica npx -y @pacifica-dev/mcp
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+Edit `~/.config/zed/settings.json`:
+
+```json
+{
+  "context_servers": {
+    "pacifica": {
+      "source": "custom",
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"],
+      "env": {}
+    }
+  }
+}
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+Create `.continue/mcpServers/pacifica.yaml`:
+
+```yaml
+name: Pacifica MCP
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: Pacifica
+    type: stdio
+    command: npx
+    args:
+      - "-y"
+      - "@pacifica-dev/mcp"
 ```
 
-You should see `pacifica-mcp` in the list.
+MCP only works in Continue's Agent mode.
+</Tabs.Tab>
 
----
-
-## Claude Desktop
-
-Open your Claude Desktop config file:
-
-- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-
-Add the Pacifica MCP entry:
+<Tabs.Tab>
+Edit `cline_mcp_settings.json`:
 
 ```json
 {
   "mcpServers": {
-    "pacifica-mcp": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+```bash
+goose configure
+```
+
+Choose: Add Extension → Command-line Extension (stdio)
+- Name: `pacifica`
+- Command: `npx -y @pacifica-dev/mcp`
+</Tabs.Tab>
+
+<Tabs.Tab>
+Edit `~/.openclaw/openclaw.json`:
+
+```json
+{
+  "mcpServers": {
+    "pacifica": {
       "command": "npx",
       "args": ["-y", "@pacifica-dev/mcp"]
     }
@@ -113,28 +257,19 @@ Add the Pacifica MCP entry:
 }
 ```
 
-Save the file and restart Claude Desktop.
-
----
-
-## Cursor
-
-Open **Cursor Settings** → **MCP** → **Add MCP Server**.
-
-Or edit `~/.cursor/mcp.json` directly:
-
-```json
-{
-  "mcpServers": {
-    "pacifica-mcp": {
-      "command": "npx",
-      "args": ["-y", "@pacifica-dev/mcp"]
-    }
-  }
-}
+Or via CLI:
+```bash
+openclaw mcp set pacifica '{"command":"npx","args":["-y","@pacifica-dev/mcp"]}'
 ```
 
-Restart Cursor after saving.
+See the [OpenClaw guide](/guides/openclaw) for full setup including skill installation.
+</Tabs.Tab>
+
+</Tabs>
+
+<Callout type="info">
+**npm packages:** [`@pacifica-dev/mcp`](https://www.npmjs.com/package/@pacifica-dev/mcp) · [`@pacifica-dev/cli`](https://www.npmjs.com/package/@pacifica-dev/cli)
+</Callout>
 
 ---
 
@@ -144,15 +279,14 @@ Restart Cursor after saving.
 |---|---|---|
 | `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
 | `PACIFICA_PRIVATE_KEY` | (auto-generated) | Base58-encoded Ed25519 private key override |
+| `LOG_LEVEL` | `info` | `debug`, `info`, `warn`, `error` |
 
-To trade on mainnet, set `PACIFICA_NETWORK=mainnet` in the MCP server environment.
-
-### Claude Desktop with env vars
+To set env vars, add an `env` block to your MCP config:
 
 ```json
 {
   "mcpServers": {
-    "pacifica-mcp": {
+    "pacifica": {
       "command": "npx",
       "args": ["-y", "@pacifica-dev/mcp"],
       "env": {
@@ -173,7 +307,12 @@ Install the Pacifica skill so your agent knows when and how to use the tools:
 pnpm dlx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica
 ```
 
-See the [Agent Skill guide](/guides/skill) for alternative install methods.
+Or for OpenClaw:
+```bash
+openclaw skills install pacifica
+```
+
+See the [Agent Skill guide](/guides/skill) for all install methods.
 
 ---
 
@@ -183,7 +322,7 @@ For terminal use without an MCP host:
 
 ```bash
 npm install -g @pacifica-dev/cli
-pacifica prices --symbol BTC-PERP
+pacifica prices --symbol BTC
 ```
 
 See the [CLI guide](/guides/cli) for full usage.
@@ -196,13 +335,14 @@ The first time the MCP server starts, it auto-generates an Ed25519 wallet at `~/
 
 **Backup this file.** It contains your private key.
 
-To check your wallet address:
+To deposit funds and start trading:
 
-> *"Show me my Pacifica wallet address."*
+1. Copy your private key from `~/.pacifica-mcp/config.json`
+2. Import it into a browser wallet ([Phantom](https://phantom.app) or [Backpack](https://backpack.app))
+3. Go to [test-app.pacifica.fi](https://test-app.pacifica.fi) (access code: `Pacifica`) and connect your wallet
+4. Deposit SOL, USDC, or any supported asset
 
-Then deposit funds (e.g. SOL, USDC) on Pacifica to start trading. See the [Testnet guide](/guides/testnet) for step-by-step instructions.
-
-For testnet setup, see the [Testnet guide](/guides/testnet).
+For the full walkthrough, see the [Testnet guide](/guides/testnet).
 
 ---
 
@@ -224,13 +364,13 @@ If you're starting fresh, use [testnet](/guides/testnet) — it's free.
 Start by looking at the market you want to trade.
 
 **Prompt:**
-> *"What's the current price and funding rate for BTC-PERP?"*
+> *"What's the current price and funding rate for BTC?"*
 
 **What happens:** Claude calls `pacifica-prices` and returns the mark price, oracle price, funding rate, and next funding time.
 
 **Example response:**
 ```
-BTC-PERP:
+BTC:
   Mark price:     $67,420.50
   Oracle price:   $67,415.00
   Funding rate:   0.0023% (every 8h)
@@ -246,7 +386,7 @@ BTC-PERP:
 Before placing a market order, check liquidity.
 
 **Prompt:**
-> *"Show me the BTC-PERP order book — top 5 levels."*
+> *"Show me the BTC order book — top 5 levels."*
 
 **What happens:** Claude calls `pacifica-orderbook` with `agg_level=100`.
 
@@ -268,9 +408,9 @@ Make sure you have enough margin.
 Now place a long position.
 
 **Prompt:**
-> *"Buy 0.01 BTC-PERP at market price."*
+> *"Buy 0.01 BTC at market price."*
 
-**What happens:** Claude calls `pacifica-market-order` with `side=bid`, `amount=0.01`, `symbol=BTC-PERP`.
+**What happens:** Claude calls `pacifica-market-order` with `side=bid`, `amount=0.01`, `symbol=BTC`.
 
 The MCP server signs the request with your Ed25519 wallet and submits it to Pacifica.
 
@@ -278,7 +418,7 @@ The MCP server signs the request with your Ed25519 wallet and submits it to Paci
 ```json
 {
   "order_id": "ord_abc123",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "side": "bid",
   "amount": "0.01",
   "filled_price": "67421.00",
@@ -299,7 +439,7 @@ Confirm the position is open.
 
 **Example response:**
 ```
-BTC-PERP LONG
+BTC LONG
   Amount:       0.01 BTC
   Entry price:  $67,421.00
   Mark price:   $67,450.00
@@ -315,9 +455,9 @@ BTC-PERP LONG
 Protect your position with a stop-loss.
 
 **Prompt:**
-> *"Set a stop-loss on my BTC-PERP long at $65,000."*
+> *"Set a stop-loss on my BTC long at $65,000."*
 
-**What happens:** Claude calls `pacifica-set-tpsl` with `symbol=BTC-PERP`, `side=bid`, `stop_loss_price=65000`.
+**What happens:** Claude calls `pacifica-set-tpsl` with `symbol=BTC`, `side=bid`, `stop_loss_price=65000`.
 
 ---
 
@@ -326,7 +466,7 @@ Protect your position with a stop-loss.
 When you're ready to exit:
 
 **Prompt:**
-> *"Close my BTC-PERP long position."*
+> *"Close my BTC long position."*
 
 **What happens:** Claude calls `pacifica-market-order` with `side=ask`, `reduce_only=true`, and the same amount as your position.
 
@@ -337,7 +477,7 @@ When you're ready to exit:
 - Use **testnet** to practice without risking real funds — [Testnet guide](/guides/testnet)
 - All amounts are decimal strings (e.g., `"0.01"` not `0.01`)
 - Claude will always ask for confirmation before placing or canceling orders
-- Check `pacifica-markets` for the exact symbol format (e.g., `BTC-PERP`, `ETH-PERP`, `SOL-PERP`)
+- Check `pacifica-markets` for the exact symbol format (e.g., `BTC`, `ETH`, `SOL`)
 
 ---
 
@@ -437,9 +577,9 @@ All market data on testnet mirrors mainnet prices in real time. Trading mechanic
 
 **Try it:**
 
-> *"What's the BTC-PERP price on testnet?"*
+> *"What's the BTC price on testnet?"*
 
-> *"Buy 0.01 BTC-PERP at market price."*
+> *"Buy 0.01 BTC at market price."*
 
 > *"Show me my open positions."*
 
@@ -470,66 +610,34 @@ The same wallet file works on both networks.
 
 ---
 
+import { Callout } from 'nextra/components'
+
 # MCP Client Setup
 
-Detailed configuration for each supported MCP client.
+Pacifica MCP works with **12+ MCP clients** out of the box. For quick setup with tabs for every client, see the [Installation guide](/getting-started/installation).
+
+This page covers advanced configuration, environment variables, and troubleshooting.
 
 ---
 
-## Claude Code
+## Quick reference
 
-### One-liner
-
-```bash
-claude mcp add pacifica npx @pacifica-dev/mcp
-```
-
-### Manual config
-
-The command above writes to `~/.claude/mcp.json`. You can also edit it directly:
-
-```json
-{
-  "mcpServers": {
-    "pacifica-mcp": {
-      "command": "npx",
-      "args": ["-y", "@pacifica-dev/mcp"]
-    }
-  }
-}
-```
-
-### With environment variables
-
-```bash
-claude mcp add pacifica-mcp -e PACIFICA_NETWORK=mainnet -- npx @pacifica-dev/mcp
-```
-
-### Verify
-
-```bash
-claude mcp list
-# pacifica-mcp   npx @pacifica-dev/mcp
-```
-
----
-
-## Claude Desktop
-
-### Config file location
-
-| Platform | Path |
+| Client | Install command |
 |---|---|
-| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
-| Linux | `~/.config/Claude/claude_desktop_config.json` |
+| Claude Code | `claude mcp add pacifica npx @pacifica-dev/mcp` |
+| Gemini CLI | `gemini mcp add pacifica npx -y @pacifica-dev/mcp` |
+| Codex | `codex mcp add pacifica npx -y @pacifica-dev/mcp` |
+| OpenClaw | `openclaw mcp set pacifica '{"command":"npx","args":["-y","@pacifica-dev/mcp"]}'` |
+| Goose | `goose configure` → Add Extension → `npx -y @pacifica-dev/mcp` |
 
-### Config
+For **Claude Desktop, Cursor, Windsurf, VS Code, Zed, Continue, Cline** — add a JSON config entry. See the [Installation tabs](/getting-started/installation) for the exact config for each client.
+
+The standard config pattern is always:
 
 ```json
 {
   "mcpServers": {
-    "pacifica-mcp": {
+    "pacifica": {
       "command": "npx",
       "args": ["-y", "@pacifica-dev/mcp"]
     }
@@ -537,12 +645,24 @@ claude mcp list
 }
 ```
 
-### With env vars
+---
+
+## Environment variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
+| `PACIFICA_PRIVATE_KEY` | (auto-generated) | Base58-encoded Ed25519 private key override |
+| `LOG_LEVEL` | `info` | Pino log level: `debug`, `info`, `warn`, `error` |
+
+### Setting env vars
+
+Add an `env` block to your MCP config:
 
 ```json
 {
   "mcpServers": {
-    "pacifica-mcp": {
+    "pacifica": {
       "command": "npx",
       "args": ["-y", "@pacifica-dev/mcp"],
       "env": {
@@ -553,55 +673,45 @@ claude mcp list
 }
 ```
 
-Restart Claude Desktop after saving.
+Or for Claude Code via CLI:
 
----
+```bash
+claude mcp add pacifica -e PACIFICA_NETWORK=mainnet -- npx @pacifica-dev/mcp
+```
 
-## Cursor
+### Using an existing wallet
 
-### Via settings UI
-
-1. Open **Cursor Settings** (Cmd/Ctrl + ,)
-2. Search for **MCP** in the settings search bar
-3. Click **MCP Servers** → **Add MCP Server**
-4. Set:
-   - **Name:** `pacifica-mcp`
-   - **Command:** `npx`
-   - **Args:** `-y @pacifica-dev/mcp`
-
-### Via config file
-
-Edit `~/.cursor/mcp.json`:
+If you already have a Solana wallet and want to use it instead of the auto-generated one:
 
 ```json
 {
-  "mcpServers": {
-    "pacifica-mcp": {
-      "command": "npx",
-      "args": ["-y", "@pacifica-dev/mcp"]
-    }
+  "env": {
+    "PACIFICA_PRIVATE_KEY": "your-base58-encoded-ed25519-private-key"
   }
 }
 ```
 
-Restart Cursor after saving.
+<Callout type="warning">
+Never share your private key. The key stays local and is only used to sign requests.
+</Callout>
 
 ---
 
-## Any MCP client
+## Verify the connection
 
-Pacifica MCP uses stdio transport (stdin/stdout), which is supported by all MCP clients. The configuration pattern is always:
+After setup, check that the MCP server is running:
 
-- **Command:** `npx`
-- **Args:** `["-y", "@pacifica-dev/mcp"]`
+**Claude Code:**
+```bash
+claude mcp list
+```
 
-### Environment variables
+**OpenClaw:**
+```
+List all Pacifica tools
+```
 
-| Variable | Default | Description |
-|---|---|---|
-| `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
-| `PACIFICA_PRIVATE_KEY` | (auto-generated) | Base58-encoded Ed25519 private key override |
-| `LOG_LEVEL` | `info` | Pino log level: `debug`, `info`, `warn`, `error` |
+**Any client:** Ask the agent *"Show me my Pacifica wallet address"* — if it calls `pacifica-wallet` and returns an address, the server is connected.
 
 ---
 
@@ -611,13 +721,16 @@ Pacifica MCP uses stdio transport (stdin/stdout), which is supported by all MCP 
 Install Node.js 18+ from [nodejs.org](https://nodejs.org).
 
 **Wallet not found**
-The wallet config at `~/.pacifica-mcp/config.json` is created automatically on first use. Ask Claude: *"Show me my Pacifica wallet address."*
+The wallet config at `~/.pacifica-mcp/config.json` is created automatically on first use. Run any Pacifica tool to trigger wallet generation.
 
-**"Request failed: 401"**
+**"Request failed: 401" or "Account not found"**
 Your wallet has no funds on Pacifica. Deposit funds (SOL, USDC, or other supported assets) via the Pacifica web app. See the [Testnet guide](/guides/testnet).
 
 **Server not appearing in client**
 Check that the JSON config is valid (no trailing commas) and restart the client after saving.
+
+**Stale data after trading**
+Pacifica MCP caches read-only responses for 5 minutes. After placing orders or changing settings, the cache is automatically cleared so subsequent reads return fresh data.
 
 ---
 
@@ -639,24 +752,24 @@ pacifica --help
 
 # Market data (free)
 pacifica markets
-pacifica prices --symbol BTC-PERP
-pacifica orderbook --symbol BTC-PERP
-pacifica candles --symbol BTC-PERP --interval 1h --limit 50
-pacifica recent-trades --symbol ETH-PERP
-pacifica funding-rates --symbol BTC-PERP --limit 10
+pacifica prices --symbol BTC
+pacifica orderbook --symbol BTC
+pacifica candles --symbol BTC --interval 1h --limit 50
+pacifica recent-trades --symbol ETH
+pacifica funding-rates --symbol BTC --limit 10
 
 # Account monitoring (free)
 pacifica account
 pacifica positions
 pacifica orders
-pacifica trade-history --symbol BTC-PERP --limit 20
+pacifica trade-history --symbol BTC --limit 20
 pacifica portfolio --time-range 30d
 
 # Trading (requires wallet)
-pacifica market-order --symbol BTC-PERP --side bid --amount 0.01
-pacifica limit-order --symbol ETH-PERP --side ask --amount 0.1 --price 3500
-pacifica set-leverage --symbol BTC-PERP --leverage 10
-pacifica cancel --order-id 12345 --symbol BTC-PERP
+pacifica market-order --symbol BTC --side bid --amount 0.01
+pacifica limit-order --symbol ETH --side ask --amount 0.1 --price 3500
+pacifica set-leverage --symbol BTC --leverage 10
+pacifica cancel --order-id 12345 --symbol BTC
 
 # System
 pacifica wallet
@@ -668,7 +781,7 @@ pacifica tools
 All output is JSON. Pipe to `jq` for filtering:
 
 ```bash
-pacifica prices --symbol BTC-PERP | jq '.mark'
+pacifica prices --symbol BTC | jq '.mark'
 pacifica positions | jq '.[].symbol'
 ```
 
@@ -872,6 +985,171 @@ Tools are registered in `server.ts` grouped by category with clear comments.
 
 ---
 
+import { Callout, Steps } from 'nextra/components'
+
+# Pacifica MCP on OpenClaw
+
+[OpenClaw](https://openclaw.ai) is an open-source AI agent platform that runs across WhatsApp, Telegram, Slack, Discord, and 20+ messaging platforms. It supports both MCP servers and Skills — so you can trade perpetuals on Pacifica from any chat app.
+
+This guide walks through the complete setup: enabling MCP, adding Pacifica, and installing the agent skill.
+
+<Callout type="info">
+OpenClaw supports both **MCP tools** (for calling Pacifica tools directly) and **Skills** (to teach the agent when and how to use each tool). Install both for the best experience.
+</Callout>
+
+## Part 1: Set up the MCP server
+
+<Steps>
+
+### Add Pacifica via the CLI
+
+Run this one command:
+
+```bash
+openclaw mcp set pacifica '{"command":"npx","args":["-y","@pacifica-dev/mcp"]}'
+```
+
+This writes the server entry to `~/.openclaw/openclaw.json` automatically.
+
+### Or edit the config file directly
+
+**Config location:** `~/.openclaw/openclaw.json`
+
+```json
+{
+  "mcpServers": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+
+### Restart the gateway
+
+```bash
+openclaw restart
+```
+
+### Verify the connection
+
+In any connected chat (Telegram, WhatsApp, Slack, etc.), send:
+
+```
+List all Pacifica tools
+```
+
+OpenClaw should call the `pacifica-tools` tool and return all 36 Pacifica tools grouped by category.
+
+</Steps>
+
+## Part 2: Install the Pacifica skill
+
+The skill teaches OpenClaw's agent *when* to use Pacifica tools and how to handle trading operations correctly — including symbol formats, exit-side conventions for TP/SL, and the deposit flow.
+
+<Steps>
+
+### Open the Skills panel
+
+In the OpenClaw app, click **Skills** in the left sidebar (or top navigation).
+
+### Search for Pacifica
+
+Type `pacifica` in the search box. Select **Pacifica** from the results and click **Install**.
+
+### Or install via CLI
+
+```bash
+openclaw skill add pacifica
+```
+
+This fetches the latest `SKILL.md` directly from the Pacifica registry.
+
+### Or install manually
+
+Paste this into any OpenClaw conversation:
+
+```
+Read https://pacifica-mcp.xyz/skill.md and follow the instructions to install Pacifica.
+```
+
+The agent will fetch and install the skill itself.
+
+</Steps>
+
+## Running your first command
+
+Once MCP and the skill are active, try these from any connected chat app:
+
+**Market data** — free, no wallet needed:
+
+```
+What's the current BTC price on Pacifica?
+```
+
+```
+Show me the SOL orderbook
+```
+
+```
+What are the funding rates for ETH?
+```
+
+**Trading** — requires a funded wallet:
+
+```
+Open a 0.01 ETH long at market with 5x leverage
+```
+
+```
+Set a take profit at $2,600 and stop loss at $2,100 on my ETH position
+```
+
+```
+Close all my positions
+```
+
+**Real-time monitoring:**
+
+```
+Watch BTC trades for 10 seconds and summarize
+```
+
+## Wallet setup
+
+On first run, Pacifica MCP generates a wallet at `~/.pacifica-mcp/config.json`. To fund it:
+
+1. Copy your private key from the config file
+2. Import into [Phantom](https://phantom.app) or [Backpack](https://backpack.app)
+3. Go to [test-app.pacifica.fi](https://test-app.pacifica.fi) (access code: `Pacifica`)
+4. Connect wallet and deposit SOL, USDC, or other supported assets
+
+## Troubleshooting
+
+**MCP tools not appearing after setup**
+Make sure **Enable MCP** is toggled on in Settings → Integrations. Then restart the gateway with `openclaw restart`.
+
+**`openclaw` command not found**
+Install the OpenClaw CLI:
+```bash
+npm install -g @openclaw/cli
+```
+
+**"Account not found" errors**
+Your wallet needs funds on Pacifica. Deposit via the Pacifica web app at [test-app.pacifica.fi](https://test-app.pacifica.fi) (testnet) or [pacifica.fi](https://pacifica.fi) (mainnet).
+
+**Skill not triggering**
+Make sure the skill is installed (check **Skills** panel — it should show Pacifica as active). If it's installed but not triggering, try: `Use Pacifica to check the BTC price` to invoke it explicitly.
+
+## See also
+
+- [MCP Host Setup](/guides/mcp-setup) — setup for Claude Code, Cursor, Windsurf, and 12 other hosts
+- [Agent Skill](/guides/skill) — how the Pacifica skill works and all install methods
+- [Testnet Guide](/guides/testnet) — deposit flow, access code, faucet
+
+---
+
 # Tools Overview
 
 Pacifica MCP provides **36 tools** grouped into five categories. Market data and account tools are free and cached (5-minute TTL). Trading and account management tools require a wallet and sign every request with your Ed25519 keypair.
@@ -961,19 +1239,19 @@ List all available perpetual markets, or look up a single market by symbol.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | No | Filter to a single market (e.g. `BTC-PERP`) |
+| `symbol` | string | No | Filter to a single market (e.g. `BTC`) |
 
 **Example prompt**
 
 > *"List all available markets on Pacifica."*
 
-> *"Show me the BTC-PERP market details — tick size, lot size, max leverage."*
+> *"Show me the BTC market details — tick size, lot size, max leverage."*
 
 **Example response**
 
 ```json
 {
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "tick_size": "0.5",
   "lot_size": "0.001",
   "max_leverage": "100",
@@ -993,11 +1271,11 @@ Get real-time prices for all markets, or filter to a single symbol.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | No | Filter to a single symbol (e.g. `ETH-PERP`) |
+| `symbol` | string | No | Filter to a single symbol (e.g. `ETH`) |
 
 **Example prompt**
 
-> *"What's the current BTC-PERP price?"*
+> *"What's the current BTC price?"*
 
 > *"Show me prices and funding rates for all markets."*
 
@@ -1005,7 +1283,7 @@ Get real-time prices for all markets, or filter to a single symbol.
 
 ```json
 {
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "mark": "67420.50",
   "oracle": "67415.00",
   "mid": "67418.00",
@@ -1026,14 +1304,14 @@ Get the order book (bids and asks) for a market with configurable price aggregat
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 | `agg_level` | enum | No | Price bucket aggregation: `1`, `10`, `100`, `1000`, `10000` (default `1`) |
 
 **Example prompt**
 
-> *"Show me the BTC-PERP order book."*
+> *"Show me the BTC order book."*
 
-> *"What does the ETH-PERP order book look like at $10 aggregation?"*
+> *"What does the ETH order book look like at $10 aggregation?"*
 
 **Example response**
 
@@ -1060,15 +1338,15 @@ Get OHLCV candlestick data for a market.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `SOL-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `SOL`) |
 | `interval` | enum | Yes | `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `8h`, `12h`, `1d` |
 | `limit` | integer | No | Number of candles, 1–1000 (default `100`) |
 
 **Example prompt**
 
-> *"Show me the last 50 hourly candles for BTC-PERP."*
+> *"Show me the last 50 hourly candles for BTC."*
 
-> *"Get the 4h OHLCV data for ETH-PERP."*
+> *"Get the 4h OHLCV data for ETH."*
 
 **Example response**
 
@@ -1095,11 +1373,11 @@ Get the most recent trades for a market.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 
 **Example prompt**
 
-> *"Show me the recent trades on BTC-PERP."*
+> *"Show me the recent trades on BTC."*
 
 **Example response**
 
@@ -1125,26 +1403,26 @@ Get historical funding rates for a market.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 | `limit` | integer | No | Number of entries, 1–500 (default `20`) |
 
 **Example prompt**
 
-> *"Show me the last 10 funding rates for BTC-PERP."*
+> *"Show me the last 10 funding rates for BTC."*
 
-> *"What has the ETH-PERP funding rate been doing over the past week?"*
+> *"What has the ETH funding rate been doing over the past week?"*
 
 **Example response**
 
 ```json
 [
   {
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "funding_rate": "0.000023",
     "timestamp": "1712692800000"
   },
   {
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "funding_rate": "0.000018",
     "timestamp": "1712664000000"
   }
@@ -1161,15 +1439,15 @@ Get OHLCV candlestick data based on the **mark price** instead of trade price. S
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 | `interval` | enum | Yes | `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `8h`, `12h`, `1d` |
 | `limit` | integer | No | Number of candles, 1–1000 (default `100`) |
 
 **Example prompt**
 
-> *"Show me the last 50 hourly mark-price candles for BTC-PERP."*
+> *"Show me the last 50 hourly mark-price candles for BTC."*
 
-> *"Get 4h mark candles for ETH-PERP."*
+> *"Get 4h mark candles for ETH."*
 
 **Example response**
 
@@ -1245,7 +1523,7 @@ Get all open positions for an account.
 ```json
 [
   {
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "side": "bid",
     "amount": "0.01",
     "entry_price": "67421.00",
@@ -1280,7 +1558,7 @@ Get all open orders for an account.
 [
   {
     "order_id": "ord_abc123",
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "side": "bid",
     "amount": "0.05",
     "price": "65000.00",
@@ -1319,12 +1597,12 @@ Get historical trades with realized PnL and fees.
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `account` | string | No | Solana wallet address. Defaults to MCP wallet. |
-| `symbol` | string | No | Filter by market (e.g. `BTC-PERP`) |
+| `symbol` | string | No | Filter by market (e.g. `BTC`) |
 | `limit` | integer | No | Number of trades, 1–500 (default `50`) |
 
 **Example prompt**
 
-> *"Show me my BTC-PERP trade history with PnL."*
+> *"Show me my BTC trade history with PnL."*
 
 **Example response**
 
@@ -1332,7 +1610,7 @@ Get historical trades with realized PnL and fees.
 [
   {
     "trade_id": "trd_xyz789",
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "side": "ask",
     "amount": "0.01",
     "price": "67800.00",
@@ -1398,7 +1676,7 @@ Get balance event history: deposits, withdrawals, trades, and funding payments.
   {
     "type": "funding",
     "amount": "-0.05",
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "timestamp": "1712692800000"
   }
 ]
@@ -1420,7 +1698,7 @@ Get account settings including margin mode and leverage configuration per market
 
 > *"Show me my margin settings and leverage for each market."*
 
-> *"What leverage is set on my BTC-PERP and ETH-PERP?"*
+> *"What leverage is set on my BTC and ETH?"*
 
 **Example response**
 
@@ -1428,12 +1706,12 @@ Get account settings including margin mode and leverage configuration per market
 {
   "margin_settings": [
     {
-      "symbol": "BTC-PERP",
+      "symbol": "BTC",
       "isolated": false,
       "leverage": 10
     },
     {
-      "symbol": "ETH-PERP",
+      "symbol": "ETH",
       "isolated": true,
       "leverage": 20
     }
@@ -1517,7 +1795,7 @@ Place a market order. Fills immediately at the best available price.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 | `side` | enum | Yes | `bid` (long) or `ask` (short) |
 | `amount` | string | Yes | Order size as decimal string (e.g. `"0.01"`) |
 | `slippage_percent` | string | No | Max slippage % (default `"1"`) |
@@ -1525,16 +1803,16 @@ Place a market order. Fills immediately at the best available price.
 
 **Example prompt**
 
-> *"Buy 0.01 BTC-PERP at market price."*
+> *"Buy 0.01 BTC at market price."*
 
-> *"Short 0.1 ETH-PERP at market."*
+> *"Short 0.1 ETH at market."*
 
 **Example response**
 
 ```json
 {
   "order_id": "ord_abc123",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "side": "bid",
   "amount": "0.01",
   "filled_price": "67421.00",
@@ -1571,16 +1849,16 @@ Place a limit order at a specific price.
 
 **Example prompt**
 
-> *"Place a buy limit order for 0.05 BTC-PERP at $65,000."*
+> *"Place a buy limit order for 0.05 BTC at $65,000."*
 
-> *"Sell 0.1 ETH-PERP at $3,100 GTC."*
+> *"Sell 0.1 ETH at $3,100 GTC."*
 
 **Example response**
 
 ```json
 {
   "order_id": "ord_def456",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "side": "bid",
   "amount": "0.05",
   "price": "65000.00",
@@ -1608,9 +1886,9 @@ Place a stop-market or stop-limit order. Triggers when the market reaches `stop_
 
 **Example prompt**
 
-> *"Place a stop-loss on my BTC-PERP long — sell 0.01 BTC if price drops to $63,000."*
+> *"Place a stop-loss on my BTC long — sell 0.01 BTC if price drops to $63,000."*
 
-> *"Set a stop-limit order: buy 0.05 ETH-PERP when it hits $3,050, limit at $3,060."*
+> *"Set a stop-limit order: buy 0.05 ETH when it hits $3,050, limit at $3,060."*
 
 ---
 
@@ -1631,9 +1909,9 @@ Set take-profit and/or stop-loss prices on an existing position. Provide at leas
 
 **Example prompt**
 
-> *"Set a take-profit at $72,000 and stop-loss at $63,000 on my BTC-PERP long."*
+> *"Set a take-profit at $72,000 and stop-loss at $63,000 on my BTC long."*
 
-> *"Add a stop-loss at $2,800 to my ETH-PERP long position."*
+> *"Add a stop-loss at $2,800 to my ETH long position."*
 
 ---
 
@@ -1652,7 +1930,7 @@ Cancel a specific order by ID, or cancel all open orders for a symbol.
 
 > *"Cancel order ord_def456."*
 
-> *"Cancel all my open orders on BTC-PERP."*
+> *"Cancel all my open orders on BTC."*
 
 **Example response**
 
@@ -1675,9 +1953,9 @@ Set the leverage multiplier for a market (1–100x).
 
 **Example prompt**
 
-> *"Set my BTC-PERP leverage to 20x."*
+> *"Set my BTC leverage to 20x."*
 
-> *"Reduce my ETH-PERP leverage to 5x."*
+> *"Reduce my ETH leverage to 5x."*
 
 ---
 
@@ -1694,9 +1972,9 @@ Switch between cross margin and isolated margin for a market.
 
 **Example prompt**
 
-> *"Switch BTC-PERP to isolated margin."*
+> *"Switch BTC to isolated margin."*
 
-> *"Enable cross margin on ETH-PERP."*
+> *"Enable cross margin on ETH."*
 
 ---
 
@@ -1716,7 +1994,7 @@ Edit an existing order's price and/or amount. The original order is replaced and
 
 **Example prompt**
 
-> *"Change my BTC-PERP limit order ord_def456 to $66,000."*
+> *"Change my BTC limit order ord_def456 to $66,000."*
 
 > *"Update order ord_def456 — set amount to 0.1 and price to $64,500."*
 
@@ -1725,7 +2003,7 @@ Edit an existing order's price and/or amount. The original order is replaced and
 ```json
 {
   "order_id": "ord_new789",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "price": "66000.00",
   "amount": "0.05",
   "status": "open"
@@ -1758,9 +2036,9 @@ Each action object:
 
 **Example prompt**
 
-> *"Place 3 limit buy orders for BTC-PERP at $64,000, $63,500, and $63,000 — each for 0.01 BTC."*
+> *"Place 3 limit buy orders for BTC at $64,000, $63,500, and $63,000 — each for 0.01 BTC."*
 
-> *"Cancel orders ord_1 and ord_2, and place a new bid at $65,000 for 0.05 BTC-PERP."*
+> *"Cancel orders ord_1 and ord_2, and place a new bid at $65,000 for 0.05 BTC."*
 
 **Example response**
 
@@ -1790,16 +2068,16 @@ Cancel a specific stop order by ID.
 
 **Example prompt**
 
-> *"Cancel my BTC-PERP stop order ord_stop123."*
+> *"Cancel my BTC stop order ord_stop123."*
 
-> *"Remove the stop-loss order on ETH-PERP."*
+> *"Remove the stop-loss order on ETH."*
 
 **Example response**
 
 ```json
 {
   "order_id": "ord_stop123",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "status": "canceled"
 }
 
@@ -1966,12 +2244,12 @@ Subscribe to a channel, collect events for a duration, and return a summary. Thi
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `channel` | enum | Yes | `prices`, `trades`, `orderbook`, `account_info`, `account_positions`, `account_trades` |
-| `symbol` | string | Conditional | Required for `trades` and `orderbook` channels (e.g. `BTC-PERP`) |
+| `symbol` | string | Conditional | Required for `trades` and `orderbook` channels (e.g. `BTC`) |
 | `duration` | integer | No | Seconds to collect events, 1–60 (default `10`) |
 
 **Example prompt**
 
-> *"Watch BTC-PERP trades for 15 seconds."*
+> *"Watch BTC trades for 15 seconds."*
 
 > *"Sample the prices channel for 5 seconds."*
 
@@ -1982,7 +2260,7 @@ Subscribe to a channel, collect events for a duration, and return a summary. Thi
   "events": [
     {
       "channel": "trades",
-      "symbol": "BTC-PERP",
+      "symbol": "BTC",
       "price": "67420.50",
       "amount": "0.025",
       "side": "bid",
@@ -2007,11 +2285,11 @@ Start a persistent WebSocket subscription that buffers events in the background.
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `channel` | enum | Yes | `prices`, `trades`, `orderbook`, `account_info`, `account_positions`, `account_trades` |
-| `symbol` | string | Conditional | Required for `trades` and `orderbook` channels (e.g. `ETH-PERP`) |
+| `symbol` | string | Conditional | Required for `trades` and `orderbook` channels (e.g. `ETH`) |
 
 **Example prompt**
 
-> *"Start streaming BTC-PERP orderbook updates."*
+> *"Start streaming BTC orderbook updates."*
 
 > *"Subscribe to my account position updates."*
 
@@ -2021,7 +2299,7 @@ Start a persistent WebSocket subscription that buffers events in the background.
 {
   "subscription_id": "sub_abc123",
   "channel": "orderbook",
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "status": "active"
 }
 ```
@@ -2056,7 +2334,7 @@ Read and drain buffered events from a persistent subscription. The buffer is cle
   "events": [
     {
       "channel": "orderbook",
-      "symbol": "BTC-PERP",
+      "symbol": "BTC",
       "bids": [["67419.0", "1.234"]],
       "asks": [["67421.0", "0.890"]],
       "time": "1712699850000"

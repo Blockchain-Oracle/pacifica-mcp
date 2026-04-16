@@ -17,19 +17,19 @@ List all available perpetual markets, or look up a single market by symbol.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | No | Filter to a single market (e.g. `BTC-PERP`) |
+| `symbol` | string | No | Filter to a single market (e.g. `BTC`) |
 
 **Example prompt**
 
 > *"List all available markets on Pacifica."*
 
-> *"Show me the BTC-PERP market details — tick size, lot size, max leverage."*
+> *"Show me the BTC market details — tick size, lot size, max leverage."*
 
 **Example response**
 
 ```json
 {
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "tick_size": "0.5",
   "lot_size": "0.001",
   "max_leverage": "100",
@@ -49,11 +49,11 @@ Get real-time prices for all markets, or filter to a single symbol.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | No | Filter to a single symbol (e.g. `ETH-PERP`) |
+| `symbol` | string | No | Filter to a single symbol (e.g. `ETH`) |
 
 **Example prompt**
 
-> *"What's the current BTC-PERP price?"*
+> *"What's the current BTC price?"*
 
 > *"Show me prices and funding rates for all markets."*
 
@@ -61,7 +61,7 @@ Get real-time prices for all markets, or filter to a single symbol.
 
 ```json
 {
-  "symbol": "BTC-PERP",
+  "symbol": "BTC",
   "mark": "67420.50",
   "oracle": "67415.00",
   "mid": "67418.00",
@@ -82,14 +82,14 @@ Get the order book (bids and asks) for a market with configurable price aggregat
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 | `agg_level` | enum | No | Price bucket aggregation: `1`, `10`, `100`, `1000`, `10000` (default `1`) |
 
 **Example prompt**
 
-> *"Show me the BTC-PERP order book."*
+> *"Show me the BTC order book."*
 
-> *"What does the ETH-PERP order book look like at $10 aggregation?"*
+> *"What does the ETH order book look like at $10 aggregation?"*
 
 **Example response**
 
@@ -116,15 +116,15 @@ Get OHLCV candlestick data for a market.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `SOL-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `SOL`) |
 | `interval` | enum | Yes | `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `8h`, `12h`, `1d` |
 | `limit` | integer | No | Number of candles, 1–1000 (default `100`) |
 
 **Example prompt**
 
-> *"Show me the last 50 hourly candles for BTC-PERP."*
+> *"Show me the last 50 hourly candles for BTC."*
 
-> *"Get the 4h OHLCV data for ETH-PERP."*
+> *"Get the 4h OHLCV data for ETH."*
 
 **Example response**
 
@@ -151,11 +151,11 @@ Get the most recent trades for a market.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 
 **Example prompt**
 
-> *"Show me the recent trades on BTC-PERP."*
+> *"Show me the recent trades on BTC."*
 
 **Example response**
 
@@ -181,26 +181,26 @@ Get historical funding rates for a market.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 | `limit` | integer | No | Number of entries, 1–500 (default `20`) |
 
 **Example prompt**
 
-> *"Show me the last 10 funding rates for BTC-PERP."*
+> *"Show me the last 10 funding rates for BTC."*
 
-> *"What has the ETH-PERP funding rate been doing over the past week?"*
+> *"What has the ETH funding rate been doing over the past week?"*
 
 **Example response**
 
 ```json
 [
   {
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "funding_rate": "0.000023",
     "timestamp": "1712692800000"
   },
   {
-    "symbol": "BTC-PERP",
+    "symbol": "BTC",
     "funding_rate": "0.000018",
     "timestamp": "1712664000000"
   }
@@ -217,15 +217,15 @@ Get OHLCV candlestick data based on the **mark price** instead of trade price. S
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `symbol` | string | Yes | Market symbol (e.g. `BTC-PERP`) |
+| `symbol` | string | Yes | Market symbol (e.g. `BTC`) |
 | `interval` | enum | Yes | `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `8h`, `12h`, `1d` |
 | `limit` | integer | No | Number of candles, 1–1000 (default `100`) |
 
 **Example prompt**
 
-> *"Show me the last 50 hourly mark-price candles for BTC-PERP."*
+> *"Show me the last 50 hourly mark-price candles for BTC."*
 
-> *"Get 4h mark candles for ETH-PERP."*
+> *"Get 4h mark candles for ETH."*
 
 **Example response**
 
