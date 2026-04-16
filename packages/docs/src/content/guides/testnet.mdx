@@ -5,7 +5,7 @@ description: Trade risk-free on Pacifica testnet — access code, faucet, and se
 
 # Testnet Guide
 
-Pacifica testnet lets you trade with fake USDC at no risk. It's the best way to try the MCP server before moving real funds.
+Pacifica testnet lets you trade with testnet funds at no risk. It's the best way to try the MCP server before moving real funds.
 
 ## Access
 
@@ -45,18 +45,41 @@ Ask Claude:
 
 > *"What's my Pacifica wallet address?"*
 
-The MCP server returns your Ed25519 public key. Copy it — you'll need it to deposit testnet USDC.
+The MCP server returns your Ed25519 public key. Copy it — you'll need it in the next step.
 
 ---
 
-## Step 3: Get testnet USDC
+## Step 3: Fund your testnet account
+
+Deposits happen through the Pacifica web app — not through the MCP or CLI.
+
+### 3a. Get your private key
+
+Your private key is stored at `~/.pacifica-mcp/config.json`. Open the file and copy the `privateKey` value:
+
+```bash
+cat ~/.pacifica-mcp/config.json
+```
+
+### 3b. Import into a browser wallet
+
+1. Install [Phantom](https://phantom.app) or [Backpack](https://backpack.app) browser extension
+2. Switch the wallet to **Solana devnet/testnet**
+3. Choose **Import Private Key** (not seed phrase)
+4. Paste the `privateKey` value from the config file
+
+### 3c. Connect to Pacifica testnet
 
 1. Go to [test-app.pacifica.fi](https://test-app.pacifica.fi)
 2. Enter the access code: **`Pacifica`**
-3. Connect your wallet or use the address from step 2
-4. Use the testnet faucet to claim USDC
+3. Connect your browser wallet (Phantom/Backpack)
 
-Testnet USDC has no real value. Claim as much as you need.
+### 3d. Deposit
+
+1. Use the faucet on the Pacifica testnet app to get testnet SOL
+2. Deposit SOL, USDC, or any supported asset through the Pacifica deposit interface
+
+Testnet funds have no real value. Claim and deposit as much as you need.
 
 ---
 
@@ -66,7 +89,7 @@ After depositing:
 
 > *"Show me my Pacifica account balance."*
 
-You should see your USDC balance reflected in the account overview.
+You should see your balance reflected in the account overview.
 
 ---
 
@@ -99,7 +122,7 @@ The MCP server automatically uses the correct API endpoint:
 
 When you're ready to trade with real funds:
 
-1. Deposit real USDC to your wallet address on mainnet Pacifica
+1. Deposit funds (e.g. USDC, SOL) to your wallet address on mainnet Pacifica
 2. Update your MCP config: set `PACIFICA_NETWORK=mainnet`
 3. Restart your MCP client
 

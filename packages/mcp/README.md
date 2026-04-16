@@ -88,7 +88,7 @@ On first run, a Solana wallet is auto-generated at `~/.pacifica-mcp/config.json`
 1. Install the MCP server (see above)
 2. Ask your agent: *"Show my wallet"* — this generates your wallet
 3. Go to [test-app.pacifica.fi](https://test-app.pacifica.fi) (access code: `Pacifica`)
-4. Deposit testnet USDC
+4. Deposit testnet funds (SOL, USDC, or other supported assets) via the Pacifica web app
 5. Start trading: *"Open a 0.001 BTC long"*
 
 ## Architecture

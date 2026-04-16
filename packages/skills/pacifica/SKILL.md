@@ -52,7 +52,7 @@ Skip this skill for:
 26. "Create subaccount" → `pacifica-create-subaccount`
 27. "List subaccounts" → `pacifica-list-subaccounts`
 28. "Transfer funds to subaccount" → `pacifica-transfer-funds`
-29. "Withdraw USDC" → `pacifica-withdraw`
+29. "Withdraw funds" → `pacifica-withdraw`
 30. "Open orders for my account" → `pacifica-orders`
 31. "What tools are available?" → `pacifica-tools`
 

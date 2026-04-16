@@ -12,7 +12,7 @@ export function registerTransferFundsTool(server: McpServer): void {
     {
       title: "Transfer Funds (Subaccount)",
       description:
-        "Transfer USDC between your main account and a subaccount.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
+        "Transfer funds between your main account and a subaccount.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
       inputSchema: z.object({
         to_account: z
           .string()
@@ -21,7 +21,7 @@ export function registerTransferFundsTool(server: McpServer): void {
           ),
         amount: z
           .string()
-          .describe("Amount of USDC to transfer as a decimal string"),
+          .describe("Amount to transfer as a decimal string"),
       }),
     },
     async (params) => {

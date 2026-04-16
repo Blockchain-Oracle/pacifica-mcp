@@ -37,10 +37,10 @@ const TOOLS = {
     { name: "pacifica-set-margin-mode", description: "Switch between cross and isolated margin" },
   ],
   "Account Management (requires wallet, signed)": [
-    { name: "pacifica-withdraw", description: "Withdraw USDC from Pacifica to your wallet" },
+    { name: "pacifica-withdraw", description: "Withdraw funds from Pacifica to your wallet" },
     { name: "pacifica-create-subaccount", description: "Create a new subaccount with a fresh keypair" },
     { name: "pacifica-list-subaccounts", description: "List all subaccounts under your main account" },
-    { name: "pacifica-transfer-funds", description: "Transfer USDC between main account and subaccount" },
+    { name: "pacifica-transfer-funds", description: "Transfer funds between main account and subaccount" },
   ],
   "Real-Time (WebSocket)": [
     { name: "pacifica-watch", description: "Snapshot: subscribe to a channel, collect events for N seconds" },

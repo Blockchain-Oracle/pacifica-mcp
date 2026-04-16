@@ -17,7 +17,7 @@ const steps = [
     title: "Connect Wallet",
     description: "Your wallet is auto-generated on first run.",
     detail:
-      "The MCP server generates an Ed25519 keypair on first use. Fund your address with USDC on Solana (testnet or mainnet) to start trading.",
+      "The MCP server generates an Ed25519 keypair on first use. Fund your address on Pacifica (testnet or mainnet) with SOL, USDC, or other supported assets to start trading.",
   },
   {
     step: "03",

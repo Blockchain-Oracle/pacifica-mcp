@@ -41,7 +41,7 @@ pnpm dlx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica
 
 On first run, Pacifica MCP generates a Solana wallet at `~/.pacifica-mcp/config.json`. The private key never leaves your machine.
 
-To trade, deposit USDC on Pacifica testnet: [test-app.pacifica.fi](https://test-app.pacifica.fi) (access code: `Pacifica`).
+To trade, deposit funds on Pacifica testnet: [test-app.pacifica.fi](https://test-app.pacifica.fi) (access code: `Pacifica`).
 
 ## What This Does
 
@@ -91,7 +91,7 @@ Works with every major agent client (Claude Code, Claude Desktop, Cursor, Windsu
 | `pacifica-cancel-stop` | Cancel a specific stop order |
 | `pacifica-set-leverage` | Set leverage for a market |
 | `pacifica-set-margin-mode` | Switch between cross and isolated margin |
-| `pacifica-withdraw` | Withdraw USDC from Pacifica |
+| `pacifica-withdraw` | Withdraw funds from Pacifica |
 
 ### Subaccount Management (requires wallet)
 
@@ -99,7 +99,7 @@ Works with every major agent client (Claude Code, Claude Desktop, Cursor, Windsu
 | --- | --- |
 | `pacifica-create-subaccount` | Create a new subaccount (key saved locally) |
 | `pacifica-list-subaccounts` | List all subaccounts (on-chain + local) |
-| `pacifica-transfer-funds` | Transfer USDC between accounts |
+| `pacifica-transfer-funds` | Transfer funds between accounts |
 
 ### Real-Time WebSocket
 

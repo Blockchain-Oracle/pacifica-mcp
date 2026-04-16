@@ -3,7 +3,7 @@ import { tools } from "@/lib/tools";
 
 export const metadata = {
   title: "Tools — Pacifica MCP",
-  description: "32 MCP tools for AI agents to trade perpetuals on Pacifica. Market data, account monitoring, and live trading — all in one place.",
+  description: "36 MCP tools for AI agents to trade perpetuals on Pacifica. Market data, account monitoring, and live trading — all in one place.",
 };
 
 export default function ToolsPage() {

@@ -63,7 +63,7 @@ export default function Home() {
 
               <BlurFade delay={0.12}>
                 <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                  32 tools. Market data, positions, and live trading — for Claude, Cursor, and any MCP host.
+                  36 tools. Market data, positions, and live trading — for Claude, Cursor, and any MCP host.
                 </p>
               </BlurFade>
 
@@ -141,7 +141,7 @@ export default function Home() {
                 {/* Stats grid */}
                 <div className="grid grid-cols-4 gap-3">
                   {[
-                    { label: "Tools", value: "32" },
+                    { label: "Tools", value: "36" },
                     { label: "Categories", value: "4" },
                     { label: "Auth", value: "None" },
                     { label: "Install", value: "1 cmd" },
@@ -235,7 +235,7 @@ export default function Home() {
               href="/tools"
               className="shrink-0 inline-flex items-center gap-1.5 font-mono text-xs tracking-wider text-muted-foreground hover:text-foreground transition-colors"
             >
-              View all 32
+              View all 36
               <ArrowRight className="size-3.5" />
             </Link>
           </div>
@@ -254,7 +254,7 @@ export default function Home() {
                 variant="outline"
                 className="rounded-full px-7 gap-2 border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
               >
-                View all 32 tools
+                View all 36 tools
                 <ArrowRight className="size-4" />
               </Button>
             </Link>

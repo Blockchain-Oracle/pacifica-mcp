@@ -4,7 +4,7 @@ MCP server giving AI agents the ability to trade, monitor, and manage positions 
 
 ## Architecture
 
-- `packages/cli` — Core library: 32 tools, API client, signing, wallet, cache
+- `packages/cli` — Core library: 36 tools, API client, signing, wallet, cache
 - `packages/mcp` — Thin MCP server wrapper (stdio transport, imports from cli)
 - `packages/skills/pacifica` — Agent Skill (SKILL.md for cross-client install)
 - `packages/web` — Next.js landing page + tool explorer

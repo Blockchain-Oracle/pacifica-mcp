@@ -57,17 +57,19 @@ export function loadOrCreateWallet(): PacificaConfig {
 
   process.stderr.write(
     "\n" +
-      "PACIFICA MCP — First Run Setup\n" +
-      "\u2500".repeat(34) +
+      "PACIFICA MCP \u2014 First Run Setup\n" +
+      "\u2500".repeat(50) +
       "\n\n" +
       `  Wallet:  ${config.publicKey}\n` +
-      `  Network: ${config.network}\n\n` +
-      "  Config:  " +
-      CONFIG_PATH +
-      "\n\n" +
-      "  Fund this wallet on Pacifica to start trading.\n" +
-      "  Docs: https://docs.pacifica-mcp.xyz\n\n" +
-      "\u2500".repeat(34) +
+      `  Network: ${config.network}\n` +
+      `  Config:  ${CONFIG_PATH}\n\n` +
+      "  To start trading, deposit funds on Pacifica:\n\n" +
+      "  1. Copy your private key from the config file above\n" +
+      "  2. Import it into Phantom or Backpack browser wallet\n" +
+      "  3. Go to https://test-app.pacifica.fi (code: Pacifica)\n" +
+      "  4. Connect wallet and deposit SOL, USDC, or other assets\n\n" +
+      "  Docs: https://docs.pacifica-mcp.xyz/guides/testnet\n\n" +
+      "\u2500".repeat(50) +
       "\n\n",
   );
 
