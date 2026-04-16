@@ -7,43 +7,53 @@ description: Pacifica MCP — AI-native trading tools for the #1 Solana perps DE
 
 **Pacifica MCP** is a [Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents the ability to trade, monitor, and manage positions on [Pacifica Finance](https://pacifica.fi) — the #1 perpetuals DEX on Solana.
 
-Connect it to Claude, Cursor, or any MCP-compatible client and start trading with natural language.
+Connect it to Claude Code, Cursor, Windsurf, VS Code Copilot, OpenClaw, Gemini CLI, or any MCP-compatible client and start trading with natural language.
 
 ## What can it do?
 
-Pacifica MCP exposes **36 tools** across four categories:
+Pacifica MCP exposes **36 tools** across five categories:
 
 | Category | Tools | Auth |
 |---|---|---|
-| Market Data | Prices, order book, candles, funding rates, recent trades | None |
-| Account Monitoring | Positions, orders, trade history, portfolio equity | None |
-| Trading | Market/limit/stop orders, TP/SL, batch, edit, cancel, leverage, margin mode | Wallet required |
-| Account Management | Withdraw, subaccounts, fund transfers | Wallet required |
-| System | Wallet info, list tools | None |
+| Market Data | Prices, order book, candles, funding rates, recent trades | Free |
+| Account Monitoring | Positions, orders, trade history, portfolio equity | Free |
+| Trading | Market/limit/stop orders, TP/SL, batch, edit, cancel, leverage, margin mode | Wallet |
+| Account Management | Withdraw, subaccounts, fund transfers | Wallet |
+| Real-Time | WebSocket streaming for prices, trades, orderbook, account updates | Free |
+| System | Wallet info, list tools | Free |
 
 ### Example prompts
 
-- *"What's the current BTC-PERP price and funding rate?"*
+- *"What's the current BTC price and funding rate?"*
 - *"Show me my open positions and unrealized PnL."*
-- *"Buy 0.01 BTC-PERP at market price."*
-- *"Set a stop-loss on my ETH-PERP long at $2800."*
-- *"Cancel all my open orders on SOL-PERP."*
+- *"Open a 0.01 BTC long at market with 10x leverage."*
+- *"Set a stop-loss on my ETH position at $2,100."*
+- *"Watch BTC trades for 10 seconds and summarize."*
 
 ## Quick install
 
-**MCP server** — add to Claude Code:
+**MCP server** — one command for any supported client:
 
 ```bash
+# Claude Code
 claude mcp add pacifica npx @pacifica-dev/mcp
+
+# Gemini CLI
+gemini mcp add pacifica npx -y @pacifica-dev/mcp
+
+# OpenClaw
+openclaw mcp set pacifica '{"command":"npx","args":["-y","@pacifica-dev/mcp"]}'
 ```
 
-**Agent Skill** — cross-client install via the community skills CLI:
+For Cursor, Windsurf, VS Code, Zed, Continue, Cline, and Goose — see the [Installation guide](/getting-started/installation).
+
+**Agent Skill** — teaches your agent when and how to use each tool:
 
 ```bash
 pnpm dlx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica
 ```
 
-**Standalone CLI** — install globally:
+**Standalone CLI** — terminal-native, no AI required:
 
 ```bash
 npm install -g @pacifica-dev/cli
@@ -56,10 +66,11 @@ npm install -g @pacifica-dev/cli
 
 ## Next steps
 
-- [Installation & setup](/getting-started/installation) — Claude Code, Claude Desktop, Cursor
+- [Installation & setup](/getting-started/installation) — Claude Code, Cursor, Windsurf, OpenClaw, and 12+ clients
 - [Your first trade](/getting-started/first-trade) — Walk through placing an order
 - [Tool reference](/tools) — All 36 tools with parameters and examples
 - [Architecture](/guides/architecture) — How the MCP + CLI split works
 - [Agent Skill](/guides/skill) — Install the SKILL.md for cross-client AI awareness
 - [Standalone CLI](/guides/cli) — Use tools directly from the terminal
+- [OpenClaw](/guides/openclaw) — Trade from WhatsApp, Telegram, Slack, and 20+ chat apps
 - [Testnet guide](/guides/testnet) — Trade risk-free on Pacifica testnet

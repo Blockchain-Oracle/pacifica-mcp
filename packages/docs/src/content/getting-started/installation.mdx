@@ -1,47 +1,180 @@
 ---
 title: Installation
-description: Add Pacifica MCP to Claude Code, Claude Desktop, or Cursor
+description: Add Pacifica MCP to Claude Code, Cursor, Windsurf, OpenClaw, and 12+ MCP clients
 ---
+
+import { Callout, Tabs } from 'nextra/components'
 
 # Installation
 
-Pacifica MCP runs as a local process via `npx`. No global install needed — just add it to your MCP client.
+Pacifica MCP installs in two ways: as an **MCP server** (every major agent client supports it) or as a **standalone CLI** (for terminal use). Pick whichever fits your workflow — or install both.
 
-**npm packages:** [`@pacifica-dev/mcp`](https://www.npmjs.com/package/@pacifica-dev/mcp) · [`@pacifica-dev/cli`](https://www.npmjs.com/package/@pacifica-dev/cli)
+## Install the MCP server
 
-## Claude Code
+Pacifica MCP works natively with 12+ MCP clients. Pick yours:
 
-The fastest way. Run this in your terminal:
+<Tabs items={['Claude Code', 'Claude Desktop', 'Cursor', 'Windsurf', 'VS Code', 'Gemini CLI', 'Codex', 'Zed', 'Continue', 'Cline', 'Goose', 'OpenClaw']}>
 
+<Tabs.Tab>
 ```bash
 claude mcp add pacifica npx @pacifica-dev/mcp
 ```
 
-That's it. Restart Claude Code and start chatting. Try: *"Show me the BTC-PERP price."*
+Claude Code downloads and runs the server automatically on next session.
+</Tabs.Tab>
 
-### Verify it's working
+<Tabs.Tab>
+Open your config file:
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- Linux: `~/.config/Claude/claude_desktop_config.json`
 
+```json
+{
+  "mcpServers": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+
+Fully quit and restart Claude Desktop.
+</Tabs.Tab>
+
+<Tabs.Tab>
+Create `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
+
+```json
+{
+  "mcpServers": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+
+Or use the UI: Settings → Tools & MCP → Add new MCP server.
+</Tabs.Tab>
+
+<Tabs.Tab>
+Edit `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+VS Code Copilot uses a different schema — note `servers` key (not `mcpServers`). Create `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "pacifica": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"]
+    }
+  }
+}
+```
+
+Copilot Chat must be in Agent mode for MCP tools to appear.
+</Tabs.Tab>
+
+<Tabs.Tab>
 ```bash
-claude mcp list
+gemini mcp add pacifica npx -y @pacifica-dev/mcp
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+```bash
+codex mcp add pacifica npx -y @pacifica-dev/mcp
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+Edit `~/.config/zed/settings.json`:
+
+```json
+{
+  "context_servers": {
+    "pacifica": {
+      "source": "custom",
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"],
+      "env": {}
+    }
+  }
+}
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+Create `.continue/mcpServers/pacifica.yaml`:
+
+```yaml
+name: Pacifica MCP
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: Pacifica
+    type: stdio
+    command: npx
+    args:
+      - "-y"
+      - "@pacifica-dev/mcp"
 ```
 
-You should see `pacifica-mcp` in the list.
+MCP only works in Continue's Agent mode.
+</Tabs.Tab>
 
----
-
-## Claude Desktop
-
-Open your Claude Desktop config file:
-
-- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-
-Add the Pacifica MCP entry:
+<Tabs.Tab>
+Edit `cline_mcp_settings.json`:
 
 ```json
 {
   "mcpServers": {
-    "pacifica-mcp": {
+    "pacifica": {
+      "command": "npx",
+      "args": ["-y", "@pacifica-dev/mcp"],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+```bash
+goose configure
+```
+
+Choose: Add Extension → Command-line Extension (stdio)
+- Name: `pacifica`
+- Command: `npx -y @pacifica-dev/mcp`
+</Tabs.Tab>
+
+<Tabs.Tab>
+Edit `~/.openclaw/openclaw.json`:
+
+```json
+{
+  "mcpServers": {
+    "pacifica": {
       "command": "npx",
       "args": ["-y", "@pacifica-dev/mcp"]
     }
@@ -49,28 +182,19 @@ Add the Pacifica MCP entry:
 }
 ```
 
-Save the file and restart Claude Desktop.
-
----
-
-## Cursor
-
-Open **Cursor Settings** → **MCP** → **Add MCP Server**.
-
-Or edit `~/.cursor/mcp.json` directly:
-
-```json
-{
-  "mcpServers": {
-    "pacifica-mcp": {
-      "command": "npx",
-      "args": ["-y", "@pacifica-dev/mcp"]
-    }
-  }
-}
+Or via CLI:
+```bash
+openclaw mcp set pacifica '{"command":"npx","args":["-y","@pacifica-dev/mcp"]}'
 ```
 
-Restart Cursor after saving.
+See the [OpenClaw guide](/guides/openclaw) for full setup including skill installation.
+</Tabs.Tab>
+
+</Tabs>
+
+<Callout type="info">
+**npm packages:** [`@pacifica-dev/mcp`](https://www.npmjs.com/package/@pacifica-dev/mcp) · [`@pacifica-dev/cli`](https://www.npmjs.com/package/@pacifica-dev/cli)
+</Callout>
 
 ---
 
@@ -80,15 +204,14 @@ Restart Cursor after saving.
 |---|---|---|
 | `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
 | `PACIFICA_PRIVATE_KEY` | (auto-generated) | Base58-encoded Ed25519 private key override |
+| `LOG_LEVEL` | `info` | `debug`, `info`, `warn`, `error` |
 
-To trade on mainnet, set `PACIFICA_NETWORK=mainnet` in the MCP server environment.
-
-### Claude Desktop with env vars
+To set env vars, add an `env` block to your MCP config:
 
 ```json
 {
   "mcpServers": {
-    "pacifica-mcp": {
+    "pacifica": {
       "command": "npx",
       "args": ["-y", "@pacifica-dev/mcp"],
       "env": {
@@ -109,7 +232,12 @@ Install the Pacifica skill so your agent knows when and how to use the tools:
 pnpm dlx skills add github:Blockchain-Oracle/pacifica-mcp --skill pacifica
 ```
 
-See the [Agent Skill guide](/guides/skill) for alternative install methods.
+Or for OpenClaw:
+```bash
+openclaw skills install pacifica
+```
+
+See the [Agent Skill guide](/guides/skill) for all install methods.
 
 ---
 
@@ -119,7 +247,7 @@ For terminal use without an MCP host:
 
 ```bash
 npm install -g @pacifica-dev/cli
-pacifica prices --symbol BTC-PERP
+pacifica prices --symbol BTC
 ```
 
 See the [CLI guide](/guides/cli) for full usage.
@@ -132,10 +260,11 @@ The first time the MCP server starts, it auto-generates an Ed25519 wallet at `~/
 
 **Backup this file.** It contains your private key.
 
-To check your wallet address:
+To deposit funds and start trading:
 
-> *"Show me my Pacifica wallet address."*
+1. Copy your private key from `~/.pacifica-mcp/config.json`
+2. Import it into a browser wallet ([Phantom](https://phantom.app) or [Backpack](https://backpack.app))
+3. Go to [test-app.pacifica.fi](https://test-app.pacifica.fi) (access code: `Pacifica`) and connect your wallet
+4. Deposit SOL, USDC, or any supported asset
 
-Then deposit funds (e.g. SOL, USDC) on Pacifica to start trading. See the [Testnet guide](/guides/testnet) for step-by-step instructions.
-
-For testnet setup, see the [Testnet guide](/guides/testnet).
+For the full walkthrough, see the [Testnet guide](/guides/testnet).

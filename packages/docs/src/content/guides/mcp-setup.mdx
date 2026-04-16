@@ -1,68 +1,36 @@
 ---
 title: MCP Client Setup
-description: Detailed setup instructions for Claude Code, Claude Desktop, and Cursor
+description: Detailed setup for Claude Code, Cursor, Windsurf, OpenClaw, and 12+ MCP clients
 ---
+
+import { Callout } from 'nextra/components'
 
 # MCP Client Setup
 
-Detailed configuration for each supported MCP client.
+Pacifica MCP works with **12+ MCP clients** out of the box. For quick setup with tabs for every client, see the [Installation guide](/getting-started/installation).
+
+This page covers advanced configuration, environment variables, and troubleshooting.
 
 ---
 
-## Claude Code
+## Quick reference
 
-### One-liner
-
-```bash
-claude mcp add pacifica npx @pacifica-dev/mcp
-```
-
-### Manual config
-
-The command above writes to `~/.claude/mcp.json`. You can also edit it directly:
-
-```json
-{
-  "mcpServers": {
-    "pacifica-mcp": {
-      "command": "npx",
-      "args": ["-y", "@pacifica-dev/mcp"]
-    }
-  }
-}
-```
-
-### With environment variables
-
-```bash
-claude mcp add pacifica-mcp -e PACIFICA_NETWORK=mainnet -- npx @pacifica-dev/mcp
-```
-
-### Verify
-
-```bash
-claude mcp list
-# pacifica-mcp   npx @pacifica-dev/mcp
-```
-
----
-
-## Claude Desktop
-
-### Config file location
-
-| Platform | Path |
+| Client | Install command |
 |---|---|
-| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
-| Linux | `~/.config/Claude/claude_desktop_config.json` |
+| Claude Code | `claude mcp add pacifica npx @pacifica-dev/mcp` |
+| Gemini CLI | `gemini mcp add pacifica npx -y @pacifica-dev/mcp` |
+| Codex | `codex mcp add pacifica npx -y @pacifica-dev/mcp` |
+| OpenClaw | `openclaw mcp set pacifica '{"command":"npx","args":["-y","@pacifica-dev/mcp"]}'` |
+| Goose | `goose configure` → Add Extension → `npx -y @pacifica-dev/mcp` |
 
-### Config
+For **Claude Desktop, Cursor, Windsurf, VS Code, Zed, Continue, Cline** — add a JSON config entry. See the [Installation tabs](/getting-started/installation) for the exact config for each client.
+
+The standard config pattern is always:
 
 ```json
 {
   "mcpServers": {
-    "pacifica-mcp": {
+    "pacifica": {
       "command": "npx",
       "args": ["-y", "@pacifica-dev/mcp"]
     }
@@ -70,12 +38,24 @@ claude mcp list
 }
 ```
 
-### With env vars
+---
+
+## Environment variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
+| `PACIFICA_PRIVATE_KEY` | (auto-generated) | Base58-encoded Ed25519 private key override |
+| `LOG_LEVEL` | `info` | Pino log level: `debug`, `info`, `warn`, `error` |
+
+### Setting env vars
+
+Add an `env` block to your MCP config:
 
 ```json
 {
   "mcpServers": {
-    "pacifica-mcp": {
+    "pacifica": {
       "command": "npx",
       "args": ["-y", "@pacifica-dev/mcp"],
       "env": {
@@ -86,55 +66,45 @@ claude mcp list
 }
 ```
 
-Restart Claude Desktop after saving.
+Or for Claude Code via CLI:
 
----
+```bash
+claude mcp add pacifica -e PACIFICA_NETWORK=mainnet -- npx @pacifica-dev/mcp
+```
 
-## Cursor
+### Using an existing wallet
 
-### Via settings UI
-
-1. Open **Cursor Settings** (Cmd/Ctrl + ,)
-2. Search for **MCP** in the settings search bar
-3. Click **MCP Servers** → **Add MCP Server**
-4. Set:
-   - **Name:** `pacifica-mcp`
-   - **Command:** `npx`
-   - **Args:** `-y @pacifica-dev/mcp`
-
-### Via config file
-
-Edit `~/.cursor/mcp.json`:
+If you already have a Solana wallet and want to use it instead of the auto-generated one:
 
 ```json
 {
-  "mcpServers": {
-    "pacifica-mcp": {
-      "command": "npx",
-      "args": ["-y", "@pacifica-dev/mcp"]
-    }
+  "env": {
+    "PACIFICA_PRIVATE_KEY": "your-base58-encoded-ed25519-private-key"
   }
 }
 ```
 
-Restart Cursor after saving.
+<Callout type="warning">
+Never share your private key. The key stays local and is only used to sign requests.
+</Callout>
 
 ---
 
-## Any MCP client
+## Verify the connection
 
-Pacifica MCP uses stdio transport (stdin/stdout), which is supported by all MCP clients. The configuration pattern is always:
+After setup, check that the MCP server is running:
 
-- **Command:** `npx`
-- **Args:** `["-y", "@pacifica-dev/mcp"]`
+**Claude Code:**
+```bash
+claude mcp list
+```
 
-### Environment variables
+**OpenClaw:**
+```
+List all Pacifica tools
+```
 
-| Variable | Default | Description |
-|---|---|---|
-| `PACIFICA_NETWORK` | `testnet` | `testnet` or `mainnet` |
-| `PACIFICA_PRIVATE_KEY` | (auto-generated) | Base58-encoded Ed25519 private key override |
-| `LOG_LEVEL` | `info` | Pino log level: `debug`, `info`, `warn`, `error` |
+**Any client:** Ask the agent *"Show me my Pacifica wallet address"* — if it calls `pacifica-wallet` and returns an address, the server is connected.
 
 ---
 
@@ -144,10 +114,13 @@ Pacifica MCP uses stdio transport (stdin/stdout), which is supported by all MCP 
 Install Node.js 18+ from [nodejs.org](https://nodejs.org).
 
 **Wallet not found**
-The wallet config at `~/.pacifica-mcp/config.json` is created automatically on first use. Ask Claude: *"Show me my Pacifica wallet address."*
+The wallet config at `~/.pacifica-mcp/config.json` is created automatically on first use. Run any Pacifica tool to trigger wallet generation.
 
-**"Request failed: 401"**
+**"Request failed: 401" or "Account not found"**
 Your wallet has no funds on Pacifica. Deposit funds (SOL, USDC, or other supported assets) via the Pacifica web app. See the [Testnet guide](/guides/testnet).
 
 **Server not appearing in client**
 Check that the JSON config is valid (no trailing commas) and restart the client after saving.
+
+**Stale data after trading**
+Pacifica MCP caches read-only responses for 5 minutes. After placing orders or changing settings, the cache is automatically cleared so subsequent reads return fresh data.
