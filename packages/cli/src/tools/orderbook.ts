@@ -4,7 +4,8 @@ import { get } from "../lib/api.js";
 import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { logger } from "../lib/logger.js";
-import type { OrderBook } from "../lib/types.js";
+import type { RawOrderBook } from "../lib/types.js";
+import { normalizeOrderBook } from "../lib/transforms.js";
 
 export function registerOrderbookTool(server: McpServer): void {
   server.registerTool(
@@ -25,11 +26,11 @@ export function registerOrderbookTool(server: McpServer): void {
       logger.debug(params, "pacifica-orderbook invoked");
       return withCache("pacifica-orderbook", params, async () => {
         try {
-          const data = await get<OrderBook>("/book", {
+          const data = await get<RawOrderBook>("/book", {
             symbol: params.symbol,
             agg_level: params.agg_level,
           });
-          return ok(data);
+          return ok(normalizeOrderBook(data));
         } catch (e) {
           logger.error({ err: e }, "pacifica-orderbook error");
           return err(String(e));

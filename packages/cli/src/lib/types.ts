@@ -28,7 +28,8 @@ export interface PriceInfo {
   yesterday_price: string;
 }
 
-export interface Candle {
+// Raw API shapes (single-letter keys from Pacifica wire format)
+export interface RawCandle {
   t: number;
   T: number;
   s: string;
@@ -41,16 +42,43 @@ export interface Candle {
   n: number;
 }
 
-export interface OrderBookLevel {
+export interface RawOrderBookLevel {
   p: string;
   a: string;
   n: number;
 }
 
-export interface OrderBook {
+export interface RawOrderBook {
   s: string;
-  l: [OrderBookLevel[], OrderBookLevel[]];
+  l: [RawOrderBookLevel[], RawOrderBookLevel[]];
   t: string;
+}
+
+// Normalized shapes (human/AI-readable keys returned by tools)
+export interface Candle {
+  open_time: number;
+  close_time: number;
+  symbol: string;
+  interval: string;
+  open: string;
+  close: string;
+  high: string;
+  low: string;
+  volume: string;
+  trade_count: number;
+}
+
+export interface OrderBookLevel {
+  price: string;
+  amount: string;
+  num_orders: number;
+}
+
+export interface OrderBook {
+  symbol: string;
+  bids: OrderBookLevel[];
+  asks: OrderBookLevel[];
+  timestamp: string;
 }
 
 export interface RecentTrade {

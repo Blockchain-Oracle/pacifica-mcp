@@ -5,11 +5,12 @@ import { signRequest } from "./lib/signing.js";
 import { loadOrCreateWallet, getKeypair } from "./lib/wallet.js";
 import { Keypair } from "@solana/web3.js";
 import bs58 from "bs58";
+import { normalizeOrderBook, normalizeCandles } from "./lib/transforms.js";
 import type {
   MarketInfo,
   PriceInfo,
-  OrderBook,
-  Candle,
+  RawOrderBook,
+  RawCandle,
   RecentTrade,
   FundingRateHistory,
   Paginated,
@@ -189,11 +190,11 @@ program
   )
   .action(async (opts: { symbol: string; aggLevel: string }) => {
     try {
-      const data = await get<OrderBook>("/book", {
+      const data = await get<RawOrderBook>("/book", {
         symbol: opts.symbol,
         agg_level: opts.aggLevel,
       });
-      output(data);
+      output(normalizeOrderBook(data));
     } catch (e) {
       fatal(e);
     }
@@ -214,12 +215,12 @@ program
         const limit = parseInt(opts.limit, 10);
         const intervalMs = INTERVAL_MS[opts.interval] ?? 60_000;
         const startTime = Date.now() - limit * intervalMs;
-        const data = await get<Candle[]>("/kline", {
+        const data = await get<RawCandle[]>("/kline", {
           symbol: opts.symbol,
           interval: opts.interval,
           start_time: String(startTime),
         });
-        output(data);
+        output(normalizeCandles(data));
       } catch (e) {
         fatal(e);
       }
@@ -241,12 +242,12 @@ program
         const limit = parseInt(opts.limit, 10);
         const intervalMs = INTERVAL_MS[opts.interval] ?? 60_000;
         const startTime = Date.now() - limit * intervalMs;
-        const data = await get<Candle[]>("/kline/mark", {
+        const data = await get<RawCandle[]>("/kline/mark", {
           symbol: opts.symbol,
           interval: opts.interval,
           start_time: String(startTime),
         });
-        output(data);
+        output(normalizeCandles(data));
       } catch (e) {
         fatal(e);
       }

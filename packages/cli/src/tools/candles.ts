@@ -4,7 +4,8 @@ import { get } from "../lib/api.js";
 import { ok, err } from "../lib/format.js";
 import { withCache } from "../lib/cache.js";
 import { logger } from "../lib/logger.js";
-import type { Candle } from "../lib/types.js";
+import type { RawCandle } from "../lib/types.js";
+import { normalizeCandles } from "../lib/transforms.js";
 import { INTERVAL_MS } from "../lib/constants.js";
 
 export function registerCandlesTool(server: McpServer): void {
@@ -46,12 +47,12 @@ export function registerCandlesTool(server: McpServer): void {
         try {
           const intervalMs = INTERVAL_MS[params.interval] ?? 60_000;
           const startTime = Date.now() - params.limit * intervalMs;
-          const data = await get<Candle[]>("/kline", {
+          const data = await get<RawCandle[]>("/kline", {
             symbol: params.symbol,
             interval: params.interval,
             start_time: String(startTime),
           });
-          return ok(data);
+          return ok(normalizeCandles(data));
         } catch (e) {
           logger.error({ err: e }, "pacifica-candles error");
           return err(String(e));
