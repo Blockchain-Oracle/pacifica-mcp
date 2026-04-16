@@ -11,11 +11,26 @@ export function registerWatchReadTool(server: McpServer): void {
     {
       title: "Watch Read",
       description:
-        "Read and drain buffered events from a persistent WebSocket subscription.\n\nReturns all events accumulated since the last read, then clears the buffer.\n\nIf the subscription is not found, returns active subscriptions so you can pick the right one.",
+        "Read and drain buffered events from a persistent WebSocket subscription.\n\nUse summary_only=true to get aggregated metrics without raw events (recommended for prices channel to avoid data flooding).\n\nClears the buffer after reading.\n\nIf the subscription is not found, returns active subscriptions so you can pick the right one.",
       inputSchema: z.object({
         subscription_id: z
           .string()
           .describe("Subscription ID returned by pacifica-watch-start"),
+        summary_only: z
+          .boolean()
+          .default(false)
+          .describe(
+            "If true, return only the summary without raw events. Recommended for prices channel.",
+          ),
+        max_events: z
+          .number()
+          .int()
+          .min(1)
+          .max(10000)
+          .default(100)
+          .describe(
+            "Maximum number of raw events to return (default 100). Ignored when summary_only is true.",
+          ),
       }),
     },
     async (params) => {
@@ -32,7 +47,6 @@ export function registerWatchReadTool(server: McpServer): void {
           );
         }
 
-        // Extract channel name from subscription ID (e.g. "prices_1" → "prices")
         const channel = params.subscription_id.replace(/_\d+$/, "");
         const summary = summarizeEvents(
           channel,
@@ -40,9 +54,22 @@ export function registerWatchReadTool(server: McpServer): void {
           result.timeSpanMs,
         );
 
+        if (params.summary_only) {
+          return ok({
+            count: result.count,
+            time_span_ms: result.timeSpanMs,
+            summary,
+          });
+        }
+
+        const capped = result.events.slice(0, params.max_events);
+        const dropped = result.events.length - capped.length;
+
         return ok({
-          events: result.events,
+          events: capped,
           count: result.count,
+          events_returned: capped.length,
+          events_dropped: dropped,
           time_span_ms: result.timeSpanMs,
           summary,
         });

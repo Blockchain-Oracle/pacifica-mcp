@@ -86,7 +86,7 @@ export function registerBatchOrderTool(server: McpServer): void {
             const data: Record<string, unknown> = {
               symbol: action.symbol,
             };
-            if (action.order_id) data.order_id = action.order_id;
+            if (action.order_id) data.order_id = Number(action.order_id);
             if (action.client_order_id)
               data.client_order_id = action.client_order_id;
             return {

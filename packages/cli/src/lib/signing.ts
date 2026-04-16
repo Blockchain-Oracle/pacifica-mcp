@@ -14,7 +14,7 @@ export interface SignedRequest {
  * Recursively sort all keys alphabetically at every level of an object.
  * Arrays are preserved in order but their object elements are sorted.
  */
-function sortKeys(obj: unknown): unknown {
+export function sortKeys(obj: unknown): unknown {
   if (Array.isArray(obj)) return obj.map(sortKeys);
   if (obj !== null && typeof obj === "object") {
     return Object.keys(obj as Record<string, unknown>)
