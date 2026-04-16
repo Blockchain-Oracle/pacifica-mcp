@@ -314,7 +314,7 @@ export default function Home() {
               Pacifica.fi <ExternalLink className="size-3" />
             </Link>
             <Link
-              href="https://test.pacifica.fi"
+              href="https://test-app.pacifica.fi"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"

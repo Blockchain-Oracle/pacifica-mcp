@@ -73,7 +73,7 @@ Skip this skill for:
 
 ## Error Handling
 
-- **404 on account**: User hasn't deposited on Pacifica yet — direct them to https://test.pacifica.fi (testnet) or https://pacifica.fi (mainnet)
+- **404 on account**: User hasn't deposited on Pacifica yet — direct them to https://test-app.pacifica.fi (testnet) or https://pacifica.fi (mainnet)
 - **429 rate limited**: Back off and retry after a moment
 - **Signing errors**: Check that the wallet key is set (`pacifica-wallet` to verify)
 - **"Account not found"**: User needs to connect and deposit on Pacifica first
