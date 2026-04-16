@@ -19,7 +19,7 @@ export function registerCancelOrderTool(server: McpServer): void {
           .string()
           .optional()
           .describe(
-            "Market symbol (e.g. BTC-PERP). Required for single cancel. Optional filter for cancel-all when all_symbols is false.",
+            "Market symbol (e.g. BTC). Required for single cancel. Optional filter for cancel-all when all_symbols is false.",
           ),
         order_id: z
           .string()

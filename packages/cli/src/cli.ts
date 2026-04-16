@@ -143,7 +143,7 @@ program.action(async () => {
 program
   .command("markets")
   .description("List all available perpetual markets, or look up one by symbol")
-  .option("--symbol <symbol>", "Filter to a single market (e.g. BTC-PERP)")
+  .option("--symbol <symbol>", "Filter to a single market (e.g. BTC)")
   .action(async (opts: { symbol?: string }) => {
     try {
       const data = await get<MarketInfo[]>("/info");
@@ -163,7 +163,7 @@ program
 program
   .command("prices")
   .description("Get real-time prices for all or specific markets")
-  .option("--symbol <symbol>", "Filter to a single symbol (e.g. BTC-PERP)")
+  .option("--symbol <symbol>", "Filter to a single symbol (e.g. BTC)")
   .action(async (opts: { symbol?: string }) => {
     try {
       const data = await get<PriceInfo[]>("/info/prices");
@@ -183,7 +183,7 @@ program
 program
   .command("orderbook")
   .description("Get the order book (bids and asks) for a market")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .option(
     "--agg-level <level>",
     "Aggregation level: 1, 10, 100, 1000, 10000",
@@ -204,7 +204,7 @@ program
 program
   .command("candles")
   .description("Get OHLCV candlestick data for a market")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .requiredOption(
     "--interval <interval>",
     "Candle interval: 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 8h, 12h, 1d",
@@ -231,7 +231,7 @@ program
 program
   .command("mark-candles")
   .description("Get mark price OHLCV candlestick data for a market")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .requiredOption(
     "--interval <interval>",
     "Candle interval: 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 8h, 12h, 1d",
@@ -258,7 +258,7 @@ program
 program
   .command("recent-trades")
   .description("Get recent trades for a market")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .action(async (opts: { symbol: string }) => {
     try {
       const data = await get<RecentTrade[]>("/trades", {
@@ -273,7 +273,7 @@ program
 program
   .command("funding-rates")
   .description("Get historical funding rates for a market")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .option("--limit <n>", "Number of entries (default 20)", "20")
   .action(async (opts: { symbol: string; limit: string }) => {
     try {
@@ -342,7 +342,7 @@ program
   .command("trade-history")
   .description("Get historical trades with PnL and fees")
   .option("--account <address>", "Solana wallet address (defaults to MCP wallet)")
-  .option("--symbol <symbol>", "Filter by market symbol (e.g. BTC-PERP)")
+  .option("--symbol <symbol>", "Filter by market symbol (e.g. BTC)")
   .option("--limit <n>", "Number of trades (default 50)", "50")
   .action(
     async (opts: { account?: string; symbol?: string; limit: string }) => {
@@ -464,7 +464,7 @@ program
 program
   .command("market-order")
   .description("Place a market order (bid = buy/long, ask = sell/short)")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .requiredOption("--side <side>", "Order side: bid or ask")
   .requiredOption("--amount <amount>", "Order size as a decimal string")
   .option("--slippage <percent>", "Max slippage percent (default 1)", "1")
@@ -506,7 +506,7 @@ program
 program
   .command("limit-order")
   .description("Place a limit order (bid = buy/long, ask = sell/short)")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .requiredOption("--side <side>", "Order side: bid or ask")
   .requiredOption("--amount <amount>", "Order size as a decimal string")
   .requiredOption("--price <price>", "Limit price as a decimal string")
@@ -548,7 +548,7 @@ program
 program
   .command("stop-order")
   .description("Place a stop order (triggers when stop-price is reached)")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .requiredOption("--side <side>", "Order side: bid or ask")
   .requiredOption("--stop-price <price>", "Trigger price as a decimal string")
   .requiredOption("--amount <amount>", "Order size as a decimal string")
@@ -598,8 +598,8 @@ program
 program
   .command("set-tpsl")
   .description("Set take-profit and/or stop-loss on an existing position")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
-  .requiredOption("--side <side>", "Position side: bid = long, ask = short")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
+  .requiredOption("--side <side>", "Exit side: use ask to close a long, bid to close a short")
   .option("--tp <price>", "Take-profit trigger price")
   .option("--sl <price>", "Stop-loss trigger price")
   .action(
@@ -642,7 +642,7 @@ program
 program
   .command("edit-order")
   .description("Edit an existing order's price and/or amount")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .requiredOption("--price <price>", "New limit price")
   .requiredOption("--amount <amount>", "New order size")
   .option("--order-id <id>", "Order ID to edit")
@@ -749,7 +749,7 @@ program
 program
   .command("cancel-stop")
   .description("Cancel a specific stop order")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .option("--order-id <id>", "Stop order ID to cancel")
   .option("--client-order-id <id>", "Client order ID of the stop order")
   .action(
@@ -790,7 +790,7 @@ program
 program
   .command("set-leverage")
   .description("Set the leverage for a market")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .requiredOption("--leverage <n>", "Leverage multiplier (e.g. 10)")
   .action(async (opts: { symbol: string; leverage: string }) => {
     try {
@@ -815,7 +815,7 @@ program
 program
   .command("set-margin-mode")
   .description("Switch between cross and isolated margin for a market")
-  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .requiredOption("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .requiredOption(
     "--isolated <bool>",
     "true = isolated margin, false = cross margin",
@@ -848,7 +848,7 @@ program
   )
   .requiredOption(
     "--actions <json>",
-    'JSON array of actions, e.g. \'[{"type":"Create","symbol":"BTC-PERP","side":"bid","amount":"0.001","price":"50000"}]\'',
+    'JSON array of actions, e.g. \'[{"type":"Create","symbol":"BTC","side":"bid","amount":"0.001","price":"50000"}]\'',
   )
   .action(async (opts: { actions: string }) => {
     try {
@@ -1036,7 +1036,7 @@ program
       const config = loadOrCreateWallet();
       const keypair = getKeypair(config);
       const signed = signRequest(
-        "subaccount_transfer",
+        "transfer_funds",
         { to_account: opts.to, amount: opts.amount },
         keypair.secretKey,
         config.publicKey,
@@ -1062,7 +1062,7 @@ program
     "--channel <channel>",
     "Channel: prices, trades, orderbook, account_info, account_positions, account_trades",
   )
-  .option("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .option("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .option("--account <address>", "Wallet address for account_* channels")
   .option("--duration <seconds>", "Seconds to collect (default 10, max 60)", "10")
   .action(
@@ -1100,7 +1100,7 @@ program
     "--channel <channel>",
     "Channel: prices, trades, orderbook, account_info, account_positions, account_trades",
   )
-  .option("--symbol <symbol>", "Market symbol (e.g. BTC-PERP)")
+  .option("--symbol <symbol>", "Market symbol (e.g. BTC)")
   .option("--account <address>", "Wallet address for account_* channels")
   .action(
     async (opts: {
@@ -1137,7 +1137,9 @@ program
     "--subscription-id <id>",
     "Subscription ID from watch-start",
   )
-  .action(async (opts: { subscriptionId: string }) => {
+  .option("--summary-only", "Return only the summary, no raw events", false)
+  .option("--max-events <n>", "Max events to return (default 100)", "100")
+  .action(async (opts: { subscriptionId: string; summaryOnly: boolean; maxEvents: string }) => {
     try {
       const { wsManager } = await import("./lib/ws.js");
       const { summarizeEvents } = await import("./tools/watch.js");
@@ -1159,12 +1161,21 @@ program
       const channel = opts.subscriptionId.replace(/_\d+$/, "");
       const summary = summarizeEvents(channel, result.events, result.timeSpanMs);
 
-      output({
-        events: result.events,
-        count: result.count,
-        time_span_ms: result.timeSpanMs,
-        summary,
-      });
+      if (opts.summaryOnly) {
+        output({ count: result.count, time_span_ms: result.timeSpanMs, summary });
+      } else {
+        const maxEvents = parseInt(opts.maxEvents, 10);
+        const capped = result.events.slice(0, maxEvents);
+        const dropped = result.events.length - capped.length;
+        output({
+          events: capped,
+          count: result.count,
+          events_returned: capped.length,
+          events_dropped: dropped,
+          time_span_ms: result.timeSpanMs,
+          summary,
+        });
+      }
     } catch (e) {
       fatal(e);
     }

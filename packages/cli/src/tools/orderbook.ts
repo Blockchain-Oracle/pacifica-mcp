@@ -15,7 +15,7 @@ export function registerOrderbookTool(server: McpServer): void {
       description:
         "Get the order book (bids and asks) for a Pacifica market.\n\nFree — no auth required.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         agg_level: z
           .enum(["1", "10", "100", "1000", "10000"])
           .default("1")

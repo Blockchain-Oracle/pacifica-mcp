@@ -14,7 +14,7 @@ export function registerFundingRatesTool(server: McpServer): void {
       description:
         "Get historical funding rates for a Pacifica market.\n\nFree — no auth required.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         limit: z
           .number()
           .int()

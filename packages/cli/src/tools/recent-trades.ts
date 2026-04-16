@@ -14,7 +14,7 @@ export function registerRecentTradesTool(server: McpServer): void {
       description:
         "Get recent trades for a Pacifica market.\n\nReturns price, amount, side, and cause for each trade.\n\nFree — no auth required.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
       }),
     },
     async (params) => {

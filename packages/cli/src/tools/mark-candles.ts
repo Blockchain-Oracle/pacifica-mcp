@@ -16,7 +16,7 @@ export function registerMarkCandlesTool(server: McpServer): void {
       description:
         "Get OHLCV candlestick data based on the mark price for a Pacifica market.\n\nSimilar to pacifica-candles but uses the mark price instead of trade price.\n\nFree — no auth required.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         interval: z
           .enum([
             "1m",

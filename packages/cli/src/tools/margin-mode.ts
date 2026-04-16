@@ -15,7 +15,7 @@ export function registerMarginModeTool(server: McpServer): void {
       description:
         "Switch between cross margin and isolated margin for a market.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         is_isolated: z
           .boolean()
           .describe("true = isolated margin, false = cross margin"),

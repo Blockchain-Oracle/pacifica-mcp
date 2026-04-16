@@ -30,7 +30,7 @@ export function registerTransferFundsTool(server: McpServer): void {
         const config = loadOrCreateWallet();
         const keypair = getKeypair(config);
         const signed = signRequest(
-          "subaccount_transfer",
+          "transfer_funds",
           { to_account: params.to_account, amount: params.amount },
           keypair.secretKey,
           config.publicKey,

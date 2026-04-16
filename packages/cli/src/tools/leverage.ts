@@ -15,7 +15,7 @@ export function registerLeverageTool(server: McpServer): void {
       description:
         "Set the leverage for a Pacifica market.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         leverage: z
           .number()
           .int()

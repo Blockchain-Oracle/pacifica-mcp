@@ -19,7 +19,7 @@ export function registerWatchStartTool(server: McpServer): void {
         symbol: z
           .string()
           .optional()
-          .describe("Market symbol (e.g. BTC-PERP) — required for trades, orderbook"),
+          .describe("Market symbol (e.g. BTC) — required for trades, orderbook"),
         account: z
           .string()
           .optional()

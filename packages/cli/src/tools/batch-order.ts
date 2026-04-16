@@ -11,7 +11,7 @@ const ActionSchema = z.object({
   type: z
     .enum(["Create", "Cancel"])
     .describe("Action type: Create or Cancel"),
-  symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+  symbol: z.string().describe("Market symbol (e.g. BTC)"),
   side: z
     .enum(["bid", "ask"])
     .optional()

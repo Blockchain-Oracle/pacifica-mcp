@@ -24,7 +24,7 @@ export function registerTradeHistoryTool(server: McpServer): void {
         symbol: z
           .string()
           .optional()
-          .describe("Filter by market symbol (e.g. BTC-PERP)"),
+          .describe("Filter by market symbol (e.g. BTC)"),
         limit: z
           .number()
           .int()

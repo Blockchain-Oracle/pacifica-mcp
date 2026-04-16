@@ -17,7 +17,7 @@ export function registerMarketsTool(server: McpServer): void {
         symbol: z
           .string()
           .optional()
-          .describe("Filter to a single market (e.g. BTC-PERP)"),
+          .describe("Filter to a single market (e.g. BTC)"),
       }),
     },
     async (params) => {

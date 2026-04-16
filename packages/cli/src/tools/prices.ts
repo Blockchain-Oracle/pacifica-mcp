@@ -17,7 +17,7 @@ export function registerPricesTool(server: McpServer): void {
         symbol: z
           .string()
           .optional()
-          .describe("Filter to a single symbol (e.g. BTC-PERP)"),
+          .describe("Filter to a single symbol (e.g. BTC)"),
       }),
     },
     async (params) => {

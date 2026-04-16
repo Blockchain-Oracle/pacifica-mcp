@@ -15,10 +15,10 @@ export function registerTpslTool(server: McpServer): void {
       description:
         "Set take-profit and/or stop-loss prices on an existing position.\n\nProvide at least one of take_profit_price or stop_loss_price.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         side: z
           .enum(["bid", "ask"])
-          .describe("Position side: bid = long, ask = short"),
+          .describe("Exit side: use ask to close a long, bid to close a short"),
         take_profit_price: z
           .string()
           .optional()

@@ -15,7 +15,7 @@ export function registerStopOrderTool(server: McpServer): void {
       description:
         "Place a stop order on Pacifica.\n\nTriggers a market (or limit) order when the stop_price is reached.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         side: z
           .enum(["bid", "ask"])
           .describe("Order side: bid = buy/long, ask = sell/short"),

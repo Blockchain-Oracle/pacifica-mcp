@@ -15,7 +15,7 @@ export function registerLimitOrderTool(server: McpServer): void {
       description:
         "Place a limit order on Pacifica.\n\nbid = buy/long, ask = sell/short.\nTIF options: GTC (good-til-cancel), IOC (immediate-or-cancel), ALO (add-liquidity-only), TOB (top-of-book).\n\nRequires wallet — signs the request with your Ed25519 keypair.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         side: z
           .enum(["bid", "ask"])
           .describe("Order side: bid = buy/long, ask = sell/short"),

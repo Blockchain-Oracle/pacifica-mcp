@@ -15,7 +15,7 @@ export function registerEditOrderTool(server: McpServer): void {
       description:
         "Edit an existing order's price and/or amount.\n\nIdentify the order by order_id or client_order_id.\n\nRequires wallet — signs the request with your Ed25519 keypair.",
       inputSchema: z.object({
-        symbol: z.string().describe("Market symbol (e.g. BTC-PERP)"),
+        symbol: z.string().describe("Market symbol (e.g. BTC)"),
         price: z.string().describe("New limit price as a decimal string"),
         amount: z.string().describe("New order size as a decimal string"),
         order_id: z
