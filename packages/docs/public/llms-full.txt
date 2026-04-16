@@ -1029,7 +1029,7 @@ This writes the server entry to `~/.openclaw/openclaw.json` automatically.
 ### Restart the gateway
 
 ```bash
-openclaw restart
+openclaw gateway restart
 ```
 
 ### Verify the connection
@@ -1128,7 +1128,7 @@ On first run, Pacifica MCP generates a wallet at `~/.pacifica-mcp/config.json`. 
 ## Troubleshooting
 
 **MCP tools not appearing after setup**
-Make sure **Enable MCP** is toggled on in Settings → Integrations. Then restart the gateway with `openclaw restart`.
+Make sure **Enable MCP** is toggled on in Settings → Integrations. Then restart the gateway with `openclaw gateway restart`.
 
 **`openclaw` command not found**
 Install the OpenClaw CLI:
